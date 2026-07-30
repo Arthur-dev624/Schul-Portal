@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+    }
+    /* Seitenleiste Styling */
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      right: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+    }
+    .sidenav a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 22px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+    @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Seitenleiste / Navbar -->
+<div id="mySidenav" class="sidenav">
+  <!-- Close Button -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  
+  <!-- Benutzerabhängige Links -->
+  {% if request.user.is_authenticated %}
+    {% if request.user.person.role == "teacher" %}
+      <!-- Lehrer Links -->
+      <a href="{% url 'teacher_dashboard' %}">Dashboard</a>
+      <a href="{% url 'add_event' %}">Add Events</a>
+      <a href="{% url 'lunch_view' %}">Lunch programm</a>
+    {% elif request.user.person.role == "student" %}
+      <!-- Schüler Links -->
+      <a href="{% url 'student_dashboard' %}">Dashboard</a>
+      <a href="{% url 'post_list' %}">Forum</a>
+      <a href="{% url 'my_grades' %}">My Grades</a>
+      <a href="{% url 'my_lessons' %}">My Lessons</a>
+      <a href="{% url 'lunch_view' %}">Lunch programm</a>
+      <a href="{% url 'my_quiz' %}">Quiz</a>
+    {% endif %}
+    <!-- Logout Link -->
+    <a href="{% url 'logout' %}">Logout</a>
+  {% else %}
+    <!-- Login Link für nicht angemeldete Benutzer -->
+    <a href="{% url 'login' %}">Login</a>
+  {% endif %}
+</div>
+
+<!-- Begrüßung des Benutzers -->
+<h2>Welcome {{ request.user.username }}!</h2>
+
+{% block content %}
+<!-- Menü Button -->
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+
+<script>
+<!-- Funktion zum Öffnen der Seitenleiste -->
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+<!-- Funktion zum Schließen der Seitenleiste -->
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+{% endblock %}
+
+<!-- Lunch Programm Header -->
+<h3 class="mb-3">
+  Lunch Program — {{ lunches.0.date }}
+</h3>
+
+<!-- Lunch Cards -->
+<div class="row">
+  {% for lunch in lunches %}
+  <div class="col-md-4 mb-3">
+    <!-- Einzelne Lunch Card -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        {{ lunch.lunchname }}
+      </div>
+      <div class="card-body">
+        <p><strong> Price:</strong> {{ lunch.preis }}</p>
+        <p><strong> Ingredients:</strong> {{ lunch.inhalte }}</p>
+        <!-- Allergie Warnung -->
+        <strong>⚠️ Allergy:</strong>
+        {% if lunch.allergiewarn %}
+          ✅
+        {% else %}
+          ❌
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <!-- Kein Lunch Programm vorhanden -->
+  <p class="text-muted">No lunch program available.</p>
+  {% endfor %}
+
+  <!-- Hinweis für Benutzer mit Allergien -->
+  <p>Notice: If you see ✅ next to allergy and you know that you have allergies, please ask the personnel to inform </p>
+</div>

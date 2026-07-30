@@ -1,0 +1,253 @@
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<!-- ========================= -->
+<!-- MDB CSS (Design Library) -->
+<!-- ========================= -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet"/>
+
+<style>
+/* ========================= */
+/* CAROUSEL DESIGN */
+/* ========================= */
+
+/* Jede Slide nimmt ganze Bildschirmhöhe */
+.carousel-item {
+  height: 100vh;
+  position: relative;
+}
+
+/* Bilder werden angepasst (kein Verzerren) */
+.carousel-item img {
+  object-fit: cover;
+  height: 100%;
+}
+
+/* Dunkler Overlay für bessere Lesbarkeit */
+.carousel-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  top: 0;
+  left: 0;
+}
+
+/* Text Box oben links */
+.text-overlay {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  max-width: 500px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  z-index: 5;
+}
+
+/* Überschrift */
+.text-overlay h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Beschreibung */
+.text-overlay p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* Button Stil */
+.text-overlay .carousel-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 1rem;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+/* Hover Effekt */
+.text-overlay .carousel-btn:hover {
+  background: #0d6efd;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Pfeile vorne halten */
+.carousel-control-prev,
+.carousel-control-next {
+  z-index: 10;
+}
+
+/* Pfeil Design */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 50%;
+}
+</style>
+
+<!-- ========================= -->
+<!-- NAVBAR -->
+<!-- ========================= -->
+<!-- 
+Diese Navbar enthält:
+- Sprachwechsel (EN / DE)
+- Benutzer Login / Logout
+-->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+
+    <!-- Menü rechts -->
+    <ul class="navbar-nav ms-auto">
+
+      <!-- ========================= -->
+      <!-- SPRACHWECHSEL -->
+      <!-- ========================= -->
+      <li class="nav-item dropdown me-3">
+        <a class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm" 
+                href="#" role="button" data-mdb-toggle="dropdown">
+          {% get_current_language as LANGUAGE_CODE %}
+          {{ LANGUAGE_CODE|upper }}
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+
+          <!-- Englisch -->
+          <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-3">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <button type="submit" name="language" value="en" class="dropdown-item">
+                English
+              </button>
+            </form>
+          </li>
+
+          <!-- Deutsch -->
+          <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-3">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <button type="submit" name="language" value="de" class="dropdown-item">
+                Deutsch
+              </button>
+            </form>
+          </li>
+
+        </ul>
+      </li>
+
+      <!-- ========================= -->
+      <!-- USER LOGIN / LOGOUT -->
+      <!-- ========================= -->
+      {% if request.user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              {{ request.user.username }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="{% url 'logout' %}">
+                  {% trans "Logout" %}
+                </a>
+              </li>
+            </ul>
+          </li>
+      {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">
+              {% trans "Login" %}
+            </a>
+          </li>
+      {% endif %}
+
+    </ul>
+
+  </div>
+</nav>
+
+<!-- ========================= -->
+<!-- CAROUSEL -->
+<!-- ========================= -->
+<div id="carouselExample" class="carousel slide carousel-fade" data-mdb-ride="carousel">
+  <div class="carousel-inner">
+
+    <!-- SLIDE 1 -->
+    <div class="carousel-item active">
+      <img src="{{ bild1.bild.url }}" class="d-block w-100" alt="Slide 1">
+      <div class="carousel-overlay"></div>
+
+      <div class="text-overlay">
+        <h2>{% trans "Our History" %}</h2>
+
+        <!-- blocktrans für längeren Text -->
+        <p>{% blocktrans %}All started with Passion to Education{% endblocktrans %}</p>
+
+        <a href="{% url 'home' %}" class="carousel-btn">
+          {% blocktrans %}Back to the Homepage{% endblocktrans %}
+        </a>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="carousel-item">
+      <img src="{{ bild2.bild.url }}" class="d-block w-100" alt="Slide 2">
+      <div class="carousel-overlay"></div>
+
+      <div class="text-overlay">
+        <h2>{% trans "The Generations" %}</h2>
+        <p>{% trans "There was many Generations to learn" %}</p>
+
+        <a href="{% url 'home' %}" class="carousel-btn">
+          {% blocktrans %}Back to the Homepage{% endblocktrans %}
+        </a>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="carousel-item">
+      <img src="{{ bild3.bild.url }}" class="d-block w-100" alt="Slide 3">
+      <div class="carousel-overlay"></div>
+
+      <div class="text-overlay">
+        <h2>{% trans "Present" %}</h2>
+        <p>{% trans "Our History continues." %}</p>
+
+        <a href="{% url 'home' %}" class="carousel-btn">
+          {% blocktrans %}Back to the Homepage{% endblocktrans %}
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PREVIOUS BUTTON -->
+  <button class="carousel-control-prev" type="button"
+          data-mdb-target="#carouselExample" data-mdb-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+    <span class="visually-hidden">{% trans "Previous" %}</span>
+  </button>
+
+  <!-- NEXT BUTTON -->
+  <button class="carousel-control-next" type="button"
+          data-mdb-target="#carouselExample" data-mdb-slide="next">
+    <span class="carousel-control-next-icon"></span>
+    <span class="visually-hidden">{% trans "Next" %}</span>
+  </button>
+
+</div>
+
+<!-- MDB JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+
+{% endblock %}

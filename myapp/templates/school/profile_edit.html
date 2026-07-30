@@ -1,0 +1,124 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "Edit Profile" %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color:#f5f6fa;">
+
+<!-- ========================= -->
+<!-- NAVBAR -->
+<!-- ========================= -->
+<!-- 
+Diese Navigationsleiste zeigt unterschiedliche Links, 
+abhängig von der Rolle des Benutzers (Lehrer oder Schüler).
+-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container-fluid">
+
+        <!-- Logo / Schulname -->
+        <a class="navbar-brand" href="#">
+            SaarSchool
+        </a>
+
+        <!-- Mobile Menü Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menü Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+
+                {% if request.user.person.role == "teacher" %}
+                    <!-- Lehrer Dashboard Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'teacher_dashboard' %}">
+                            {% trans "Dashboard" %}
+                        </a>
+                    </li>
+                {% else %}
+                    <!-- Schüler Dashboard Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_dashboard' %}">
+                            {% trans "Dashboard" %}
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- Profilseite -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'profile_view' %}">
+                        {% trans "Profile" %}
+                    </a>
+                </li>
+
+                <!-- Logout Link -->
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="{% url 'logout' %}">
+                        {% trans "Logout" %}
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ========================= -->
+<!-- HAUPTINHALT -->
+<!-- ========================= -->
+<div class="container py-5">
+
+    <!-- Profil Bearbeiten Karte -->
+    <!-- 
+    Zeigt ein Formular für allgemeine Benutzerinformationen 
+    und optional für Studentendetails, falls der Benutzer ein Schüler ist.
+    -->
+    <div class="card mx-auto shadow-lg rounded-4 p-4" style="max-width:600px;">
+
+        <!-- Überschrift -->
+        <h3 class="fw-bold text-center mb-4">
+            {% trans "Edit Profile" %}
+        </h3>
+
+        <!-- Formular Start -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Allgemeine Informationen -->
+            <!-- Diese Felder sind für alle Benutzer gleich (Name, E-Mail etc.) -->
+            <h5 class="mb-3">{% trans "General Information" %}</h5>
+            {{ person_form.as_p }}
+
+            <!-- Optional: Student Informationen -->
+            <!-- Nur anzeigen, wenn student_form existiert -->
+            {% if student_form %}
+                <hr>
+                <h5 class="mb-3">{% trans "Student Information" %}</h5>
+                {{ student_form.as_p }}
+            {% endif %}
+
+            <!-- Speichern Button -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success px-4">
+                    {% trans "Save Changes" %}
+                </button>
+            </div>
+
+        </form>
+        <!-- Formular Ende -->
+
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

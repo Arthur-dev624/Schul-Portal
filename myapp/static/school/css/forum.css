@@ -1,0 +1,47 @@
+/* ====== GENEL FORUM STİLİ ====== */
+body {
+  background-color: #f0f2f5;
+}
+
+/* Forum ana kapsayıcı */
+.forum-wrapper {
+  max-width: 680px;
+  margin: 20px auto 40px;
+}
+
+/* Her post kartı */
+.post-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  overflow: hidden;
+}
+
+/* Hover efekti */
+.post-hover:hover {
+  background: #f8f9fa;
+}
+
+/* Post metni */
+.post-text {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Alt ikonlar */
+.post-actions span {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.post-actions span:hover {
+  color: #0d6efd;
+}
+
+/* Küçük badge sayaçlar */
+.count-badge {
+  font-size: 0.75rem;
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 10px;
+}

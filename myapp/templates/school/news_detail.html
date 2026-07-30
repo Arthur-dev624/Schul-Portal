@@ -1,0 +1,25 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-5">
+
+  <!-- News Titel -->
+  <h2>{{ news_item.titel }}</h2>
+
+  <!-- Veröffentlichungsdatum -->
+  <p class="text-muted">{{ news_item.erstellt_at|date:"d.m.Y" }}</p>
+
+  <!-- News Bild -->
+  <img src="{{ news_item.bild.url }}" class="img-fluid rounded mb-4">
+
+  <!-- Vollständiger Text der News -->
+  <p>{{ news_item.voll_text }}</p>
+
+  <!-- Zurück-Button zur News-Übersichtsseite -->
+  <a href="{% url 'news_list' %}" class="btn btn-secondary mt-3">
+    {% trans "back" %}
+  </a>
+
+</div>
+{% endblock %}

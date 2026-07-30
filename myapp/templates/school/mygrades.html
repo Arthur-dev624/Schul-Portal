@@ -1,0 +1,252 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS für responsives Design -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    /* Allgemeine Schriftart */
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    /* ===================== */
+    /* Side Navigation Menü */
+    /* ===================== */
+    /* Dieses Menü öffnet sich von rechts und dient zur Navigation */
+    .sidenav {
+      height: 100%;
+      width: 0; /* Standardmäßig geschlossen */
+      position: fixed;
+      top: 0;
+      right: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      transition: 0.5s; /* Animation beim Öffnen */
+      z-index: 9999; /* Immer im Vordergrund */
+      padding-top: 60px;
+    }
+
+    /* Menü-Links */
+    .sidenav a {
+      padding: 8px 32px;
+      font-size: 22px;
+      color: #818181;
+      display: block;
+      text-decoration: none;
+    }
+
+    /* Hover-Effekt */
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+
+    /* Schließen-Button (X) */
+    .closebtn {
+      position: absolute;
+      top: 0;
+      right: 20px;
+      font-size: 36px;
+    }
+
+    /* ===================== */
+    /* Sprachumschalter */
+    /* ===================== */
+    /* Button oben rechts zur Sprachauswahl */
+    .language-switcher {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 10000;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- 
+Diese Seite zeigt die Noten des Benutzers an.
+Der Benutzer kann:
+- Über das Menü navigieren
+- Die Sprache der Webseite ändern
+-->
+
+<!-- ===================== -->
+<!-- SIDE MENU -->
+<!-- ===================== -->
+<div id="mySidenav" class="sidenav">
+
+  <!-- Button zum Schließen des Menüs -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+  <!-- Prüfen, ob Benutzer eingeloggt ist -->
+  {% if request.user.is_authenticated %}
+
+    <!-- Menü für Lehrer -->
+    {% if request.user.person.role == "teacher" %}
+      <a href="{% url 'teacher_dashboard' %}">{% trans "Dashboard" %}</a>
+      <a href="{% url 'add_event' %}">{% trans "Manage Events" %}</a>
+      <a href="{% url 'grades' %}">{% trans "Grades" %}</a>
+      <a href="{% url 'my_lessons' %}">{% trans "My Lessons" %}</a>
+      <a href="{% url 'lunch_view' %}">{% trans "Lunch Program" %}</a>
+
+    <!-- Menü für Schüler -->
+    {% elif request.user.person.role == "student" %}
+      <a href="{% url 'student_dashboard' %}">{% trans "Dashboard" %}</a>
+      <a href="{% url 'post_list' %}">{% trans "Forum" %}</a>
+      <a href="{% url 'my_grades' %}">{% trans "My Grades" %}</a>
+      <a href="{% url 'my_lessons' %}">{% trans "My Lessons" %}</a>
+      <a href="{% url 'lunch_view' %}">{% trans "Lunch Program" %}</a>
+      <a href="{% url 'my_quiz' %}">{% trans "Quiz" %}</a>
+    {% endif %}
+
+    <!-- Logout -->
+    <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
+
+  {% else %}
+    <!-- Falls nicht eingeloggt -->
+    <a href="{% url 'login' %}">{% trans "Login" %}</a>
+  {% endif %}
+
+</div>
+
+<!-- ===================== -->
+<!-- Menü Button + Sprache -->
+<!-- ===================== -->
+<div class="d-flex justify-content-between align-items-center px-3 mt-3">
+
+  <!-- Button zum Öffnen des Menüs -->
+  <span style="font-size:30px;cursor:pointer" onclick="openNav()">☰ Menü</span>
+
+  <!-- Sprachumschalter -->
+  <div class="language-switcher">
+    <div class="dropdown">
+
+      <!-- Aktuelle Sprache anzeigen -->
+      <button class="btn btn-light btn-sm dropdown-toggle shadow" type="button" data-bs-toggle="dropdown">
+        {% get_current_language as LANGUAGE_CODE %}
+        {{ LANGUAGE_CODE|upper }}
+      </button>
+
+      <!-- Sprachauswahl -->
+      <ul class="dropdown-menu dropdown-menu-end">
+
+        <!-- Englisch -->
+        <li>
+          <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" name="language" value="en" class="dropdown-item">
+              🇬🇧 Englisch
+            </button>
+          </form>
+        </li>
+
+        <!-- Deutsch -->
+        <li>
+          <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button type="submit" name="language" value="de" class="dropdown-item">
+              🇩🇪 Deutsch
+            </button>
+          </form>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- Begrüßung -->
+<h2 class="mt-3 ms-3">
+  {% trans "Welcome" %} {{ request.user.username }}!
+</h2>
+
+<!-- ===================== -->
+<!-- NOTEN TABELLE -->
+<!-- ===================== -->
+<div class="container mt-4">
+
+  <!-- Titel -->
+  <h2 class="mb-4">{% trans "📊 My Grades" %}</h2>
+
+  {% if grades %}
+
+    <!-- Tabelle mit Noten -->
+    <table class="table table-striped table-bordered">
+
+      <!-- Tabellenkopf -->
+      <thead class="table-dark">
+        <tr>
+          <th>{% trans "Lesson" %}</th>
+          <th>{% trans "Grade" %}</th>
+          <th>{% trans "Given By" %}</th>
+          <th>{% trans "Note" %}</th>
+          <th>{% trans "Date" %}</th>
+        </tr>
+      </thead>
+
+      <!-- Tabelleninhalt -->
+      <tbody>
+        {% for grade in grades %}
+        <tr>
+          <td>{{ grade.enrollment.lesson.name }}</td>
+          <td>{{ grade.value }}</td>
+
+          <!-- Lehrer -->
+          <td>
+            {% if grade.given_by %}
+              {{ grade.given_by.username }}
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+
+          <!-- Kommentar -->
+          <td>{{ grade.note }}</td>
+
+          <!-- Datum -->
+          <td>{{ grade.created_at|date:"Y-m-d" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+  {% else %}
+
+    <!-- Falls keine Noten vorhanden -->
+    <div class="alert alert-info">
+      {% trans "No grades available." %}
+    </div>
+
+  {% endif %}
+
+</div>
+
+<!-- ===================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* Öffnet das Side-Menü */
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+/* Schließt das Side-Menü */
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+
+</body>
+</html>

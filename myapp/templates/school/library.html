@@ -1,0 +1,66 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+
+  {# Überschrift und kurze Beschreibung der Bibliothek #}
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">{% trans " Our Library" %}</h2>
+    <p class="text-muted">{% blocktrans %}Explore our modern learning environment.{% endblocktrans %}</p>
+  </div>
+
+  {# Bibliotheksbild: mittig ausgerichtet, responsive Karte #}
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow border-0 rounded-4">
+
+        {% if librarybild %}
+        <img src="{{ librarybild.bild.url }}"
+             class="card-img-top rounded-top-4"
+             style="height: 300px; object-fit: cover;">
+        {% endif %}
+
+        {# Beschreibung der Bibliothek #}
+        <div class="card-body text-center">
+          <p class="text-muted">
+            {% blocktrans %}A quiet and modern learning environment equipped with digital and printed resources.{% endblocktrans %}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {# INFO-KARTEN: Öffnungszeiten und Bibliotheksausweis #}
+  <div class="row mt-5 g-4">
+
+    {# Öffnungszeiten #}
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body text-center">
+          <h5 class="fw-bold mb-3">{% trans "Opening Hours" %}</h5>
+          <p class="mb-1">{%  trans "Weekdays" %}: 8:00 – 22:00</p>
+          <p>{% trans "Weekends" %}: 12:00 – 17:00</p>
+        </div>
+      </div>
+    </div>
+
+    {# Informationen zum Bibliotheksausweis #}
+    <div class="col-md-6">
+      <div class="card shadow-sm border-0 rounded-4 h-100">
+        <div class="card-body text-center">
+          <h5 class="fw-bold mb-3">{% trans "Library Card" %}</h5>
+          <p>
+            {% blocktrans %}Please inquire at the reception desk for any questions regarding your library card.{% endblocktrans %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% endblock %}

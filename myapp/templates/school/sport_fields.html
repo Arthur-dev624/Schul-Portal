@@ -1,0 +1,65 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.css" rel="stylesheet"/>
+
+<div class="container py-5">
+
+
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">{% trans "Our Sport Facilities" %}</h2>
+    <p class="text-muted">{% trans "Explore our modern and well-equipped sport areas." %}</p>
+  </div>
+
+  <div class="lightbox" data-mdb-lightbox-init>
+    <div class="row g-4">
+
+      <div class="col-md-6">
+      
+        <img
+          src="{{ swimbild.bild.url }}"
+          class="w-100 shadow-3-strong rounded-4 hover-shadow transition"
+          style="height: 300px; object-fit: cover;"
+          alt="Swimming Pool"
+        />
+       
+      </div>
+
+      <div class="col-md-6">
+       
+        <img
+          src="{{ runningbild.bild.url }}"
+          class="w-100 shadow-3-strong rounded-4 mb-4 hover-shadow transition"
+          style="height: 145px; object-fit: cover;"
+          alt="Running Track"
+        />
+
+
+       
+        <img
+          src="{{ basketballbild.bild.url }}"
+          class="w-100 shadow-3-strong rounded-4 hover-shadow transition"
+          style="height: 145px; object-fit: cover;"
+          alt="Basketball Court"
+        />
+   
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Opening Hours Card -->
+  <div class="card shadow-lg border-0 mt-5 rounded-4">
+    <div class="card-body text-center py-4">
+      <h5 class="card-title fw-bold mb-3">{% trans "Reservation for Sport Fields" %}</h5>
+      <p class="mb-2"><strong>Weekdays:</strong>{% trans "Please contact with Sport Facilities Managment:" %}sfm@gmail.com </p>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.3.1/mdb.min.js"></script>
+
+{% endblock %}

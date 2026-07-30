@@ -1,0 +1,54 @@
+{% load i18n %}
+
+<!-- 
+Diese Seite zeigt alle verfügbaren Unterrichtseinheiten (Lessons).
+Der Schüler kann sich hier für Kurse anmelden oder abmelden.
+Die Anzeige basiert auf den aktuellen Einschreibungen des Benutzers.
+-->
+
+<h3>{% trans "You can choose available Lessons and enroll" %}</h3>
+
+<ul>
+
+  <!-- Loop durch alle Lessons -->
+  {% for lesson in all_lessons %}
+    <li>
+      {{ lesson.name }}
+
+      <!-- Prüfen, ob der Schüler bereits eingeschrieben ist -->
+      {% if lesson.id in enrolled_lesson_ids %}
+
+        <!-- Bereits eingeschrieben -->
+        <span>✅ {% trans "Enrolled" %}</span>
+
+        <!-- Abmelden von Kurs -->
+        <form method="post" action="{% url 'dropout_lesson' lesson.id %}">
+          {% csrf_token %}
+          <button type="submit">{% trans "Dropout" %}</button>
+        </form>
+
+      {% else %}
+
+        <!-- Einschreiben -->
+        <form method="post" action="{% url 'enroll_lesson' lesson.id %}">
+          {% csrf_token %}
+          <button type="submit">{% trans "Enroll" %}</button>
+        </form>
+
+      {% endif %}
+
+    </li>
+
+  {% empty %}
+
+    <!-- Wenn keine Lessons vorhanden -->
+    <li>{% trans "No lessons available." %}</li>
+
+  {% endfor %}
+
+</ul>
+
+<!-- Navigation zurück -->
+<a href="{% url 'my_lessons' %}">
+  {% trans "Back to My Lessons" %}
+</a>

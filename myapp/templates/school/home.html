@@ -1,0 +1,90 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% block content %}
+
+<!-- HERO SECTION -->
+<div class="vh-100 d-flex flex-column justify-content-center align-items-center text-white text-center"
+     style="background: url('{{ school_image.bild.url }}') center/cover no-repeat;">
+
+    <h1 class="display-3 fw-bold">{% trans "Welcome to SaarSchool!" %}</h1>
+    <p class="lead">{% trans "Your Future starts here" %}</p>
+
+</div>
+
+<!-- NEWS + ANNOUNCEMENTS -->
+<div class="container my-5">
+
+  <!-- Latest News -->
+  <h3 class="fw-bold mb-4">{% trans "Latest News" %}</h3>
+  <div class="row g-4">
+    {% for item in news|slice:":3" %}
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100">
+          {% if item.bild %}
+          <img src="{{ item.bild.url }}" 
+               class="card-img-top" 
+               style="height:200px; object-fit:cover;">
+          {% endif %}
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ item.titel }}</h5>
+            <p class="card-text">
+              {{ item.kurz_text|truncatewords:20 }}
+            </p>
+            <a href="{% url 'news_detail' item.id %}" 
+               class="btn btn-sm btn-primary mt-auto">
+               {% trans "Mehr anzeigen" %}
+            </a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>{% trans "No news available." %}</p>
+    {% endfor %}
+  </div>
+
+  <!-- Latest Announcements -->
+  <h3 class="fw-bold mt-5 mb-4">{% trans "Announcements" %}</h3>
+  <ul class="list-group shadow-sm">
+    {% for ann in announcements|slice:":3" %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ ann.text }}
+        {% if ann.date %}
+        <span class="badge bg-primary rounded-pill">
+          {{ ann.date|date:"d.m.Y" }}
+        </span>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li class="list-group-item">
+        {% trans "No announcements available." %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="mt-4 text-end">
+    <a href="{% url 'news_list' %}" 
+       class="btn btn-outline-secondary btn-sm me-2">
+       {% trans "All News" %}
+    </a>
+    <a href="{% url 'announcement_list' %}" 
+       class="btn btn-outline-secondary btn-sm">
+       {% trans "All Announcements" %}
+    </a>
+  </div>
+
+</div>
+
+<!-- GOOGLE MAP - Kopieren Link von deiner Lokation und hinzufugen unten bei src -->
+<div class="container my-5">
+  <h2 class="fw-bold text-center mb-4">{% trans "Our School Location" %}</h2>
+  <div class="ratio ratio-16x9 shadow rounded-4 overflow-hidden">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2753.343158639808!2d7.038295476650284!3d49.2546553713887!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4795b65faad2ce4f%3A0xdf77444e039a71b1!2sSaarland%20%C3%9Cniversitesi!5e1!3m2!1str!2sde!4v1771784029774!5m2!1str!2sde"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+</div>
+
+{% endblock %}

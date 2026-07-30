@@ -1,0 +1,218 @@
+{% extends "school/student_dashboard.html" %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container py-4">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-4">
+      <div class="container-fluid">
+        <!-- Brand: Lehrer oder Schüler Dashboard -->
+        <a class="navbar-brand" href="{% if request.user.person.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %}{% endif %}">
+          SaarSchool
+        </a>
+        <!-- Menü  -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-center">
+            {% if request.user.is_authenticated %}
+              {% if request.user.person.role == "teacher" %}
+                <!-- Lehrer Dashboard Link -->
+                <li class="nav-item"><a class="nav-link active" href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a></li>
+              {% else %}
+                <!-- Schüler Dashboard Link -->
+                <li class="nav-item"><a class="nav-link active" href="{% url 'student_dashboard' %}">Student Dashboard</a></li>
+              {% endif %}
+              <!-- Logout -->
+              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+              <!-- Login für nicht angemeldete Benutzer -->
+              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="row">
+
+        <!-- Linke Spalte: Forum Posts -->
+        <div class="col-lg-8">
+            <!-- Kategorie Filter Buttons -->
+            <div class="category-btns mb-3">
+                <a href="{% url 'post_list' %}" class="btn {% if not active_kategorie %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">All</a>
+                {% for kategorie in kategories %}
+                  <a href="{% url 'post_list_by_category' kategorie.id %}" class="btn {% if active_kategorie == kategorie.id %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                    {{ kategorie.name }}
+                  </a>
+                {% endfor %}
+            </div>
+
+            <!-- Forum Posts Liste -->
+            <div class="post-card">
+                <!-- Header mit Button für neuen Post -->
+                <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                  <h4 class="mb-0">Forum</h4>
+                  <a href="{% url 'create_post' %}" class="btn btn-primary btn-sm">➕ New Post</a>
+                </div>
+
+                {% for post in posts %}
+                <!-- Einzelner Post -->
+                <div class="w-100 ps-3 pt-3 pb-2 border-bottom post-hover">
+                    
+                    <!-- Benutzer Avatar und Name -->
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{% if post.author.person.profile_image %}{{ post.author.person.profile_image.url }}{% else %}https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp{% endif %}" 
+                             class="rounded-circle me-2" height="40" width="40" alt="Avatar">
+                        <div>
+                            <h6 class="mb-0">{{ post.author.username }}</h6>
+                            <small class="text-muted">{{ post.submitted_at|date:"d.m.Y H:i" }}</small>
+                        </div>
+                    </div>
+
+                    <!-- Post Inhalt -->
+                    <p class="mb-2">{{ post.content|truncatechars:140 }}</p>
+
+                    <!-- Optionales Post Bild -->
+                    {% if post.image %}
+                        <div class="mt-2">
+                            <img src="{{ post.image.url }}" class="img-fluid rounded" style="max-height:300px; object-fit:cover;">
+                        </div>
+                    {% endif %}
+
+                    <!-- Likes und Kommentare -->
+                    <div class="d-flex gap-4 text-muted align-items-center mb-2">
+                        <a href="{% url 'post_detail' post.pk %}" class="text-muted text-decoration-none">
+                            💬 Comment ({{ post.comments.count }})
+                        </a>
+                        <button class="like-btn" data-id="{{ post.id }}">
+                            ❤️ <span class="like-count">{{ post.likes.count }}</span>
+                        </button>
+                    </div>
+                </div>
+                {% empty %}
+                <!-- Keine Posts vorhanden -->
+                <div class="p-3 text-muted">There are no posts in this category.</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Rechte Spalte: Regeln, Top Posts, Stats -->
+        <div class="col-lg-4">
+            <!-- Regeln -->
+            <div class="card rules-card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Rules</h5>
+                    <ul class="mb-0">
+                        <li>Show respect</li>
+                        <li>Do not use bad words</li>
+                        <li>Be patient while waiting answers</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Top Post -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Top Post</h5>
+                    {% if top_post %}
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="{% if top_post.author.person.profile_image %}{{ top_post.author.person.profile_image.url }}{% else %}https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp{% endif %}" 
+                                 class="rounded-circle me-2" height="40" width="40" alt="Avatar">
+                            <strong>{{ top_post.author.username }}</strong>
+                        </div>
+                        <p>{{ top_post.content|truncatechars:50 }}</p>
+                        <div class="d-flex justify-content-between small text-muted">
+                            <span>❤️ {{ top_post.likes.count }}</span>
+                            <span>💬 {{ top_post.comments.count }}</span>
+                        </div>
+                        <a href="{% url 'post_detail' top_post.pk %}" class="btn btn-sm btn-outline-primary mt-2">View Post</a>
+                    {% else %}
+                        <p>No posts yet</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Benutzer Statistiken -->
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Your Stats</h5>
+                    <ul class="mb-0">
+                        <li>Total Posts: {{ request.user.post_set.count }}</li>
+                        <li>Total Comments: {{ request.user.comment_set.count }}</li>
+                        <li>Total Likes: {{ request.user.like_set.count }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- JS für Bootstrap & Like Button AJAX -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll(".like-btn").forEach(button => {
+        button.addEventListener("click", function() {
+            const postId = this.dataset.id;
+            const likeCountSpan = this.querySelector(".like-count");
+
+            fetch(`/post/${postId}/like/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                likeCountSpan.innerText = data.like_count;
+                this.style.color = data.liked ? "red" : "black";
+            })
+            .catch(err => console.error(err));
+        });
+    });
+});
+</script>
+
+<!-- Custom CSS für Dashboard -->
+<style>
+body {
+    background-color: #f0f2f5;
+    font-family: "Lato", sans-serif;
+}
+.post-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+    padding: 0;
+    margin-bottom: 20px;
+}
+.post-hover:hover {
+    background: #f8f9fa;
+}
+.like-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1rem;
+}
+.category-btns .btn {
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.rules-card {
+    position: sticky;
+    top: 20px;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f6f8fb;
+    }
+    .chat-wrapper {
+      max-width: 800px;
+      margin: 28px auto;
+    }
+    .chat-box {
+      height: 500px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .message {
+      margin-bottom: 14px;
+      display: flex;
+    }
+    .user {
+      justify-content: flex-end;
+    }
+    .user span {
+      background: #0d6efd;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 16px 16px 0 16px;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+    .ai {
+      justify-content: flex-start;
+    }
+    .ai span {
+      background: #e9ecef;
+      color: #212529;
+      padding: 10px 14px;
+      border-radius: 16px 16px 16px 0;
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-white border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="{% if request.user.person.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %}{% endif %}">
+        SaarSchool Chat
+      </a>
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm" href="{% if request.user.person.role == 'teacher' %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %}{% endif %}">
+          Dashboard
+        </a>
+        <a class="btn btn-outline-danger btn-sm" href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container chat-wrapper">
+    <h4 class="text-center mb-3">AI Assistant</h4>
+    <div id="chat-box" class="chat-box"></div>
+    <div class="input-group mt-3">
+      <input type="text" id="user-input" class="form-control" placeholder="Type your message..." autocomplete="off">
+      <button class="btn btn-primary" id="send-btn" type="button">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const GEMINI_API_URL = "{% url 'gemini_chat' %}";
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) {
+        return parts.pop().split(";").shift();
+      }
+      return "";
+    }
+
+    function appendMessage(type, text) {
+      const chatBox = document.getElementById("chat-box");
+      chatBox.innerHTML += `<div class="message ${type}"><span>${text}</span></div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("user", message);
+      input.value = "";
+
+      fetch(GEMINI_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({ message: message })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.reply) {
+            appendMessage("ai", data.reply);
+          } else if (data.error) {
+            appendMessage("ai", `Error: ${data.error}`);
+          }
+        })
+        .catch(() => appendMessage("ai", "Error while contacting server."));
+    }
+
+    document.getElementById("send-btn").addEventListener("click", sendMessage);
+    document.getElementById("user-input").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>

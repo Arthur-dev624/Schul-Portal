@@ -1,0 +1,1040 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-26 02:32+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: myapp/templates/school/Karrierepage.html:8
+msgid "Carrier in SaarSchool"
+msgstr "Karriere bei der SaarSchool"
+
+#: myapp/templates/school/Karrierepage.html:9
+msgid "Explore our Jobs and be a Member of our Team"
+msgstr "Entdecken Sie unsere Stellenangebote und werden Sie Teil unseres Teams"
+
+#: myapp/templates/school/Karrierepage.html:21
+msgid "Published at:"
+msgstr ""
+
+#: myapp/templates/school/Karrierepage.html:24
+msgid "Show more"
+msgstr "Mehr anzeigen"
+
+#: myapp/templates/school/Karrierepage.html:28
+#, fuzzy
+#| msgid "Carrier Contact"
+msgid "Carrier contact"
+msgstr "Karrierekontakt"
+
+#: myapp/templates/school/Karrierepage.html:36
+msgid "Actually there is no job to offer"
+msgstr "Derzeit sind keine Stellenangebote verfügbar"
+
+#: myapp/templates/school/add_event.html:58
+msgid "Add New Event"
+msgstr "Neues Ereignis hinzufügen"
+
+#: myapp/templates/school/add_event.html:98
+#: myapp/templates/school/add_grade.html:121
+#: myapp/templates/school/add_question.html:120
+msgid "Back"
+msgstr "Zurück"
+
+#: myapp/templates/school/add_event.html:107
+msgid "Save Event"
+msgstr "Ereignis speichern"
+
+#: myapp/templates/school/add_grade.html:10
+msgid "Add Grade"
+msgstr "Note hinzufügen"
+
+#: myapp/templates/school/add_grade.html:102
+msgid "➕ Add Grade"
+msgstr "➕ Note hinzufügen"
+
+#: myapp/templates/school/add_grade.html:126
+msgid "Save"
+msgstr "Speichern"
+
+#: myapp/templates/school/add_question.html:61
+msgid "Add Quiz Question"
+msgstr "Quizfrage hinzufügen"
+
+#: myapp/templates/school/add_question.html:71
+#: myapp/templates/school/mygrades.html:188
+msgid "Lesson"
+msgstr "Unterricht"
+
+#: myapp/templates/school/add_question.html:77
+msgid "Question"
+msgstr "Frage"
+
+#: myapp/templates/school/add_question.html:85
+msgid "Option A"
+msgstr "Option A"
+
+#: myapp/templates/school/add_question.html:90
+msgid "Option B"
+msgstr "Option B"
+
+#: myapp/templates/school/add_question.html:98
+msgid "Option C"
+msgstr "Option C"
+
+#: myapp/templates/school/add_question.html:103
+msgid "Option D"
+msgstr "Option D"
+
+#: myapp/templates/school/add_question.html:110
+msgid "Correct Answer"
+msgstr "Richtige Antwort"
+
+#: myapp/templates/school/add_question.html:126
+msgid "Save Question"
+msgstr "Frage speichern"
+
+#: myapp/templates/school/announcement_list.html:15
+#: myapp/templates/school/home.html:71
+#, fuzzy
+#| msgid "Announcements"
+msgid "All Announcements"
+msgstr "Ankündigungen"
+
+#: myapp/templates/school/announcement_list.html:17
+msgid "Stay informed about important updates and school notices."
+msgstr ""
+"Bleiben Sie informiert über wichtige Neuigkeiten und Schulmitteilungen."
+
+#: myapp/templates/school/announcement_list.html:37
+#, fuzzy
+#| msgid "Announcements"
+msgid "Announcement"
+msgstr "Ankündigungen"
+
+#: myapp/templates/school/announcement_list.html:64
+#, fuzzy
+#| msgid "No announcements available."
+msgid "No announcements available at the moment."
+msgstr "Keine Ankündigungen verfügbar."
+
+#: myapp/templates/school/base.html:10
+msgid "School"
+msgstr "Schule"
+
+#: myapp/templates/school/base.html:34
+msgid "Home"
+msgstr "Startseite"
+
+#: myapp/templates/school/base.html:35 myapp/templates/school/base.html:145
+msgid "Pricing"
+msgstr "Preise"
+
+#: myapp/templates/school/base.html:36
+msgid "News"
+msgstr "Nachrichten"
+
+#: myapp/templates/school/base.html:37
+msgid "Career"
+msgstr "Karriere"
+
+#: myapp/templates/school/base.html:41
+msgid "About"
+msgstr "Über uns"
+
+#: myapp/templates/school/base.html:44 myapp/templates/school/history.html:191
+msgid "Our History"
+msgstr "Unsere Geschichte"
+
+#: myapp/templates/school/base.html:45 myapp/templates/school/base.html:144
+msgid "Our Team"
+msgstr "Unser Team"
+
+#: myapp/templates/school/base.html:47 myapp/templates/school/base.html:146
+msgid "Our School"
+msgstr "Unsere Schule"
+
+#: myapp/templates/school/base.html:53
+msgid "Facilities"
+msgstr "Einrichtungen"
+
+#: myapp/templates/school/base.html:56
+msgid "Library"
+msgstr "Bibliothek"
+
+#: myapp/templates/school/base.html:57
+msgid "Sport Fields"
+msgstr "Sportplätze"
+
+#: myapp/templates/school/base.html:59
+msgid "Buildings"
+msgstr "Gebäude"
+
+#: myapp/templates/school/base.html:101 myapp/templates/school/history.html:161
+#: myapp/templates/school/material_detail.html:87
+#: myapp/templates/school/my_lessons.html:154
+#: myapp/templates/school/my_quizez.html:114
+#: myapp/templates/school/mygrades.html:109
+#: myapp/templates/school/post_detail.html:158
+#: myapp/templates/school/profile.html:59
+#: myapp/templates/school/profile_edit.html:64
+#: myapp/templates/school/student_dashboard.html:80
+#: myapp/templates/school/teacher_dashboard.html:110
+#: myapp/templates/school/upload_material.html:66
+msgid "Logout"
+msgstr "Abmelden"
+
+#: myapp/templates/school/base.html:105 myapp/templates/school/history.html:169
+#: myapp/templates/school/material_detail.html:90
+#: myapp/templates/school/my_lessons.html:158
+#: myapp/templates/school/mygrades.html:113
+#: myapp/templates/school/post_detail.html:162
+#: myapp/templates/school/register.html:71
+#: myapp/templates/school/student_dashboard.html:83
+#: myapp/templates/school/upload_material.html:68
+msgid "Login"
+msgstr "Anmelden"
+
+#: myapp/templates/school/base.html:123
+msgid "Connect with us on social media"
+msgstr "Verbinden Sie sich mit uns in den sozialen Medien"
+
+#: myapp/templates/school/base.html:138
+msgid "Education directly in the heart of Saarland"
+msgstr "Bildung direkt im Herzen des Saarlandes"
+
+#: myapp/templates/school/base.html:142
+msgid "Links"
+msgstr "Links"
+
+#: myapp/templates/school/base.html:143
+msgid "Where Are we?"
+msgstr "Wo sind wir?"
+
+#: myapp/templates/school/base.html:150
+msgid "Contact"
+msgstr "Kontakt"
+
+#: myapp/templates/school/building.html:10
+msgid "Our Buildings"
+msgstr "Unsere Gebäude"
+
+#: myapp/templates/school/building.html:11
+msgid "trans Explore our campus buildings and infrastructure."
+msgstr "Entdecken Sie unsere Campusgebäude und Infrastruktur."
+
+#: myapp/templates/school/building.html:42
+msgid "Facilities Managment"
+msgstr "Facility Management"
+
+#: myapp/templates/school/building.html:44
+msgid " Please contact the Facilities Management:"
+msgstr "Bitte kontaktieren Sie das Facility Management:"
+
+#: myapp/templates/school/contact.html:5
+msgid "Contact us"
+msgstr "Kontaktieren Sie uns"
+
+#: myapp/templates/school/contact.html:8
+#, fuzzy
+#| msgid ""
+#| "  Do you have any questions? Please do not hesitate to contact us "
+#| "directly."
+msgid ""
+"Do you have any questions? Please do not hesitate to contact us directly."
+msgstr "Haben Sie Fragen? Zögern Sie nicht, uns direkt zu kontaktieren."
+
+#: myapp/templates/school/contact.html:19
+msgid "Your name"
+msgstr "Ihr Name"
+
+#: myapp/templates/school/contact.html:36
+msgid "Your email"
+msgstr "Ihre E-Mail"
+
+#: myapp/templates/school/contact.html:53
+msgid "Subject"
+msgstr "Betreff"
+
+#: myapp/templates/school/contact.html:67
+msgid "Your message"
+msgstr "Ihre Nachricht"
+
+#: myapp/templates/school/contact.html:75
+msgid "Send"
+msgstr "Senden"
+
+#: myapp/templates/school/contact.html:81
+#, fuzzy
+#| msgid "Your Message has sended."
+msgid "Your message has been sent."
+msgstr "Ihre Nachricht wurde gesendet."
+
+#: myapp/templates/school/enroll.html:9
+msgid "You can choose available Lessons and enroll"
+msgstr "Sie können aus den verfügbaren Kursen wählen und sich einschreiben"
+
+#: myapp/templates/school/enroll.html:22
+#, fuzzy
+#| msgid "Enroll Now"
+msgid "Enrolled"
+msgstr "Jetzt einschreiben"
+
+#: myapp/templates/school/enroll.html:27
+#: myapp/templates/school/my_lessons.html:217
+msgid "Dropout"
+msgstr "Abmelden"
+
+#: myapp/templates/school/enroll.html:35
+#: myapp/templates/school/my_lessons.html:233
+#, fuzzy
+#| msgid "Enroll Now"
+msgid "Enroll"
+msgstr "Jetzt einschreiben"
+
+#: myapp/templates/school/enroll.html:45
+#, fuzzy
+#| msgid "No news available."
+msgid "No lessons available."
+msgstr "Keine Nachrichten verfügbar."
+
+#: myapp/templates/school/enroll.html:53
+msgid "Back to My Lessons"
+msgstr ""
+
+#: myapp/templates/school/history.html:194
+#, fuzzy
+#| msgid "All started with Passion to Education\" "
+msgid "All started with Passion to Education"
+msgstr "Alles begann mit der Leidenschaft für Bildung."
+
+#: myapp/templates/school/history.html:197
+#: myapp/templates/school/history.html:212
+#: myapp/templates/school/history.html:227
+msgid "Back to the Homepage"
+msgstr "Zurück zur Startseite"
+
+#: myapp/templates/school/history.html:208
+msgid "The Generations"
+msgstr "Die Generationen"
+
+#: myapp/templates/school/history.html:209
+msgid "There was many Generations to learn"
+msgstr "Viele Generationen haben hier gelernt."
+
+#: myapp/templates/school/history.html:223
+msgid "Present"
+msgstr "Gegenwart"
+
+#: myapp/templates/school/history.html:224
+msgid "Our History continues."
+msgstr "Unsere Geschichte geht weiter."
+
+#: myapp/templates/school/history.html:238
+msgid "Previous"
+msgstr "Zurück"
+
+#: myapp/templates/school/history.html:245
+msgid "Next"
+msgstr "Weiter"
+
+#: myapp/templates/school/home.html:9
+#, fuzzy
+#| msgid "Welcome to SaarSchool"
+msgid "Welcome to SaarSchool!"
+msgstr "Willkommen bei der SaarSchool!"
+
+#: myapp/templates/school/home.html:10
+msgid "Your Future starts here"
+msgstr "Ihre Zukunft beginnt hier"
+
+#: myapp/templates/school/home.html:18
+msgid "Latest News"
+msgstr "Neueste Nachrichten"
+
+#: myapp/templates/school/home.html:35
+msgid "Mehr anzeigen"
+msgstr ""
+
+#: myapp/templates/school/home.html:41
+msgid "No news available."
+msgstr "Keine Nachrichten verfügbar."
+
+#: myapp/templates/school/home.html:46
+#: myapp/templates/school/teacher_dashboard.html:124
+msgid "Announcements"
+msgstr "Ankündigungen"
+
+#: myapp/templates/school/home.html:59
+#: myapp/templates/school/teacher_dashboard.html:132
+msgid "No announcements available."
+msgstr "Keine Ankündigungen verfügbar."
+
+#: myapp/templates/school/home.html:67
+msgid "All News"
+msgstr "Alle Nachrichten"
+
+#: myapp/templates/school/home.html:79
+msgid "Our School Location"
+msgstr "Unser Schulstandort"
+
+#: myapp/templates/school/jobdetail.html:25
+msgid "Carrier Contact"
+msgstr "Karrierekontakt"
+
+#: myapp/templates/school/jobdetail.html:33
+msgid "Back to Carrier Page"
+msgstr "Zurück zur Karriereseite"
+
+#: myapp/templates/school/library.html:9
+msgid " Our Library"
+msgstr "Unsere Bibliothek"
+
+#: myapp/templates/school/library.html:10
+msgid "Explore our modern learning environment."
+msgstr "Entdecken Sie unsere moderne Lernumgebung."
+
+#: myapp/templates/school/library.html:25
+msgid ""
+"A quiet and modern learning environment equipped with digital and printed "
+"resources."
+msgstr ""
+"Eine ruhige und moderne Lernumgebung, ausgestattet mit digitalen und "
+"gedruckten Materialien."
+
+#: myapp/templates/school/library.html:39
+msgid "Opening Hours"
+msgstr "Öffnungszeiten"
+
+#: myapp/templates/school/library.html:40
+msgid "Weekdays"
+msgstr "Werktage"
+
+#: myapp/templates/school/library.html:41
+msgid "Weekends"
+msgstr "Wochenenden"
+
+#: myapp/templates/school/library.html:49
+#, fuzzy
+#| msgid "Library"
+msgid "Library Card"
+msgstr "Bibliothek"
+
+#: myapp/templates/school/library.html:51
+msgid ""
+"Please inquire at the reception desk for any questions regarding your "
+"library card."
+msgstr ""
+"Bitte wenden Sie sich bei Fragen zu Ihrem Bibliotheksausweis an den Empfang."
+
+#: myapp/templates/school/login.html:15 myapp/templates/school/register.html:36
+#: myapp/templates/school/student.html:9
+msgid "Username"
+msgstr "Benutzername"
+
+#: myapp/templates/school/login.html:21 myapp/templates/school/register.html:42
+#: myapp/templates/school/student.html:29
+#, fuzzy
+#| msgid "Re-Password"
+msgid "Password"
+msgstr "Passwort wiederholen"
+
+#: myapp/templates/school/login.html:26 myapp/templates/school/student.html:38
+msgid "Sign in"
+msgstr "Anmelden"
+
+#: myapp/templates/school/login.html:30
+#, fuzzy
+#| msgid " Do you have an account? "
+msgid "Do you have not Account? Let's"
+msgstr "Haben Sie bereits ein Konto?"
+
+#: myapp/templates/school/login.html:30 myapp/templates/school/register.html:64
+msgid "Register"
+msgstr "Registrieren"
+
+#: myapp/templates/school/material_detail.html:72
+#: myapp/templates/school/material_detail.html:79
+#: myapp/templates/school/my_lessons.html:137
+#: myapp/templates/school/my_lessons.html:145
+#: myapp/templates/school/my_quizez.html:108
+#: myapp/templates/school/mygrades.html:92
+#: myapp/templates/school/mygrades.html:100
+#: myapp/templates/school/post_detail.html:141
+#: myapp/templates/school/post_detail.html:149
+#: myapp/templates/school/profile.html:43
+#: myapp/templates/school/profile.html:48
+#: myapp/templates/school/profile_edit.html:42
+#: myapp/templates/school/profile_edit.html:49
+#: myapp/templates/school/student_dashboard.html:63
+#: myapp/templates/school/student_dashboard.html:70
+#: myapp/templates/school/upload_material.html:55
+#: myapp/templates/school/upload_material.html:59
+msgid "Dashboard"
+msgstr ""
+
+#: myapp/templates/school/material_detail.html:73
+#: myapp/templates/school/my_lessons.html:138
+#: myapp/templates/school/mygrades.html:93
+#: myapp/templates/school/post_detail.html:142
+msgid "Manage Events"
+msgstr "Event Organisieren"
+
+#: myapp/templates/school/material_detail.html:74
+#: myapp/templates/school/my_lessons.html:139
+#: myapp/templates/school/mygrades.html:94
+#: myapp/templates/school/post_detail.html:143
+#: myapp/templates/school/student_dashboard.html:65
+msgid "Grades"
+msgstr "Leistungen"
+
+#: myapp/templates/school/material_detail.html:75
+#: myapp/templates/school/material_detail.html:82
+#: myapp/templates/school/my_lessons.html:140
+#: myapp/templates/school/my_lessons.html:148
+#: myapp/templates/school/my_quizez.html:110
+#: myapp/templates/school/mygrades.html:95
+#: myapp/templates/school/mygrades.html:103
+#: myapp/templates/school/post_detail.html:144
+#: myapp/templates/school/post_detail.html:152
+#: myapp/templates/school/student_dashboard.html:66
+#: myapp/templates/school/student_dashboard.html:74
+#: myapp/templates/school/upload_material.html:62
+msgid "My Lessons"
+msgstr "Meine Unterrichten"
+
+#: myapp/templates/school/material_detail.html:76
+#: myapp/templates/school/material_detail.html:83
+#: myapp/templates/school/my_lessons.html:141
+#: myapp/templates/school/my_lessons.html:149
+#: myapp/templates/school/mygrades.html:96
+#: myapp/templates/school/mygrades.html:104
+#: myapp/templates/school/post_detail.html:145
+#: myapp/templates/school/post_detail.html:153
+#: myapp/templates/school/student_dashboard.html:67
+#: myapp/templates/school/student_dashboard.html:76
+#, fuzzy
+#| msgid "Basic program"
+msgid "Lunch Program"
+msgstr "Grundprogramm"
+
+#: myapp/templates/school/material_detail.html:80
+#: myapp/templates/school/my_lessons.html:146
+#: myapp/templates/school/mygrades.html:101
+#: myapp/templates/school/post_detail.html:150
+#: myapp/templates/school/student_dashboard.html:72
+#: myapp/templates/school/upload_material.html:60
+msgid "Forum"
+msgstr ""
+
+#: myapp/templates/school/material_detail.html:81
+#: myapp/templates/school/my_lessons.html:147
+#: myapp/templates/school/my_quizez.html:109
+#: myapp/templates/school/mygrades.html:102
+#: myapp/templates/school/post_detail.html:151
+#: myapp/templates/school/student_dashboard.html:73
+#: myapp/templates/school/upload_material.html:61
+msgid "My Grades"
+msgstr "Meine Leistung"
+
+#: myapp/templates/school/material_detail.html:84
+#: myapp/templates/school/my_lessons.html:150
+#: myapp/templates/school/my_quizez.html:111
+#: myapp/templates/school/my_quizez.html:151
+#: myapp/templates/school/mygrades.html:105
+#: myapp/templates/school/post_detail.html:154
+#: myapp/templates/school/student_dashboard.html:77
+#: myapp/templates/school/upload_material.html:64
+msgid "Quiz"
+msgstr ""
+
+#: myapp/templates/school/material_detail.html:99
+#: myapp/templates/school/my_lessons.html:168
+#: myapp/templates/school/my_quizez.html:123
+#: myapp/templates/school/mygrades.html:169
+#: myapp/templates/school/post_detail.html:172
+#: myapp/templates/school/student_dashboard.html:135
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: myapp/templates/school/material_detail.html:109
+msgid "Materials"
+msgstr "Materialien"
+
+#: myapp/templates/school/material_detail.html:138
+msgid "Download File"
+msgstr "Datei herunterladen"
+
+#: myapp/templates/school/material_detail.html:154
+msgid "No materials available."
+msgstr "Keine Materialien verfügbar."
+
+#: myapp/templates/school/my_lessons.html:178
+msgid "Lessons"
+msgstr "Unterrichtsstunden"
+
+#: myapp/templates/school/my_lessons.html:199
+msgid "Lesson:"
+msgstr "Unterricht:"
+
+#: myapp/templates/school/my_lessons.html:224
+msgid "View Material"
+msgstr "Material anzeigen"
+
+#: myapp/templates/school/my_quizez.html:132
+msgid "📝 My Quizzes"
+msgstr "📝 Meine Quizze"
+
+#: myapp/templates/school/my_quizez.html:163
+msgid "Take Quiz"
+msgstr "Quiz starten"
+
+#: myapp/templates/school/my_quizez.html:178
+msgid "No quizzes available for your enrolled lessons."
+msgstr "Für Ihre eingeschriebenen Kurse sind keine Quizze verfügbar."
+
+#: myapp/templates/school/mygrades.html:178
+msgid "📊 My Grades"
+msgstr "📊 Meine Noten"
+
+#: myapp/templates/school/mygrades.html:189
+msgid "Grade"
+msgstr "Note"
+
+#: myapp/templates/school/mygrades.html:190
+msgid "Given By"
+msgstr "Gegeben von"
+
+#: myapp/templates/school/mygrades.html:191
+msgid "Note"
+msgstr "Anmerkung"
+
+#: myapp/templates/school/mygrades.html:192
+msgid "Date"
+msgstr "Datum"
+
+#: myapp/templates/school/mygrades.html:227
+#, fuzzy
+#| msgid "No news available."
+msgid "No grades available."
+msgstr "Keine Nachrichten verfügbar."
+
+#: myapp/templates/school/news_detail.html:12
+msgid "back"
+msgstr "Zurück"
+
+#: myapp/templates/school/news_list.html:17
+msgid " News of the day"
+msgstr "Nachrichten des Tages"
+
+#: myapp/templates/school/news_list.html:23
+msgid "Mehr lesen"
+msgstr "Mehr lesen"
+
+#: myapp/templates/school/post_detail.html:215
+msgid "Delete"
+msgstr "Löschen"
+
+#: myapp/templates/school/post_detail.html:238
+#: myapp/templates/school/post_detail.html:256
+msgid "Comments"
+msgstr "Kommentare"
+
+#: myapp/templates/school/post_detail.html:284
+msgid "No comments yet. Be the first!"
+msgstr "Noch keine Kommentare. Seien Sie der Erste!"
+
+#: myapp/templates/school/post_detail.html:297
+msgid "Add a Comment"
+msgstr "Kommentar hinzufügen"
+
+#: myapp/templates/school/post_detail.html:307
+msgid "Submit Comment"
+msgstr "Kommentar absenden"
+
+#: myapp/templates/school/price.html:7
+msgid "Our Programs & Pricing"
+msgstr "Unsere Programme & Preise"
+
+#: myapp/templates/school/price.html:9
+msgid ""
+"Explore our school programs and find the one that suits your needs. "
+"Affordable and flexible options for every budget."
+msgstr ""
+"Entdecken Sie unsere Schulprogramme und finden Sie das passende Angebot für "
+"Ihre Bedürfnisse. Flexible und erschwingliche Optionen für jedes Budget."
+
+#: myapp/templates/school/price.html:21
+msgid "Premium"
+msgstr ""
+
+#: myapp/templates/school/price.html:24 myapp/templates/school/price.html:42
+#: myapp/templates/school/price.html:60
+msgid "/ year"
+msgstr "/ Jahr"
+
+#: myapp/templates/school/price.html:26
+msgid "Inclusive opportunities"
+msgstr "Umfassende Möglichkeiten"
+
+#: myapp/templates/school/price.html:27
+msgid "Priority support"
+msgstr "Priorisierter Support"
+
+#: myapp/templates/school/price.html:28
+#, fuzzy
+#| msgid "Limited access"
+msgid "All facilities access"
+msgstr "Eingeschränkter Zugang"
+
+#: myapp/templates/school/price.html:30 myapp/templates/school/price.html:48
+#: myapp/templates/school/price.html:66
+#, fuzzy
+#| msgid "Enroll Now"
+msgid "Enroll Now"
+msgstr "Jetzt einschreiben"
+
+#: myapp/templates/school/price.html:39
+msgid "Standard"
+msgstr "Standard"
+
+#: myapp/templates/school/price.html:44
+#, fuzzy
+#| msgid "Basic program"
+msgid "Good program"
+msgstr "Grundprogramm"
+
+#: myapp/templates/school/price.html:45
+msgid "Email support"
+msgstr "E-Mail-Support"
+
+#: myapp/templates/school/price.html:46
+#, fuzzy
+#| msgid "Library"
+msgid "Library access"
+msgstr "Bibliothek"
+
+#: myapp/templates/school/price.html:57
+msgid "Base"
+msgstr "Basis"
+
+#: myapp/templates/school/price.html:62
+msgid "Basic program"
+msgstr "Grundprogramm"
+
+#: myapp/templates/school/price.html:63
+msgid "Limited access"
+msgstr "Eingeschränkter Zugang"
+
+#: myapp/templates/school/price.html:64
+msgid "Self-study resources"
+msgstr "Selbstlernmaterialien"
+
+#: myapp/templates/school/price.html:76
+msgid "Contacts"
+msgstr "Kontakte"
+
+#: myapp/templates/school/price.html:77
+msgid "Do you have questions? Let's get in touch."
+msgstr "Haben Sie Fragen? Nehmen Sie Kontakt mit uns auf."
+
+#: myapp/templates/school/price.html:90 myapp/templates/school/price.html:106
+#: myapp/templates/school/price.html:122
+msgid "Number:"
+msgstr "Nummer:"
+
+#: myapp/templates/school/price.html:91 myapp/templates/school/price.html:107
+#: myapp/templates/school/price.html:123
+msgid "E-Mail:"
+msgstr "E-Mail:"
+
+#: myapp/templates/school/price.html:92 myapp/templates/school/price.html:108
+#: myapp/templates/school/price.html:124
+msgid "Adress:"
+msgstr "Adresse:"
+
+#: myapp/templates/school/profile.html:54
+#: myapp/templates/school/profile.html:95
+#: myapp/templates/school/profile_edit.html:57
+#: myapp/templates/school/student_dashboard.html:71
+#: myapp/templates/school/teacher_dashboard.html:95
+msgid "Profile"
+msgstr "Profil"
+
+#: myapp/templates/school/profile.html:109
+msgid "Branch:"
+msgstr "Fachrichtung:"
+
+#: myapp/templates/school/profile.html:113
+msgid "Not assigned"
+msgstr "Nicht zugewiesen"
+
+#: myapp/templates/school/profile.html:123
+#: myapp/templates/school/profile_edit.html:103
+msgid "Student Information"
+msgstr "Schülerinformationen"
+
+#: myapp/templates/school/profile.html:141
+#: myapp/templates/school/profile_edit.html:7
+#: myapp/templates/school/profile_edit.html:87
+msgid "Edit Profile"
+msgstr "Profil bearbeiten"
+
+#: myapp/templates/school/profile_edit.html:96
+msgid "General Information"
+msgstr "Allgemeine Informationen"
+
+#: myapp/templates/school/profile_edit.html:110
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: myapp/templates/school/quiz_result.html:30
+msgid "RIGHT ANSWER!"
+msgstr "RICHTIGE ANTWORT!"
+
+#: myapp/templates/school/quiz_result.html:35
+msgid "Wrong Answer"
+msgstr "FALSCHE ANTWORT"
+
+#: myapp/templates/school/quiz_result.html:44
+#, fuzzy
+#| msgid "Your name"
+msgid "Your Answer:"
+msgstr "Ihr Name"
+
+#: myapp/templates/school/quiz_result.html:50
+msgid "Correct Answer:"
+msgstr "Richtige Antwort"
+
+#: myapp/templates/school/quiz_result.html:78
+msgid "Back to My Quizzes"
+msgstr "Zurück zu meinen Quiz"
+
+#: myapp/templates/school/register.html:19
+msgid "Registration Form"
+msgstr "Registrierungsformular"
+
+#: myapp/templates/school/register.html:47
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
+#: myapp/templates/school/register.html:53
+msgid "Role"
+msgstr "Rolle"
+
+#: myapp/templates/school/register.html:55
+msgid "Choose role"
+msgstr "Rolle auswählen"
+
+#: myapp/templates/school/register.html:56
+msgid "Student"
+msgstr "Schüler"
+
+#: myapp/templates/school/register.html:57
+msgid "Teacher"
+msgstr "Lehrer"
+
+#: myapp/templates/school/register.html:70
+msgid " Do you have an account? "
+msgstr "Haben Sie bereits ein Konto?"
+
+#: myapp/templates/school/school.html:9
+#, fuzzy
+#| msgid "Welcome to SaarSchool"
+msgid "Welcome to SaarSchool"
+msgstr "Willkommen bei der SaarSchool!"
+
+#: myapp/templates/school/school.html:11
+msgid ""
+"Discover our campus, programs, and facilities. A place where learning meets "
+"innovation."
+msgstr ""
+"Entdecken Sie unseren Campus, unsere Programme und Einrichtungen. Ein Ort, "
+"an dem Lernen auf Innovation trifft."
+
+#: myapp/templates/school/sport_fields.html:12
+msgid "Our Sport Facilities"
+msgstr "Unsere Sporteinrichtungen"
+
+#: myapp/templates/school/sport_fields.html:13
+msgid "Explore our modern and well-equipped sport areas."
+msgstr "Entdecken Sie unsere modernen und gut ausgestatteten Sportbereiche."
+
+#: myapp/templates/school/sport_fields.html:56
+#, fuzzy
+#| msgid "Sport Fields"
+msgid "Reservation for Sport Fields"
+msgstr "Sportplätze"
+
+#: myapp/templates/school/sport_fields.html:57
+#, fuzzy
+#| msgid " Please contact the Facilities Management:"
+msgid "Please contact with Sport Facilities Managment:"
+msgstr "Bitte kontaktieren Sie das Facility Management:"
+
+#: myapp/templates/school/student.html:6
+#, fuzzy
+#| msgid "Registration Form"
+msgid "Student Registration"
+msgstr "Registrierungsformular"
+
+#: myapp/templates/school/student.html:14
+msgid "Firstname"
+msgstr "Vorname"
+
+#: myapp/templates/school/student.html:19
+msgid "Lastname"
+msgstr "Nachname"
+
+#: myapp/templates/school/student.html:24
+msgid "Email"
+msgstr "E-Mail"
+
+#: myapp/templates/school/student.html:34
+msgid "Re-Password"
+msgstr "Passwort wiederholen"
+
+#: myapp/templates/school/student_dashboard.html:64
+#: myapp/templates/school/upload_material.html:56
+msgid "Add Events"
+msgstr "Ereignisse hinzufügen"
+
+#: myapp/templates/school/student_dashboard.html:75
+msgid "Chat with AI"
+msgstr "Mit KI chatten"
+
+#: myapp/templates/school/student_forum.html:6
+msgid "New Post"
+msgstr "Neuer Beitrag"
+
+#: myapp/templates/school/student_forum.html:21
+msgid "There is no post yet"
+msgstr "Es gibt noch keine Beiträge"
+
+#: myapp/templates/school/take_quiz.html:106
+msgid "submit your answer"
+msgstr "Antwort einreichen"
+
+#: myapp/templates/school/teacher.html:6
+#, fuzzy
+#| msgid "Registration Form"
+msgid "Teacher Registration"
+msgstr "Registrierungsformular"
+
+#: myapp/templates/school/teacher_dashboard.html:94
+msgid "✖ Close"
+msgstr ""
+
+#: myapp/templates/school/teacher_dashboard.html:99
+msgid "Add quiz"
+msgstr "Quiz hinzufügen"
+
+#: myapp/templates/school/teacher_dashboard.html:100
+#, fuzzy
+#| msgid "Materials"
+msgid "Add Material"
+msgstr "Materialien"
+
+#: myapp/templates/school/teacher_dashboard.html:109
+#: myapp/templates/school/upload_material.html:57
+#, fuzzy
+#| msgid "Basic program"
+msgid "Lunch programm"
+msgstr "Grundprogramm"
+
+#: myapp/templates/school/teacher_dashboard.html:119
+msgid "Teacher Dashboard"
+msgstr ""
+
+#: myapp/templates/school/teacher_dashboard.html:138
+#, fuzzy
+#| msgid "Lessons"
+msgid "Your Lessons"
+msgstr "Unterrichtsstunden"
+
+#: myapp/templates/school/teacher_dashboard.html:149
+#, fuzzy
+#| msgid "➕ Add Grade"
+msgid "➕ Give Grade"
+msgstr "➕ Note hinzufügen"
+
+#: myapp/templates/school/teacher_dashboard.html:153
+msgid "No students enrolled."
+msgstr "Keine Schüler eingeschrieben."
+
+#: myapp/templates/school/teacher_dashboard.html:157
+msgid "You are not assigned to any lessons."
+msgstr "Sie sind keinem Unterricht zugewiesen."
+
+#: myapp/templates/school/team.html:8
+msgid "Our Branches & Academic Team"
+msgstr "Unsere Standorte & Akademisches Team"
+
+#: myapp/templates/school/team.html:9
+msgid "Meet our dedicated staff and discover their expertise."
+msgstr ""
+"Lernen Sie unser engagiertes Team kennen und entdecken Sie ihre Fachgebiete."
+
+#: myapp/templates/school/team.html:20
+msgid "Our Staff"
+msgstr "Unser Staff"
+
+#: myapp/templates/school/team.html:35
+msgid "Administrative Staff"
+msgstr "Verwaltungspersonal"
+
+#: myapp/templates/school/team.html:41
+msgid "Principal:"
+msgstr "Schulleiter:"
+
+#: myapp/templates/school/team.html:42
+msgid "Director:"
+msgstr "Direktor:"
+
+#: myapp/templates/school/team.html:55
+msgid "Mathematics"
+msgstr ""
+
+#: myapp/templates/school/team.html:74
+msgid "Computer Science"
+msgstr "Informatik"
+
+#: myapp/templates/school/team.html:90
+msgid "Be patient; responses can take 3-5 days."
+msgstr "Bitte haben Sie Geduld; Antworten können 3–5 Tage dauern."
+
+#: myapp/templates/school/team.html:91
+msgid " Use official emails only."
+msgstr "Bitte verwenden Sie nur offizielle E-Mail-Adressen."
+
+#: myapp/templates/school/team.html:92
+msgid " Include your full name and purpose of contact."
+msgstr ""
+"Geben Sie bitte Ihren vollständigen Namen und den Grund Ihrer "
+"Kontaktaufnahme an."
+
+#: myapp/templates/school/upload_material.html:63
+#, fuzzy
+#| msgid "Basic program"
+msgid "lunch programm"
+msgstr "Grundprogramm"
+
+#: myapp/templates/school/upload_material.html:98
+msgid "Upload"
+msgstr "Hochladen"
+
+#~ msgid "Zurück"
+#~ msgstr "Zurück"

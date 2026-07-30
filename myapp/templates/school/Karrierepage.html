@@ -1,0 +1,50 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+
+    {# Überschrift und kurze Beschreibung der Karriereseite #}
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">{% trans "Carrier in SaarSchool" %}</h2>
+        <p class="text-muted">{% trans "Explore our Jobs and be a Member of our Team" %}</p>
+    </div>
+
+    {# Jobkarten: Grid mit 3 Spalten pro Reihe auf großen Bildschirmen #}
+    <div class="row g-4">
+        {% for j in job %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex flex-column">
+
+                    {# Jobtitel und Kurzbeschreibung #}
+                    <h5 class="card-title fw-bold">{{ j.jobtitel }}</h5>
+                    <p class="card-text text-truncate" style="max-height: 4.5em; overflow: hidden;">
+                        {{ j.jobbeschreibung }}
+                    </p>
+
+                    {# Veröffentlichungsdatum #}
+                    <small class="text-muted mb-3">{% trans "Published at:" %} {{ j.erstellt_at|date:"d.m.Y" }}</small>
+
+                    {# Button zur Detailansicht des Jobs #}
+                    <a href="{% url 'job_detail' j.id %}" class="btn btn-primary mt-auto">{% trans "Show more" %}</a>
+
+                    {# Kontaktkarte für Bewerbungen #}
+                    <div class="card mt-3 border-0 shadow-sm p-2">
+                        <h6 class="fw-bold mb-1">{% trans "Carrier contact" %}</h6>
+                        <p class="mb-0">Email: karriere@saar-school.de</p>
+                        <p class="mb-0">Telefon: +49 11 123456</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        {# Falls keine Jobs vorhanden sind #}
+        <p class="text-center">{% blocktrans %}Actually there is no job to offer{% endblocktrans %}</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

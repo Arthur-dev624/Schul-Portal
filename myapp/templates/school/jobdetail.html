@@ -1,0 +1,46 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+
+    {# Überschrift des Jobs und Veröffentlichungsdatum #}
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">{{ job.jobtitel }}</h2>
+        <p class="text-muted">Veröffentlicht am: {{ job.erstellt_at|date:"d.m.Y" }}</p>
+    </div>
+
+    {# Hauptbereich: Jobbeschreibung links, Kontaktkarte rechts #}
+    <div class="row g-4 justify-content-center">
+
+        {# Linke Spalte: Jobbeschreibung #}
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm border-0 rounded-4 p-4 h-100">
+                <p class="mb-0" style="white-space: pre-wrap; word-break: break-word;">
+                    {{ job.jobbeschreibung }}
+                </p>
+            </div>
+        </div>
+
+        {# Rechte Spalte: Kontaktinformationen für Bewerbungen #}
+        <div class="col-md-4 col-lg-3">
+            <div class="card shadow-sm border-0 rounded-4 p-3 h-100">
+                <h5 class="fw-bold mb-2">{% trans "Carrier Contact" %}</h5>
+                <p>Email: karriere@saar-school.de</p>
+                <p>Telefon: +49 11 123456</p>
+            </div>
+        </div>
+
+    </div>
+
+    {# Zurück-Button zur Karriereseite #}
+    <div class="mt-4 text-center">
+        <a href="{% url 'karriere_view' %}" class="btn btn-secondary">{% trans "Back to Carrier Page" %}</a>
+    </div>
+
+</div>
+
+{# Bootstrap JS einbinden für interaktive Elemente #}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

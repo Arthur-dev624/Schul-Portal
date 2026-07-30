@@ -1,0 +1,59 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+<div class="container py-5">
+
+  {# Überschrift und Beschreibung des Abschnitts #}
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">{% trans "Our Buildings" %}</h2>
+    <p class="text-muted">{% blocktrans %}trans Explore our campus buildings and infrastructure.{% endblocktrans %}</p>
+  </div>
+
+  {# Lightbox-Galerie für Bilder der Gebäude #}
+  <div class="lightbox" data-mdb-lightbox-init>
+    <div class="row">
+      <div class="col-lg-6">
+        {# Erstes Bild #}
+        <img
+          src="{{ bild1.bild.url }}"
+          data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Slides/1.webp"
+          alt="Table Full of Spices"
+          class="w-100 mb-2 mb-md-4 shadow-1-strong rounded"
+        />
+        {# Zweites Bild #}
+        <img
+          src="{{ bild2.bild.url }}"
+          data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Square/1.webp"
+          alt="Coconut with Strawberries"
+          class="w-100 shadow-1-strong rounded"
+        />
+      </div>
+      <div class="col-lg-6">
+        {# Drittes Bild #}
+        <img
+          src="{{ bild3.bild.url }}"
+          data-mdb-img="https://mdbcdn.b-cdn.net/img/Photos/Vertical/1.webp"
+          alt="Dark Roast Iced Coffee"
+          class="w-100 shadow-1-strong rounded"
+        />
+      </div>
+    </div>
+  </div>
+
+  {# Karte mit Kontaktinformationen für Facility Management #}
+  <div class="card shadow-lg border-0 mt-5 rounded-4">
+    <div class="card-body text-center py-4">
+      <h5 class="fw-bold mb-3">{% trans "Facilities Managment" %}</h5>
+      <p>
+        {% blocktrans %} Please contact the Facilities Management:{% endblocktrans %}<br>
+        <strong>fm@gmail.com</strong>
+      </p>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

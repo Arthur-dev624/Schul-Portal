@@ -1,0 +1,132 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% block content %}
+
+<!-- Pricing Header -->
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 text-center">
+  <h1 class="display-4">{% trans "Our Programs & Pricing" %}</h1>
+  <p class="lead">
+    {% blocktrans %}Explore our school programs and find the one that suits your needs. Affordable and flexible options for every budget.{% endblocktrans %}
+  </p>
+</div>
+
+<!-- Pricing Cards -->
+<div class="container mb-5">
+  <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+
+    <!-- Premium -->
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 fw-normal">{% trans "Premium" %}</h4>
+        </div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">$20k <small class="text-muted">{% trans "/ year" %}</small></h1><!--Die Preise konnen geandert werden-->
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>{% trans "Inclusive opportunities" %}</li><!--Die konnen nach Inhalte von Programmen geandert werden-->
+            <li>{% trans "Priority support" %}</li>
+            <li>{% trans "All facilities access" %}</li>
+          </ul>
+            <a class="btn btn-lg btn btn-primary w-100" href="/contact">{% trans "Enroll Now" %}</a>  
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard -->
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 fw-normal">{% trans "Standard" %}</h4>
+        </div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">$10k <small class="text-muted">{% trans "/ year" %}</small></h1>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>{% trans "Good program" %}</li><!--Die konnen nach Inhalte von Programmen geandert werden-->
+            <li>{% trans "Email support" %}</li>
+            <li>{% trans "Library access" %}</li>
+          </ul>
+            <a class="btn btn-lg btn btn-primary w-100" href="/contact">{% trans "Enroll Now" %}</a>  
+        </div>
+      </div>
+    </div>
+
+    <!-- Base -->
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 fw-normal">{% trans "Base" %}</h4>
+        </div>
+        <div class="card-body">
+          <h1 class="card-title pricing-card-title">$5k <small class="text-muted">{% trans "/ year" %}</small></h1>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li>{% trans "Basic program" %}</li><!--Die konnen nach Inhalte von Programmen geandert werden-->
+            <li>{% trans "Limited access" %}</li>
+            <li>{% trans "Self-study resources" %}</li>
+          </ul>
+        <a class="btn btn-lg btn btn-primary w-100" href="/contact">{% trans "Enroll Now" %}</a>  
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Accordion for details -->
+<div class="container mb-5">
+  <h2 class="mb-4 text-center">{% trans "Contacts" %}</h2>
+  <a class="mb-4 text-center" >{% trans "Do you have questions? Let's get in touch." %}</a>
+
+  <div class="accordion accordion-flush" id="programAccordion">
+
+    <!-- Premium Details -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePremium" aria-expanded="false">
+          Frau Muller - Managment
+        </button>
+      </h2>
+      <div id="collapsePremium" class="accordion-collapse collapse" data-bs-parent="#programAccordion">
+        <div class="accordion-body">
+          <a><strong>{% trans "Number:" %}</strong>+4910000000000<br>
+              <strong>{% trans "E-Mail:" %}</strong>muller@gmail.com <br>
+              <strong>{% trans "Adress:" %}</strong>Mail Building 1,Saarbrucken</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard Details -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStandard" aria-expanded="false">
+          Herr Thomas - Welcome Office
+        </button>
+      </h2>
+      <div id="collapseStandard" class="accordion-collapse collapse" data-bs-parent="#programAccordion">
+        <div class="accordion-body">
+           <a><strong>{% trans "Number:" %}</strong>+4910000000000<br>
+              <strong>{% trans "E-Mail:" %}</strong>thomas@gmail.com <br>
+              <strong>{% trans "Adress:" %}</strong>Mail Building 1,Saarbrucken</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Base Details -->
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBase" aria-expanded="false">
+          Frau Meier - Help Desk
+        </button>
+      </h2>
+      <div id="collapseBase" class="accordion-collapse collapse" data-bs-parent="#programAccordion">
+        <div class="accordion-body">
+             <a><strong>{% trans "Number:" %}</strong>+4910000000000<br>
+              <strong>{% trans "E-Mail:" %}</strong>meier@gmail.com <br>
+              <strong>{% trans "Adress:" %}</strong>  Main Building 1, Saarbrücken</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

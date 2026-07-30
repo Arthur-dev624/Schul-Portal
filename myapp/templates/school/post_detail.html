@@ -1,0 +1,367 @@
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- 
+Diese Seite zeigt einen einzelnen Forum-Post mit Kommentaren.
+Benutzer können:
+- den Beitrag sehen
+- Kommentare lesen
+- neue Kommentare hinzufügen
+- den Beitrag liken
+-->
+
+  <style>
+    /* Allgemeines Seiten-Design */
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    /* =========================
+       SIDE NAVIGATION (RECHTES MENÜ)
+       Dieses Menü wird per JavaScript geöffnet und geschlossen
+    ========================= */
+    .sidenav {
+      height: 100%;                 /* volle Höhe */
+      width: 0;                     /* am Anfang geschlossen */
+      position: fixed;              /* bleibt fix auf dem Bildschirm */
+      top: 0;
+      right: 0;
+      background-color: #111;       /* dunkler Hintergrund */
+      overflow-x: hidden;
+      transition: 0.5s;             /* sanfte Animation */
+      z-index: 9999;                /* über anderen Elementen */
+      padding-top: 60px;
+    }
+
+    /* Links im Menü */
+    .sidenav a {
+      padding: 8px 32px;
+      font-size: 22px;
+      color: #818181;
+      display: block;
+      text-decoration: none;
+    }
+
+    /* Hover Effekt */
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
+
+    /* Schließen-Button (X oben rechts) */
+    .closebtn {
+      position: absolute;
+      top: 0;
+      right: 20px;
+      font-size: 36px;
+    }
+
+    /* =========================
+       LANGUAGE SWITCHER
+       Ermöglicht das Wechseln der Sprache (EN / DE)
+    ========================= */
+    .language-switcher {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10000; /* immer oben sichtbar */
+    }
+  </style>
+</head>
+
+<body>
+
+<body>
+
+<!-- 
+Diese Seite zeigt alle verfügbaren Kurse (Lessons).
+Funktionen:
+- Benutzer kann sich in Kurse einschreiben (Enroll)
+- Benutzer kann Kurse verlassen (Dropout)
+- Benutzer kann Materialien ansehen
+-->
+
+<!-- ========================= -->
+<!-- LANGUAGE SWITCHER -->
+<!-- ========================= -->
+<div class="language-switcher">
+
+  <!-- Dropdown Menü für Sprachwahl -->
+  <div class="dropdown">
+
+    <!-- Aktuelle Sprache anzeigen -->
+    <button class="btn btn-light btn-sm dropdown-toggle shadow"
+            type="button"
+            data-bs-toggle="dropdown">
+
+      {% get_current_language as LANGUAGE_CODE %}
+      {{ LANGUAGE_CODE|upper }}
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+      <!-- Englisch auswählen -->
+   <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('lang-en-form').submit();">
+  English
+</a>
+
+<form id="lang-en-form" action="{% url 'set_language' %}" method="post" style="display:none;">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}">
+  <input type="hidden" name="language" value="en">
+</form>
+<a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('lang-de-form').submit();">
+  Deutsch
+</a>
+
+<form id="lang-de-form" action="{% url 'set_language' %}" method="post" style="display:none;">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}">
+  <input type="hidden" name="language" value="de">
+</form>
+
+    </ul>
+  </div>
+</div>
+
+<!-- ========================= -->
+<!-- SIDE MENU -->
+<!-- ========================= -->
+<div id="mySidenav" class="sidenav">
+
+  <!-- Menü schließen -->
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+  {% if request.user.is_authenticated %}
+
+    <!-- Lehrer Menu -->
+    {% if request.user.person.role == "teacher" %}
+      <a href="{% url 'teacher_dashboard' %}">{% trans "Dashboard" %}</a>
+      <a href="{% url 'add_event' %}">{% trans "Manage Events" %}</a>
+      <a href="{% url 'grades' %}">{% trans "Grades" %}</a>
+      <a href="{% url 'my_lessons' %}">{% trans "My Lessons" %}</a>
+      <a href="{% url 'lunch_view' %}">{% trans "Lunch Program" %}</a>
+
+    <!-- Student Menu -->
+    {% elif request.user.person.role == "student" %}
+      <a href="{% url 'student_dashboard' %}">{% trans "Dashboard" %}</a>
+      <a href="{% url 'post_list' %}">{% trans "Forum" %}</a>
+      <a href="{% url 'my_grades' %}">{% trans "My Grades" %}</a>
+      <a href="{% url 'my_lessons' %}">{% trans "My Lessons" %}</a>
+      <a href="{% url 'lunch_view' %}">{% trans "Lunch Program" %}</a>
+      <a href="{% url 'my_quiz' %}">{% trans "Quiz" %}</a>
+    {% endif %}
+
+    <!-- Logout -->
+    <a href="{% url 'logout' %}">{% trans "Logout" %}</a>
+
+  {% else %}
+    <!-- Login -->
+    <a href="{% url 'login' %}">{% trans "Login" %}</a>
+  {% endif %}
+
+</div>
+
+<!-- MENU -->
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">☰ Menu</span>
+
+<!-- Begrussung -->
+<h2 class="mt-3">
+  {% trans "Welcome" %} {{ request.user.username }}!
+</h2>
+
+</body>
+
+
+<!-- ========================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================= -->
+
+<script>
+/* Menu offnen */
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+/* Menu schliessen */
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+
+
+
+
+<div class="container py-4">
+
+  <!-- ========================= -->
+  <!-- POST -->
+  <!-- ========================= -->
+  <div class="card shadow-sm mb-4">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ post.author.username }}</strong>
+        <small class="text-muted">
+          • {{ post.submitted_at|date:"d.m.Y H:i" }}
+        </small>
+      </div>
+
+      <!-- Nur Autor/Admin darf löschen -->
+      {% if request.user == post.author or request.user.is_staff %}
+      <a href="{% url 'delete_post' post.pk %}" class="btn btn-danger btn-sm">
+        {% trans "Delete" %}
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="card-body">
+
+      <!-- Inhalt -->
+      <p>{{ post.content }}</p>
+
+      <!-- Bild -->
+      {% if post.image %}
+      <div class="mt-2">
+        <img src="{{ post.image.url }}"
+             class="img-fluid rounded"
+             style="max-height:400px; object-fit:cover;">
+      </div>
+      {% endif %}
+
+      <!-- Like + Kommentar -->
+      <div class="d-flex gap-3 mt-3 align-items-center">
+
+        <a href="#comment-form" class="text-decoration-none">
+          💬 {% trans "Comments" %} ({{ comments.count }})
+        </a>
+
+        <button class="like-btn btn btn-light btn-sm d-flex align-items-center"
+                data-id="{{ post.id }}">
+          ❤️ <span class="ms-1 like-count">{{ like_count }}</span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================= -->
+  <!-- COMMENTS -->
+  <!-- ========================= -->
+  <div class="card mb-4">
+
+    <div class="card-header">
+      <h5>{% trans "Comments" %} ({{ comments.count }})</h5>
+    </div>
+
+    <ul class="list-group list-group-flush">
+
+      {% for comment in comments %}
+      <li class="list-group-item d-flex align-items-start">
+
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (29).webp"
+             class="rounded-circle me-3" height="40">
+
+        <div class="w-100">
+          <div class="d-flex justify-content-between">
+            <strong>{{ comment.commentauthor.username }}</strong>
+            <small class="text-muted">
+              {{ comment.submitted_at|date:"d.m.Y H:i" }}
+            </small>
+          </div>
+
+          <p class="mb-0 mt-1">
+            {{ comment.commentcontent }}
+          </p>
+        </div>
+
+      </li>
+
+      {% empty %}
+      <li class="list-group-item text-muted">
+        {% trans "No comments yet. Be the first!" %}
+      </li>
+      {% endfor %}
+
+    </ul>
+  </div>
+
+  <!-- ========================= -->
+  <!-- COMMENT FORM -->
+  <!-- ========================= -->
+  <div class="card mb-5" id="comment-form">
+
+    <div class="card-body">
+      <h5>{% trans "Add a Comment" %}</h5>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          {{ form.commentcontent }}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm">
+          {% trans "Submit Comment" %}
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- LIKE SCRIPT -->
+<!-- ========================= -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const likeBtn = document.querySelector(".like-btn");
+
+    if (likeBtn) {
+        likeBtn.addEventListener("click", function() {
+            const postId = this.dataset.id;
+            const likeCountSpan = this.querySelector(".like-count");
+
+            fetch(`/post/${postId}/like/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                likeCountSpan.innerText = data.like_count;
+                this.style.color = data.liked ? "red" : "black";
+            });
+        });
+    }
+});
+</script>
+
+<style>
+/* Allgemeines Design */
+body {
+    background-color: #f0f2f5;
+    font-family: "Lato", sans-serif;
+}
+
+/* Karten Stil */
+.card {
+    border-radius: 12px;
+}
+
+/* Like Button */
+.like-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

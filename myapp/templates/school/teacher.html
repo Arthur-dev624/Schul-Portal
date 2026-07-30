@@ -1,0 +1,41 @@
+<!--hier ist Register Seite fur Lehrerinnen-->
+{% extends "school/base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-5" style="max-width: 600px;">
+  <h3 class="mb-4 text-center">{% trans "Teacher Registration" %}</h3>
+  <form>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control form-control-lg" id="username" placeholder="Username">
+    </div>
+
+    <div class="mb-3">
+      <label for="firstname" class="form-label">Firstname</label>
+      <input type="text" class="form-control form-control-lg" id="firstname" placeholder="Firstname">
+    </div>
+
+    <div class="mb-3">
+      <label for="lastname" class="form-label">Lastname</label>
+      <input type="text" class="form-control form-control-lg" id="lastname" placeholder="Lastname">
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control form-control-lg" id="email" placeholder="Email">
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control form-control-lg" id="password" placeholder="Password">
+    </div>
+
+    <div class="mb-3">
+      <label for="repassword" class="form-label">Re-Password</label>
+      <input type="password" class="form-control form-control-lg" id="repassword" placeholder="Re-Password">
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg w-100">Sign in</button>
+  </form>
+</div>
+{% endblock %}

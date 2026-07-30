@@ -1,0 +1,38 @@
+{% extends "school/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<!-- Hero -->
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+  <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <h1 class="display-4 font-weight-normal">{% trans "Welcome to SaarSchool" %}</h1>
+    <p class="lead font-weight-normal">
+      {% blocktrans %}Discover our campus, programs, and facilities. A place where learning meets innovation.{% endblocktrans %}
+    </p>
+  </div>
+</div>
+
+<!-- GALERIE -->
+<div class="container my-5">
+  <div class="row g-4">
+
+    {% for sb in bilder %}
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+
+        {% if sb.bild %}
+          <img src="{{ sb.bild.url }}" class="card-img-top" style="height: 250px; object-fit: cover;">
+        {% endif %}
+
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ sb.titel }}</h5>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endblock %}

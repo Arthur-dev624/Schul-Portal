@@ -1,0 +1,108 @@
+/* =========================
+   History / Cover Template
+   ========================= */
+
+/* Body ve temel yapılar */
+html, body {
+  height: 100%;
+  background-color: #000; /* Siyah arka plan */
+  color: #fff; /* Beyaz yazı */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  margin: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.cover-container {
+  max-width: 42em;
+  padding: 3rem;
+  margin: 0 auto;
+}
+
+/* Header */
+.masthead {
+  margin-bottom: 2rem;
+}
+
+.masthead-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-masthead {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.nav-masthead .nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-masthead .active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+/* Cover / main content */
+.cover {
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.cover .cover-heading {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.cover .lead {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn-secondary {
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: #666;
+  color: #fff;
+  border-color: #fff;
+}
+
+/* Footer */
+.mastfoot {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: auto;
+  padding-top: 2rem;
+  font-size: 0.9rem;
+}
+
+/* Responsive tweaks */
+@media (min-width: 768px) {
+  .cover .cover-heading {
+    font-size: 4rem;
+  }
+  .cover .lead {
+    font-size: 1.5rem;
+  }
+}

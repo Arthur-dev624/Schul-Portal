@@ -1,0 +1,30 @@
+{% extends "school/student_dashboard.html" %}
+
+{% block content %}
+<!-- Überschrift des Forums -->
+<h3>Student Forum</h3>
+
+<!-- Link zum Erstellen eines neuen Beitrags -->
+<a href="{% url 'create_post' %}">{% trans "New Post" %}</a>
+
+<!-- Liste der Beiträge -->
+<ul>
+  {% for post in posts %}
+    <li>
+      <!-- Link zum Detail des Beitrags -->
+      <a href="{% url 'post_detail' post.pk %}">
+        {{ post.content|truncatechars:50 }} <!-- Zeigt die ersten 50 Zeichen des Beitrags -->
+      </a>
+      <br>
+      <!-- Autor und Datum des Beitrags -->
+      <small>
+        {{ post.author.username }} | <!-- Benutzername des Autors -->
+        {{ post.submitted_at|date:"d.m.Y H:i" }} <!-- Veröffentlichungsdatum -->
+      </small>
+    </li>
+  {% empty %}
+    <!-- Nachricht, wenn keine Beiträge vorhanden sind -->
+    <li>{% trans "There is no post yet" %}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

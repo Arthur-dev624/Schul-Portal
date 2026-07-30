@@ -1,0 +1,98 @@
+{% extends "school/base.html" %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold"><em>{% blocktrans %}Our Branches & Academic Team{% endblocktrans %}</em></h2>
+        <p class="text-muted">{% blocktrans %}Meet our dedicated staff and discover their expertise.{% endblocktrans %}</p>
+    </div>
+
+    <!-- Staff Image Card -->
+    <div class="card shadow-sm mb-5 border-0 rounded-4 overflow-hidden">
+        {% if staff_image %}
+        <img src="{{ staff_image.bild.url }}"
+             class="card-img-top"
+             style="height: 400px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body text-center bg-light">
+            <h5 class="card-title mb-0">{% trans "Our Staff" %}</h5>
+        </div>
+    </div>
+
+    <!-- Accordion fur Fachrichtungen -->
+    <div class="accordion" id="accordionStaff">
+
+        <!-- Administrative Staff -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne"
+                        aria-expanded="true"
+                        aria-controls="collapseOne">
+                    {% trans "Administrative Staff" %}
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show"
+                 aria-labelledby="headingOne" data-bs-parent="#accordionStaff">
+                <div class="accordion-body">
+                    <p><strong>{% trans "Principal:" %}</strong> Suzanne Miller</p>
+                    <p><strong>{% trans "Director:" %}</strong> Schmidt</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mathematik Fachrichtung Unterricht und die Personen konnen geandert werden -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo"
+                        aria-expanded="false"
+                        aria-controls="collapseTwo">
+                    {% trans "Mathematics" %}
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse"
+                 aria-labelledby="headingTwo" data-bs-parent="#accordionStaff">
+                <div class="accordion-body">
+                    <p>Emma Watson - ew@gmail.com</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Computer Science Department -->
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree"
+                        aria-expanded="false"
+                        aria-controls="collapseThree">
+                    {% trans "Computer Science" %}
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse"
+                 aria-labelledby="headingThree" data-bs-parent="#accordionStaff">
+                <div class="accordion-body">
+                    <p>Bradt Pit - bp@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kontakt Regeln Card -->
+    <div class="card shadow-sm border-0 rounded-4 mt-5 p-4 bg-light">
+        <h5 class="fw-bold mb-3">Rules for Contacting Staff</h5>
+        <ul class="mb-0">
+            <li>{% blocktrans %}Be patient; responses can take 3-5 days.{% endblocktrans %}</li>
+            <li>{% blocktrans %} Use official emails only.{% endblocktrans %}</li>
+            <li>{% blocktrans %} Include your full name and purpose of contact.{% endblocktrans %}</li>
+        </ul>
+    </div>
+</div>
+
+
+{% endblock %}

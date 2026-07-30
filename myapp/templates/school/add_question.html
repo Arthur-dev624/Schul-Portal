@@ -1,0 +1,151 @@
+{% block content %}
+{% load i18n %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<!-- ========================= -->
+<!-- 🌍 LANGUAGE SWITCHER -->
+<!-- ========================= -->
+<div class="language-switcher">
+  <div class="dropdown">
+    <button class="btn btn-light btn-sm dropdown-toggle shadow"
+            type="button"
+            data-bs-toggle="dropdown">
+
+      {% get_current_language as LANGUAGE_CODE %}
+      {{ LANGUAGE_CODE|upper }}
+
+    </button>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+      <li>
+        <form action="{% url 'set_language' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="submit" name="language" value="en" class="dropdown-item">
+            🇬🇧 English
+          </button>
+        </form>
+      </li>
+
+      <li>
+        <form action="{% url 'set_language' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <button type="submit" name="language" value="de" class="dropdown-item">
+            🇩🇪 Deutsch
+          </button>
+        </form>
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+<!-- 
+Diese Seite ermöglicht es Lehrern, fragen fur Quiz zu erstellen.
+Eine Frage gehört immer zu einer bestimmten Unterrichtseinheit (Lesson).
+Der Lehrer kann vier Antwortmöglichkeiten eingeben und die richtige Antwort auswählen.
+Nach dem Speichern wird die Frage in der Datenbank gespeichert und ist für Schüler verfügbar.
+-->
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-pen"></i> {% trans "Add Quiz Question" %}
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Lesson Auswahl: Bestimmt, zu welchem Kurs die Frage gehört -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{% trans "Lesson" %}</label>
+                            {{ form.lesson }}
+                        </div>
+
+                        <!-- Frage Eingabe -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{% trans "Question" %}</label>
+                            {{ form.frage }}
+                        </div>
+
+                        <!-- Antwortmöglichkeiten -->
+                        <!-- Erste Reihe -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% trans "Option A" %}</label>
+                                {{ form.antwort1 }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% trans "Option B" %}</label>
+                                {{ form.antwort2 }}
+                            </div>
+                        </div>
+
+                        <!-- Zweite Reihe -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% trans "Option C" %}</label>
+                                {{ form.antwort3 }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{% trans "Option D" %}</label>
+                                {{ form.antwort4 }}
+                            </div>
+                        </div>
+
+                        <!-- Richtige Antwort Auswahl -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">{% trans "Correct Answer" %}</label>
+                            {{ form.richtigeantwort }}
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+
+                            <!-- Zurück ohne Speichern -->
+                            <a href="{% url 'teacher_dashboard' %}" 
+                               class="btn btn-outline-secondary">
+                                {% trans "Back" %}
+                            </a>
+
+                            <!-- Speichern der Frage -->
+                            <button type="submit" 
+                                    class="btn btn-success">
+                                {% trans "Save Question" %}
+                            </button>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Language Button CSS -->
+<style>
+.language-switcher {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

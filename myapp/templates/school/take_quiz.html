@@ -1,0 +1,163 @@
+{% extends "school/student_dashboard.html" %}
+{% load i18n %}
+{% load static %}
+<!-- Das ist die Seite zum losen der Quizfragen-->
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      
+      <!-- Header -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h3 class="mb-2">{{ quiz.lesson.name }}</h3> 
+          
+        </div>
+      </div>
+
+      <!-- Quiz Form -->
+      <div class="card shadow">
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            <!-- Soru -->
+            <h5 class="mb-4"><strong>{{ quiz.frage }}</strong></h5>
+
+            <!-- Losungsauswahl - da schreiben wir antwort1 , antwort2 ... da wir in der Modelle so genannt haben, was auf Admin-Seite geandert werden kann -->
+            <div class="answer-options">
+              {% if quiz.antwort1 %}
+              <div class="form-check mb-3">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="answer" 
+                  id="answer1"
+                  value="{{ quiz.antwort1 }}"
+                  required
+                >
+                <label class="form-check-label w-100 p-3 rounded" 
+                  for="answer1"
+                  style="background-color: #f8f9fa; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;">
+                  {{ quiz.antwort1 }}
+                </label>
+              </div>
+              {% endif %}
+
+              {% if quiz.antwort2 %}
+              <div class="form-check mb-3">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="answer" 
+                  id="answer2"
+                  value="{{ quiz.antwort2 }}"
+                  required
+                >
+                <label class="form-check-label w-100 p-3 rounded" 
+                  for="answer2"
+                  style="background-color: #f8f9fa; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;">
+                  {{ quiz.antwort2 }}
+                </label>
+              </div>
+              {% endif %}
+
+              {% if quiz.antwort3 %}
+              <div class="form-check mb-3">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="answer" 
+                  id="answer3"
+                  value="{{ quiz.antwort3 }}"
+                  required
+                >
+                <label class="form-check-label w-100 p-3 rounded" 
+                  for="answer3"
+                  style="background-color: #f8f9fa; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;">
+                  {{ quiz.antwort3 }}
+                </label>
+              </div>
+              {% endif %}
+
+              {% if quiz.antwort4 %}
+              <div class="form-check mb-3">
+                <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="answer" 
+                  id="answer4"
+                  value="{{ quiz.antwort4 }}"
+                  required
+                >
+                <label class="form-check-label w-100 p-3 rounded" 
+                  for="answer4"
+                  style="background-color: #f8f9fa; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;">
+                  {{ quiz.antwort4 }}
+                </label>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary btn-lg w-100">
+                <i class="fas fa-check"></i> {% trans "submit your answer" %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-check-input {
+    width: 20px;
+    height: 20px;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .form-check-input:checked {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+  }
+
+  .form-check-label {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #e3f2fd;
+  }
+
+  .form-check-label:hover {
+    background-color: #e3f2fd !important;
+    border-color: #1da1f2 !important;
+  }
+
+  .form-check-input:checked + .form-check-label {
+    background-color: #e3f2fd !important;
+    border-color: #1da1f2 !important;
+    font-weight: 600;
+  }
+
+  .btn-primary {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+    font-weight: 600;
+  }
+
+  .btn-primary:hover {
+    background-color: #1a91da;
+    border-color: #1a91da;
+  }
+
+  .card {
+    border: none;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
