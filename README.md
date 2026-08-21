@@ -132,7 +132,10 @@ python manage.py runserver
 
 Öffnen im Browser:
 
-Startseite: http://127.0.0.1:8000/home/
+Startseite: 
+http://127.0.0.1:8000/en/home/
+oder
+http://127.0.0.1:8000/de/home/
 
 Admin-Panel: http://127.0.0.1:8000/admin/
 
