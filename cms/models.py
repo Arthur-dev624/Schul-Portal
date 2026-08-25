@@ -69,7 +69,7 @@ class PageVersion(models.Model):
 
 class NavigationItem(models.Model):
     id = models.AutoField(primary_key=True)
-    page_id = models.ForeignKey(Page, on_delete=models.CASCADE, related_name = 'links_to')
+    page_id = models.ForeignKey(Page, on_delete=models.CASCADE, related_name = 'linksTo')
 
     parent_id = models.ForeignKey(
         "self",
@@ -120,21 +120,21 @@ class Function(models.Model):
 
 class PageBlock(models.Model):
     id = models.AutoField(primary_key=True)
-    page_version_id = models.ForeignKey(PageVersion, on_delete=models.CASCADE, related_name='contains')
-    block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='placed')
-    layout_region_id = models.ForeignKey(LayoutRegion, on_delete=models.CASCADE, related_name='positioned in')
+    page_version_id = models.ForeignKey(PageVersion, on_delete=models.CASCADE, related_name='pageBlocks')
+    block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='pageBlocks')
+    layout_region_id = models.ForeignKey(LayoutRegion, on_delete=models.CASCADE, related_name='pageBlocks')
     position = models.IntegerField()
 
 class BlockMedium(models.Model):
     id = models.AutoField(primary_key=True)
-    block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='used')
-    medium_id = models.ForeignKey(CmsMedium, on_delete=models.CASCADE, related_name='integrated')
+    block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='blockMedia')
+    medium_id = models.ForeignKey(CmsMedium, on_delete=models.CASCADE, related_name='mediumBlocks')
     position = models.IntegerField()
 
 class FunctionBlock(models.Model):
     id = models.AutoField(primary_key=True)
-    function_id = models.ForeignKey(Function, on_delete=models.CASCADE, related_name='used')
-    block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='used')
+    function_id = models.ForeignKey(Function, on_delete=models.CASCADE, related_name='functionBlocks')
+    block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='functionBlocks')
     config = JSONField(blank=True, null=True)
 
 class Publication(models.Model):
