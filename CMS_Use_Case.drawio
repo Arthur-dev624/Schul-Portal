@@ -1,0 +1,298 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="cms-heraklit-run" name="Heraklit Run">
+    <mxGraphModel dx="2007" dy="1114" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="m1" parent="1" style="swimlane;horizontal=0;startSize=28;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontStyle=1;fontSize=13;pointerEvents=0;" value="Benutzer- und Rechteverwaltung" vertex="1">
+          <mxGeometry height="385" width="690" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="E2" parent="m1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Bearbeitungsrecht prüfen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;pruefe_recht([Redakteur_Meyer, Seite_bearbeiten] → erlaubt)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Benutzer: Redakteur_Meyer,&lt;br&gt;Recht: Seite_bearbeiten]" vertex="1">
+          <mxGeometry height="150" width="260" x="415" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" parent="1" style="swimlane;horizontal=0;startSize=28;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontStyle=1;fontSize=13;pointerEvents=0;" value="Seitenverwaltung" vertex="1">
+          <mxGeometry height="360" width="460" x="720" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" parent="1" style="swimlane;horizontal=0;startSize=28;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontStyle=1;fontSize=13;pointerEvents=0;" value="Inhalts-, Medien- und Funktionsverwaltung" vertex="1">
+          <mxGeometry height="735" width="920" x="1200" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="S3" parent="m3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Seite&lt;br&gt;bearbeitbar" vertex="1">
+          <mxGeometry height="110" width="110" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="E4" parent="m3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Textblock hinzufügen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;erstelle_block([Seite_Schulfest, Textblock] → Textblock_1)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest,&lt;br&gt;Blocktyp: Text]" vertex="1">
+          <mxGeometry height="150" width="260" x="150" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="m3" source="S3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E6" parent="m3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Medium hochladen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;upload_medium([Datei, Dateityp] → Medium_Schulfest)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Datei: schulfest.jpg,&lt;br&gt;Dateityp: Bild]" vertex="1">
+          <mxGeometry height="150" width="260" x="150" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="E9" parent="m3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Funktionsblock erstellen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;erstelle_block([Seite_Schulfest, Funktionsblock] → Funktionsblock_1)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest,&lt;br&gt;Blocktyp: Funktion]" vertex="1">
+          <mxGeometry height="150" width="260" x="150" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="S4" parent="m3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Textblock&lt;br&gt;vorhanden" vertex="1">
+          <mxGeometry height="110" width="110" x="450" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="m3" source="E4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S6" parent="m3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Medium&lt;br&gt;gespeichert" vertex="1">
+          <mxGeometry height="110" width="110" x="450" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="m3" source="E6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S6" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S9" parent="m3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Funktionsblock&lt;br&gt;vorhanden" vertex="1">
+          <mxGeometry height="110" width="110" x="450" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="m3" source="E9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz17rQTXWRpdFuYGaS8C-2" edge="1" parent="m3" source="S3" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="E6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="540" y="410" as="sourcePoint" />
+            <mxPoint x="590" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Xz17rQTXWRpdFuYGaS8C-3" edge="1" parent="m3" source="S3" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="E9" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="540" y="410" as="sourcePoint" />
+            <mxPoint x="590" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="E7" parent="m3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Bildblock erstellen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;erstelle_block([Seite_Schulfest, Bildblock] → Bildblock_1)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest,&lt;br&gt;Blocktyp: Bild]" vertex="1">
+          <mxGeometry height="150" width="260" x="600" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="m3" source="S6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E5" parent="m3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Textblock konfigurieren&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;setze_inhalt([Textblock_1, Überschrift, Text])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Überschrift: Unser Schulfest,&lt;br&gt;Text: Veranstaltungsbeschreibung]" vertex="1">
+          <mxGeometry height="150" width="260" x="600" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="m3" source="S4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E10" parent="m3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Funktionsblock konfigurieren&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;setze_funktion([Funktionsblock_1, News])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Block: Funktionsblock_1,&lt;br&gt;Funktion: News]" vertex="1">
+          <mxGeometry height="150" width="260" x="600" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="m3" source="S9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F0" parent="m3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Funktion News&lt;br&gt;aktiviert" vertex="1">
+          <mxGeometry height="110" width="110" x="150" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="m3" source="F0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" parent="1" style="swimlane;horizontal=0;startSize=28;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontStyle=1;fontSize=13;pointerEvents=0;" value="Speichern &amp; Navigation" vertex="1">
+          <mxGeometry height="820" width="2040" x="2160" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="S5" parent="m4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Textinhalt&lt;br&gt;verändert" vertex="1">
+          <mxGeometry height="110" width="110" x="50" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="S7" parent="m4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Bildblock&lt;br&gt;vorhanden" vertex="1">
+          <mxGeometry height="110" width="110" x="50" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="S10" parent="m4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Funktionsblock&lt;br&gt;konfiguriert" vertex="1">
+          <mxGeometry height="110" width="110" x="50" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="E8" parent="m4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Medium verwenden&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;verwende_medium([Medium_Schulfest, Bildblock_1])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Medium: schulfest.jpg,&lt;br&gt;Block: Bildblock_1]" vertex="1">
+          <mxGeometry height="150" width="260" x="220" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="m4" source="S7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" parent="1" style="swimlane;horizontal=0;startSize=28;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontStyle=1;fontSize=13;pointerEvents=0;container=0;" value="Öffentliche Darstellung" vertex="1">
+          <mxGeometry height="820" width="720" x="6290" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="S0" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Redakteur&lt;br&gt;nicht angemeldet" vertex="1">
+          <mxGeometry height="110" width="110" x="60" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="E1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;anmelden()&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;login([Benutzername, Passwort] → Redakteur_Meyer)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Benutzername, Passwort]" vertex="1">
+          <mxGeometry height="150" width="260" x="210" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="S1" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Redakteur&lt;br&gt;angemeldet" vertex="1">
+          <mxGeometry height="110" width="110" x="510" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="R0" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Bearbeitungsrecht&lt;br&gt;vorhanden" vertex="1">
+          <mxGeometry height="110" width="110" x="210" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="S2" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Bearbeitung&lt;br&gt;zulässig" vertex="1">
+          <mxGeometry height="110" width="110" x="750" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="E3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Seite erstellen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;erstelle_seite([Titel, Seitentyp, Redakteur] → Seite_Schulfest)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Titel: Schulfest 2026,&lt;br&gt;Seitentyp: Inhaltsseite,&lt;br&gt;Redakteur: Meyer]" vertex="1">
+          <mxGeometry height="160" width="260" x="900" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="S8" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Medium&lt;br&gt;verwendet" vertex="1">
+          <mxGeometry height="110" width="110" x="2690" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="E12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Seite speichern&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;speichere_seite([Seite_Schulfest])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest,&lt;br&gt;Status: bearbeitet → gespeichert]" vertex="1">
+          <mxGeometry height="150" width="260" x="3330" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="S13" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Navigationseintrag&lt;br&gt;vorbereitet" vertex="1">
+          <mxGeometry height="120" width="120" x="4080" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="S16" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Navigationseintrag&lt;br&gt;sichtbar" vertex="1">
+          <mxGeometry height="120" width="120" x="6080" y="72.5" as="geometry" />
+        </mxCell>
+        <mxCell id="E17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Seiteninhalt bereitstellen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;liefere_inhalt([Seite_Schulfest])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Textblock_1,&lt;br&gt;Bildblock_1,&lt;br&gt;schulfest.jpg]" vertex="1">
+          <mxGeometry height="145" width="250" x="5590" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="S17" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Inhalte und Medien&lt;br&gt;sichtbar" vertex="1">
+          <mxGeometry height="120" width="120" x="6080" y="442.5" as="geometry" />
+        </mxCell>
+        <mxCell id="E18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Funktionsblock bereitstellen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;liefere_funktion([Funktionsblock_1])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Funktion: News]" vertex="1">
+          <mxGeometry height="145" width="250" x="5730" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="S18" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="News-Funktion&lt;br&gt;sichtbar" vertex="1">
+          <mxGeometry height="120" width="120" x="6080" y="632.5" as="geometry" />
+        </mxCell>
+        <mxCell id="E19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Seite aufrufen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;get_seite([Seite_Schulfest] → Seitenansicht)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest]" vertex="1">
+          <mxGeometry height="145" width="250" x="6380" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="S0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="E1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="S1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="R0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="E2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="S2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="E3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="E5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="E7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S7" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="E8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S8" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="E10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="S8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" edge="1" parent="1" source="E11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" edge="1" parent="1" source="S11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E12" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" edge="1" parent="1" source="E12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S12" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" edge="1" parent="1" source="E13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S13" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e34" edge="1" parent="1" source="S13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E15" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e38" edge="1" parent="1" source="E16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e39" edge="1" parent="1" source="S15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E17" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e40" edge="1" parent="1" source="E17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S17" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e41" edge="1" parent="1" source="S15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E18" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e42" edge="1" parent="1" source="E18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S18" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e43" edge="1" parent="1" source="S16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E19" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e44" edge="1" parent="1" source="S17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E19" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e45" edge="1" parent="1" source="S18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E19" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e46" edge="1" parent="1" source="E19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S19" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Anordnung anpassen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;setze_reihenfolge([Seite_Schulfest, Blockliste])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Textblock_1,&lt;br&gt;Bildblock_1,&lt;br&gt;Funktionsblock_1]" vertex="1">
+          <mxGeometry height="160" width="280" x="2810" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" edge="1" parent="1" source="S10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S11" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Anordnung&lt;br&gt;angepasst" vertex="1">
+          <mxGeometry height="110" width="110" x="3150" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="Xz17rQTXWRpdFuYGaS8C-4" edge="1" parent="1" source="S5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.291;entryY=-0.012;entryDx=0;entryDy=0;entryPerimeter=0;" target="E11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" edge="1" parent="1" source="S12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S12" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Seite&lt;br&gt;gespeichert" vertex="1">
+          <mxGeometry height="110" width="110" x="3640" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="E13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Navigationseintrag erstellen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;erstelle_navigationseintrag([Seite, Elternknoten, Position])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest,&lt;br&gt;Elternknoten: Schulleben,&lt;br&gt;Position: 3]" vertex="1">
+          <mxGeometry height="160" width="300" x="3740" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="e29" edge="1" parent="1" source="S12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E13" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" parent="1" style="swimlane;horizontal=0;startSize=28;rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontStyle=1;fontSize=13;pointerEvents=0;container=0;" value="Veröffentlichungsverwaltung" vertex="1">
+          <mxGeometry height="820" width="1880" x="4340" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="R1" parent="m5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Veröffentlichungsrecht&lt;br&gt;vorhanden" vertex="1">
+          <mxGeometry height="120" width="120" x="50" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="E14" parent="m5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Veröffentlichungsrecht prüfen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;pruefe_recht([Redakteur_Meyer, Seite_veroeffentlichen] → erlaubt)&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Benutzer: Redakteur_Meyer,&lt;br&gt;Recht: Seite_veroeffentlichen]" vertex="1">
+          <mxGeometry height="160" width="290" x="220" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" edge="1" parent="m5" source="R1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S14" parent="m5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Veröffentlichung&lt;br&gt;zulässig" vertex="1">
+          <mxGeometry height="120" width="120" x="560" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="e33" edge="1" parent="m5" source="E14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E15" parent="m5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Seite veröffentlichen&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;veroeffentliche_seite([Seite_Schulfest])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Seite: Schulfest,&lt;br&gt;Status: gespeichert → veröffentlicht]" vertex="1">
+          <mxGeometry height="160" width="280" x="740" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="e35" edge="1" parent="m5" source="S14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E15" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S15" parent="m5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Seite&lt;br&gt;veröffentlicht" vertex="1">
+          <mxGeometry height="120" width="120" x="1080" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="e36" edge="1" parent="m5" source="E15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="S15" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="E16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=11;align=center;verticalAlign=middle;" value="&lt;b&gt;Navigation aktivieren&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Funktion:&lt;/b&gt;&lt;br&gt;aktiviere_navigation([Seite_Schulfest])&lt;br&gt;&lt;br&gt;&lt;b&gt;Daten:&lt;/b&gt;&lt;br&gt;[Navigationseintrag: Schulfest]" vertex="1">
+          <mxGeometry height="145" width="250" x="5590" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="e37" edge="1" parent="1" source="S15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.4;" target="E16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S19" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#111111;strokeWidth=1.5;fontSize=12;align=center;verticalAlign=middle;" value="Schulfest-Seite&lt;br&gt;für Besucher sichtbar" vertex="1">
+          <mxGeometry height="130" width="130" x="6730" y="265" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
