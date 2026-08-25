@@ -95,7 +95,7 @@ class CmsMedium(models.Model):
     title = models.CharField(max_length=200)
     media_type = models.CharField(max_length=200)
     alt_text = models.CharField(max_length=200)
-    uploadet_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 class Function(models.Model):
