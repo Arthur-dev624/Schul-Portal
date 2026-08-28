@@ -1,6 +1,9 @@
 from builtins import id
+from tokenize import String
 
 from django.db.models import Q, Exists, OuterRef, When, IntegerField, FloatField, Count, ExpressionWrapper, Case, Value, F, Prefetch
+from pyasn1.type.univ import Null
+
 from cms.models import *
 from myapp.models import Person, User
 
@@ -39,3 +42,11 @@ def count_media():
     """ gets the media count """
     count = CmsMedium.objects.all().count()
     return count
+
+def search_pages_with_title(title = String):
+    """ gets the CMS Pages of searched title """
+    pages = Page.objects.all()
+    if title:
+        pages = pages.filter(title__icontains=title)
+
+    return pages

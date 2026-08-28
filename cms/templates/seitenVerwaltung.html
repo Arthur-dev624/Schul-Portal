@@ -5,8 +5,207 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Seitenverwaltung</title>
-</head>
-<body>
 
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .cms-layout {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cms-body {
+            flex: 1;
+            display: flex;
+            min-height: 100%;
+        }
+
+        .cms-sidebar {
+            width: 16rem;
+            flex-shrink: 0;
+        }
+
+        .cms-main {
+            flex: 1;
+            min-width: 0;
+        }
+    </style>
+</head>
+<body class="min-vh-100 bg-body-tertiary">
+<div class="cms-layout">
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Seitenverwaltung</span>
+        </div>
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Übersicht der Aktionen</span>
+        </div>
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Profil: {{ username }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "cms_logout" %}">Abmelden</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Sidebar + Main -->
+    <div class="cms-body">
+        <!-- sidebar -->
+        <!-- TODO: Views erstellen für jeden Sidebar item -->
+        <aside class="cms-sidebar border-end bg-light">
+            <div class="p-4">
+                <p class="fs-2">Schul CMS</p>
+            </div>
+            <div class="p-4">
+                <ul class="list-group">
+                    <li class="list-group-item" aria-current="true">
+                        <a class="text-dark" href="{% url "admin_dashboard" %}">Übersicht</a>
+                    </li>
+                    <li class="list-group-item active">
+                        <a class="text-dark" href="{% url "to_seiten_main" %}">Seiten</a>
+                    </li>
+                    <li class="list-group-item">Medien</li>
+                    <li class="list-group-item">Navigation</li>
+                    <li class="list-group-item">Funktionen</li>
+                    <li class="list-group-item">Layouts</li>
+                    <li class="list-group-item">Designs</li>
+                    <li class="list-group-item">Benutzer & Rechte</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="cms-main bg-white">
+            <!-- Seite erstellen Zugriff -->
+            <div class="p-2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col text-center">
+                            Seitenverwaltung
+                        </div>
+                        <div class="col">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="{% url "seite_erstellen" %}">Seite erstellen</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <!-- Seiten Suchfunktion -->
+                <div class="container-fluid p-4"></div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col text-center">
+                            Seite auswählen
+                        </div>
+                        <div class="col">
+                            <form class="d-flex" role="search" method="GET" action="{% url "seiten_search" %}">
+                                {% csrf_token %}
+                                <input class="form-control me-2" type="search" placeholder="Seite Suchen" name="q" value="{{ query }}">
+                                <button class="btn btn-outline-success" type="submit">Suchen</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid p-4">
+                    <table>
+                    <tbody>
+                    {% for page_found in pages_found %}
+                        <tr>
+                            <td>{{ page.title }}</td>
+                            <td>
+                                {% if page.status %}
+                                    Veröffentlicht
+                                {% else %}
+                                    Entwurf
+                                {% endif %}
+                            </td>
+                            <td> {{ page.updated_at }} </td>
+                            <td>
+                                <ul class="Navbar-nav">
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle text-dark" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Aktion
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Bearbeiten</a></li>
+                                            <li><a href="#">Vorschau</a></li>
+                                            <li><a href="#">Veröffentlichen</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a href="#">Archivieren</a></li>
+                                            <li><a href="#">Löschen</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+                <!-- Tabelle mit Seitendaten -->
+                <div class="container-fluid">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Titel</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Aktualisiert</th>
+                                <th scope="col">Aktionen</th>
+                            </tr>
+                        </thead>
+                        <!-- Tabellen körper wird automatisch mit django generiert -->
+                        <tbody>
+                        {% for page in pages %}
+                            <tr>
+                                <td>{{ page.title }}</td>
+                                <td>
+                                    {% if page.status %}
+                                        Veröffentlicht
+                                    {% else %}
+                                        Entwurf
+                                    {% endif %}
+                                </td>
+                                <td> {{ page.updated_at }} </td>
+                                <td>
+                                    <ul class="Navbar-nav">
+                                        <li class="dropdown">
+                                            <a href="#" class="dropdown-toggle text-dark" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Aktion
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Bearbeiten</a></li>
+                                                <li><a href="#">Vorschau</a></li>
+                                                <li><a href="#">Veröffentlichen</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a href="#">Archivieren</a></li>
+                                                <li><a href="#">Löschen</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 </body>
 </html>

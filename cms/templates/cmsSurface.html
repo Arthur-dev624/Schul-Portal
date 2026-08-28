@@ -27,7 +27,7 @@
         .cms-body {
             flex: 1;
             display: flex;
-            min-height: 0;
+            min-height: 100%;
         }
 
         .cms-sidebar {
@@ -74,13 +74,17 @@
             </div>
             <div class="p-4">
                 <ul class="list-group">
-                    <li class="list-group-item active" aria-current="true">Übersicht</li>
-                    <li class="list-group-item">Seiten:</li>
-                    <li class="list-group-item">Medien:</li>
-                    <li class="list-group-item">Navigation:</li>
-                    <li class="list-group-item">Funktionen:</li>
-                    <li class="list-group-item">Layouts:</li>
-                    <li class="list-group-item">Designs:</li>
+                    <li class="list-group-item active" aria-current="true">
+                        <a class="text-dark" href="{% url "admin_dashboard" %}">Übersicht</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark" href="{% url "to_seiten_main" %}">Seiten</a>
+                    </li>
+                    <li class="list-group-item">Medien</li>
+                    <li class="list-group-item">Navigation</li>
+                    <li class="list-group-item">Funktionen</li>
+                    <li class="list-group-item">Layouts</li>
+                    <li class="list-group-item">Designs</li>
                     <li class="list-group-item">Benutzer & Rechte</li>
                 </ul>
             </div>
