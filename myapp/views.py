@@ -148,6 +148,7 @@ def contact(request):
 
     return render(request, "school/contact.html", {"form": form, "sent": sent})
 
+#------ login view -------
 def login(request):
     error = None
     if request.method == "POST":
