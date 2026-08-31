@@ -22,24 +22,24 @@ class LayoutRegion(models.Model):
 class Design(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
-    font_family = models.CharField(max_length=200)
-    primary_color = models.CharField(max_length=200)
-    secondary_color = models.CharField(max_length=200)
-    background_color = models.CharField(max_length=200)
+    font_family = models.CharField(max_length=200, null=True)
+    primary_color = models.CharField(max_length=200, null=True)
+    secondary_color = models.CharField(max_length=200, null=True)
+    background_color = models.CharField(max_length=200, null=True)
     # optional settings
     border_radius = models.IntegerField(blank=True, null=True)
     content_width = models.IntegerField(blank=True, null=True)
     content_height = models.IntegerField(blank=True, null=True)
     distance = models.IntegerField(blank=True, null=True)
     font_size = models.IntegerField(blank=True, null=True)
-    font_color = models.CharField(max_length=200)
+    font_color = models.CharField(max_length=200, null=True, blank=True)
     # safe customized css (new data entries only possible for developer)
     custom_css = models.TextField(blank=True)
 
 class Page(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
     status = models.BooleanField(default=False)
 
     layout_id = models.ForeignKey(
@@ -64,7 +64,7 @@ class PageVersion(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     version = models.IntegerField()
-    status = models.BooleanField(default=True)
+    status = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
 
 class NavigationItem(models.Model):

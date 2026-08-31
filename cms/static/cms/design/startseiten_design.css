@@ -1,0 +1,252 @@
+:root {
+    --primary-color: #1f4e79;
+    --primary-dark: #163a5c;
+
+    --background-color: #ffffff;
+    --section-light: #f5f7f9;
+
+    --text-color: #212529;
+    --text-muted: #6c757d;
+
+    --border-color: #dee2e6;
+
+    --navbar-height: 80px;
+}
+
+/* body */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height: 1.6;
+}
+
+/* header */
+
+header {
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* navbar */
+
+.navbar {
+    min-height: var(--navbar-height);
+    background-color: #ffffff;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Schulname */
+
+.navbar-brand {
+    margin-right: 3rem;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+}
+
+.navbar-brand:hover {
+    color: var(--primary-dark);
+}
+
+/* navigation */
+
+.navbar-nav {
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.navbar .nav-link {
+    position: relative;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 1.75rem 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* unterstrich beim hover */
+
+.navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.9rem;
+    right: 0.9rem;
+    bottom: 1.15rem;
+    height: 2px;
+    background-color: var(--primary-color);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.2s ease;
+}
+
+.navbar .nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* anmelden */
+
+.navbar .btn-outline-primary {
+    margin-left: 1rem;
+    padding: 0.55rem 1.2rem;
+    border-color: var(--primary-color);
+    border-radius: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.navbar .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+}
+
+/* allgemeine einstellungen */
+
+section {
+    width: 100%;
+}
+
+/* erste Section */
+
+body > section:nth-of-type(1) {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: var(--section-light);
+}
+
+body > section:nth-of-type(1) > .container {
+    min-height: 350px;
+}
+
+/* zweite Section */
+
+body > section:nth-of-type(2) {
+    min-height: 500px;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    background-color: #ffffff;
+}
+
+body > section:nth-of-type(2) > .container {
+    min-height: 400px;
+}
+
+
+/* dritte Section */
+
+body > section:nth-of-type(3) {
+    min-height: 180px;
+
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+
+    background-color: var(--primary-dark);
+
+    color: #ffffff;
+}
+
+/* links */
+
+a {
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+/* responsive Navbar */
+
+@media (max-width: 1024px) {
+
+    header {
+        position: static;
+    }
+
+    .navbar {
+        min-height: auto;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .navbar-brand {
+        margin-right: 1rem;
+    }
+
+    .navbar-nav {
+        align-items: stretch;
+        gap: 0;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .navbar .nav-link {
+        padding: 0.75rem 0;
+    }
+
+    .navbar .nav-link::after {
+        display: none;
+    }
+
+    .navbar .btn-outline-primary {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 0.5rem;
+    }
+
+    body > section:nth-of-type(1),
+    body > section:nth-of-type(2) {
+        min-height: 350px;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    body > section:nth-of-type(1),
+    body > section:nth-of-type(2) {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+    }
+
+    body > section:nth-of-type(3) {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+}

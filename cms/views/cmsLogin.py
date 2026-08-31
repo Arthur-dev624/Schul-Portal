@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from cms.api import count_pages, count_releases, count_drafts, count_media
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import user_passes_test
 
 # TODO: Redakteur check hinzufügen und weiterleitung an redakteur_dashboard
 # dashboard view checks if logged in person got admin role

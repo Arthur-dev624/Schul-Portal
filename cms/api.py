@@ -5,6 +5,7 @@ from django.db.models import Q, Exists, OuterRef, When, IntegerField, FloatField
 from pyasn1.type.univ import Null
 
 from cms.models import *
+from cms.models import PageBlock
 from myapp.models import Person, User
 
 def _get_person(user) -> Person:
@@ -50,3 +51,19 @@ def search_pages_with_title(title = String):
         pages = pages.filter(title__icontains=title)
 
     return pages
+
+def get_blocks_and_layout_region_by_page_id(page_id= int):
+    """ gets the CMS Object Page_block and blocks by the given page id """
+    # get PageBlock objects which belong to page and order them by position
+    page_blocks = PageBlock.objects.filter(page_version_id__page_id_id=page_id).order_by("position")
+    # since PageBlock contains the information about a Block Object,
+    # we need the Block Objects which belong to the filtered Page Blocks
+    blocks_ids = [pageblock.block_id for pageblock in page_blocks]
+    blocks = Block.objects.filter(id__in=blocks_ids)
+    # needing also the regions where the Blocks are located in the layout
+    regions_ids = [pageblock.layout_region_id for pageblock in page_blocks]
+    layout_regions = LayoutRegion.objects.filter(id__in=regions_ids)
+
+    return blocks, layout_regions
+
+

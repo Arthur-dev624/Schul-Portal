@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Editor</title>
+</head>
+<body>
+
+<div class="vh-100 d-flex flex-column">
+    <!-- Header vom Editor -->
+    <header class="border-bottom bg-white px-3 py-2">
+        <div class="d-flex align-items-center justify-content-between">
+
+            <!-- Grundlegend -->
+            <div class="d-flex align-items-center gap-3">
+                <a href="{% url "to_seiten_main" %}" class="text-decoration-none navbar-brand mb-0 h1">
+                    Seitenverwaltung
+                </a>
+                 > Neue Seite erstellen > Editor
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <h5 class="mb-0">
+                    Seiteneditor mit Live Vorschau
+                </h5>
+
+                <span class="badge text-bg-secondary">
+                    {% if page.status %}
+                        Veröffentlicht
+                    {% else %}
+                        Entwurf
+                    {% endif %}
+                </span>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary">
+                    Vorschau
+                </button>
+
+                <button class="btn btn-outline-primary">
+                    Speichern
+                </button>
+
+                <button class="btn btn-primary">
+                    Veröffentlichen
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Editor -->
+    <div class="d-flex flex-grow-1 overflow-hidden">
+
+        <!-- Linke Sidebar -->
+        <aside class=" border-end bg-light p-3 overflow-auto" style="width: 16rem">
+            <h6 class="text-secondary">
+                Blöcke
+            </h6>
+
+            <p class="text-secondary mb-2">
+                Inhalt
+            </p>
+
+            <div class="d-grid gap-2 mb-4">
+                {% for block in blocks %}
+                    
+                <button class="btn btn-light border text-start">
+                    {{ block.block_type }}
+                </button>
+
+                {% endfor %}
+            </div>
+
+            <p class="text-secondary mb-2">
+                Funktionen
+            </p>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-light border text-start">
+                    News
+                </button>
+
+                <button class="btn btn-light border text-start">
+                    Veranstaltungen
+                </button>
+
+                <button class="btn btn-light border text-start">
+                    Schul-Portal
+                </button>
+            </div>
+
+            <p class="text-secondary mb-2">
+                Medien
+            </p>
+
+            <div class="d-grid gap-2">
+                <button class="btn btn-light border text-start">
+                    Bild
+                </button>
+            </div>
+        </aside>
+
+        <!-- Live Haupteditor -->
+        <main class="flex-grow-1">
+            <iframe
+                id="page-preview"
+                src="{% url "seiten_vorschau" page.id %}"
+                class="w-100 border bg-white"
+                style="height: 100%;">
+            </iframe>
+        </main>
+
+        <!-- Rechte Sidebar -->
+        <aside class="border-start bg-white p-3 overflow-auto" style="width: 16rem">
+            <h6>
+                Einstellungen
+            </h6>
+
+
+        </aside>
+    </div>
+
+</div>
+</body>
+</html>
