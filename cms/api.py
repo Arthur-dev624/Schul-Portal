@@ -31,7 +31,7 @@ def count_pages():
 
 def count_releases():
     """ gets the released pages count """
-    count = Publication.objects.all().count()
+    count = Page.objects.filter(status=True).count()
     return count
 
 def count_drafts():

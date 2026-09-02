@@ -543,10 +543,6 @@ def profile_edit(request):
     return render(request, "school/profile_edit.html", {"person_form": person_form, "student_form": student_form})
 
 
-# Google Gemini Client initialisieren
-client = genai.Client(api_key=settings.GEMINI_API_KEY) 
-
-
 @login_required
 def chat_page(request):
     # Chat-Seite anzeigen
