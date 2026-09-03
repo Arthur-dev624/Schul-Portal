@@ -1,0 +1,4 @@
+Django==6.0.7
+google-genai==2.15.0
+Pillow==12.3.0
+pyasn1==0.6.4

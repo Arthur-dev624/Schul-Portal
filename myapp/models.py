@@ -17,12 +17,13 @@ class Branche(models.Model):
     def __str__(self):
         return self.name
 
-
+# TODO: Redakteur Rolle hinzufügen
 # Person-Modell für Lehrer oder Schüler
 class Person(models.Model):
     ROLE_CHOICES = (
         ("student", "Student"),
         ("teacher", "Teacher"),
+        ("admin", "Admin"),
     )
 
     user = models.OneToOneField(

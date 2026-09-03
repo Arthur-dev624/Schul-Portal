@@ -148,6 +148,7 @@ def contact(request):
 
     return render(request, "school/contact.html", {"form": form, "sent": sent})
 
+#------ login view -------
 def login(request):
     error = None
     if request.method == "POST":
@@ -540,10 +541,6 @@ def profile_edit(request):
             return redirect("profile_view")
 
     return render(request, "school/profile_edit.html", {"person_form": person_form, "student_form": student_form})
-
-
-# Google Gemini Client initialisieren
-client = genai.Client(api_key=settings.GEMINI_API_KEY) 
 
 
 @login_required

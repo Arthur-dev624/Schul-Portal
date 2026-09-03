@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static design.custom_css %}">
+    <title></title>
+</head>
+<body>
+    <header>
+    <nav class="navbar navbar-expand-lg border-bottom">
+        <div class="container">
+            <!-- Globaler Schulname -->
+            <a class="navbar-brand" href="#">
+                {{ school.name }}
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <!-- Globale Navigation -->
+                <ul class="navbar-nav me-auto">
+                    {% for entry in navigation_entries %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                {{ entry.page.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Portal-Zugang -->
+                <a href="{% url "login" %}" class="btn btn-outline-primary">
+                    Anmelden
+                </a>
+            </div>
+        </div>
+    </nav>
+    </header>
+
+
+    <section>
+        <div class="container">
+            <!-- Hero -->
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <!-- Main -->
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <!-- Footer -->
+        </div>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Seite erstellen</title>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .cms-layout {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cms-body {
+            flex: 1;
+            display: flex;
+            min-height: 100%;
+        }
+
+        .cms-sidebar {
+            width: 60rem;
+            flex-shrink: 0;
+        }
+
+        .cms-main {
+            flex: 1;
+            min-width: 0;
+        }
+    </style>
+
+</head>
+
+<body class="min-vh-100 bg-body-tertiary">
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <a class="text-dark" href="{% url "to_seiten_main" %}">Seitenverwaltung</a>
+                > Neue Seite erstellen
+            </span>
+        </div>
+
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Grundlegende Einstellungen der neuen Seite</span>
+        </div>
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Profil: {{ username }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "cms_logout" %}">Abmelden</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="cms-body">
+        <form action="{% url "seite_erstellen" %}" method="post">
+        {% csrf_token %}
+        <aside class="cms-sidebar border-end bg-white">
+            <div class="p-4">
+                <p class="fs-2">Seiteninformationen</p>
+            </div>
+            <div class="p-4">
+                <div class="container-fluid">
+                    <p class="fs-4">Seiten Titel</p>
+                    <input class="form-control" type="text" name="title" id="name" placeholder="Titel" required>
+                </div>
+                <div class="container-fluid">
+                    <p class="fs-4">URL / Slug</p>
+                    <input class="form-control" type="text" name="slug" id="slug" placeholder="Slug" required>
+                </div>
+                {% if error %}
+                    <div class="container-fluid mt-3">
+                        <div class="alert alert-danger">{{ error }}</div>
+                    </div>
+                {% endif %}
+                <div class="container-fluid">
+                    <p class="fs-4">Layout und Design</p>
+                    <div class="row">
+                        <div class="col">
+                            <select class="form-select" name="layout_id" id="layout_id" required>
+                                <option value="">Layout auswählen</option>
+                                {% for layout in layouts %}
+                                    <option value="{{ layout.id }}">{{ layout.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <select class="form-select" name="design_id" id="design_id" required>
+                                <option value="">Design auswählen</option>
+                                {% for design in designs %}
+                                    <option value="{{ design.id }}">{{ design.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="cms-main bg-white">
+            <div class="p-4 row">
+                <div class="col">
+                    <a class="btn btn-outline-success" href="{% url "to_seiten_main" %}">
+                        Abbrechen
+                    </a>
+                </div>
+                <div class="col">
+                    <button class="btn btn-outline-success" type="submit">
+                        Seite erstellen
+                    </button>
+                </div>
+            </div>
+        </main>
+        </form>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
