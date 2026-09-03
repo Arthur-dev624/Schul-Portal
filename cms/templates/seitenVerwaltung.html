@@ -201,12 +201,13 @@
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
-
-                                        <a class="dropdown-item text-danger"
-                                           href="{% url "delete_page" page.id %}"
-                                           onclick="return confirm('Möchtest du diese Seite wirklich löschen?');">
-                                        Löschen
-                                        </a>
+                                        <li>
+                                            <a class="dropdown-item text-danger"
+                                                href="{% url "delete_page" page.id %}"
+                                                onclick="return confirm('Möchtest du diese Seite wirklich löschen?');">
+                                                Löschen
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </td>
