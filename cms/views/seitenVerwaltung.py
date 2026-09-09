@@ -1,6 +1,8 @@
+from collections import defaultdict
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from cms.api import search_pages_with_title, get_blocks_and_layout_region_by_page_id
+from cms.api import search_pages_with_title, get_block_ids_used_in_page, get_functions_by_page_id, get_media_used_by_page_id, get_blocks_and_layout_region_by_page_id, current_page_versions
 from cms.models import Design, Layout, Page, PageVersion
 from django.utils.text import slugify
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -9,10 +11,12 @@ from django.contrib import messages
 @login_required
 def to_seiten_main(request):
     username = request.user.username
-    pages = Page.objects.all()
+    pages = Page.objects.all().order_by("-id")
+    page_versions = current_page_versions(pages)
     context = {
         "username": username,
         "pages": pages,
+        "page_versions": page_versions
     }
     return render(request, "seitenVerwaltung.html", context)
 
@@ -66,15 +70,19 @@ def seite_erstellen(request):
         "error": error,
     })
 
-# öffnet den editor mit dem Page_Objekt welches zu bearbeiten ist,
-# welches benötigt wird, um die seiten_vorschau funktion mit der page_id aufzurufen
+# öffnet den editor mit dem Page_Objekt welches zu bearbeiten ist
 @login_required
-def seite_bearbeiten(request, page_id):
+def seite_bearbeiten(request, page_id, version):
     page = Page.objects.get(id=page_id)
-    blocks, _ = get_blocks_and_layout_region_by_page_id(page.id)
+    blocks, _ = get_blocks_and_layout_region_by_page_id(page.id, version)
+    used_function_types = get_functions_by_page_id(page_id, version)
+    medium_titles = get_media_used_by_page_id(page_id, version)
+
     context = {
         "page": page,
         "blocks": blocks,
+        "used_function_types": used_function_types,
+        "medium_titles": medium_titles,
     }
     return render(request, "editor.html", context)
 
@@ -82,25 +90,26 @@ def seite_bearbeiten(request, page_id):
 # in einem iframe in editor.html
 @login_required
 @xframe_options_sameorigin
-def seiten_vorschau(request, page_id):
+def seiten_vorschau(request, page_id, version):
     page = Page.objects.get(id=page_id)
     design = page.design_id
+    blocks_by_region, _ = get_block_ids_used_in_page(page.id, version)
 
-    blocks, layout_regions = get_blocks_and_layout_region_by_page_id(page.id)
-
+    # TODO: Logik einbauen wo welche Blöcke gerendert werden sollen
     context = {
         "page": page,
-        "blocks": blocks,
-        "layout_regions": layout_regions,
         "design": design,
+        "blocks_by_region": blocks_by_region,
     }
 
     return render(request, page.layout_id.template, context)
 
 @login_required
-def vorschau_view(request, page_id):
+def vorschau_view(request, page_id, version):
     page = Page.objects.get(id=page_id)
     username = request.user.username
+    block_ids_by_region = get_block_ids_used_in_page(page.id, version)
+    # TODO: Block objekte aus den block_ids dem context übergeben
     context = {
         "page": page,
         "username": username,

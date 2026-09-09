@@ -258,19 +258,19 @@
 
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{% url "seite_bearbeiten" page.id %}">
+                                                <a class="dropdown-item" href="{% url "seite_bearbeiten" page.id page_versions.page.id %}">
                                                     Bearbeiten
                                                 </a>
                                             </li>
 
                                             <li>
-                                                <a class="dropdown-item" href="{% url "vorschau" page.id %}">
+                                                <a class="dropdown-item" href="{% url "vorschau" page.id page_versions.page.id %}">
                                                     Vorschau
                                                 </a>
                                             </li>
 
                                             <li>
-                                                <a class="dropdown-item" href="{% url "release_page" page.id %}">
+                                                <a class="dropdown-item" href="{% url "release_page" page.id page_versions.page.id %}">
                                                     Veröffentlichen
                                                 </a>
                                             </li>

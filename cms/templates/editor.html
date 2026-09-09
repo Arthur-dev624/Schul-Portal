@@ -68,9 +68,9 @@
             <div class="d-grid gap-2 mb-4">
                 {% for block in blocks %}
                     
-                <button class="btn btn-light border text-start">
-                    {{ block.block_type }}
-                </button>
+                    <button class="btn btn-light border text-start">
+                        {{ block.block_type }}
+                    </button>
 
                 {% endfor %}
             </div>
@@ -80,17 +80,13 @@
             </p>
 
             <div class="d-grid gap-2">
-                <button class="btn btn-light border text-start">
-                    News
-                </button>
+                {% for function_type in used_function_types %}
 
-                <button class="btn btn-light border text-start">
-                    Veranstaltungen
-                </button>
+                    <button class="btn btn-light border text-start">
+                        {{ function_type }}
+                    </button>
 
-                <button class="btn btn-light border text-start">
-                    Schul-Portal
-                </button>
+                {% endfor %}
             </div>
 
             <p class="text-secondary mb-2">
@@ -98,9 +94,13 @@
             </p>
 
             <div class="d-grid gap-2">
-                <button class="btn btn-light border text-start">
-                    Bild
-                </button>
+                {% for media_title in medium_titles %}
+
+                    <button class="btn btn-light border text-start">
+                        {{ media_title }}
+                    </button>
+
+                {% endfor %}
             </div>
         </aside>
 
