@@ -83,8 +83,19 @@ class NavigationItem(models.Model):
     visible = models.BooleanField(default=True)
 
 class Block(models.Model):
+
+    class BlockType(models.TextChoices):
+        HEADING = "heading", "Überschrift"
+        TEXT = "text", "Text"
+        IMAGE = "image", "Bild"
+        BUTTON = "button", "Button"
+        FUNCTION = "function", "Funktion"
+
     id = models.AutoField(primary_key=True)
-    block_type = models.CharField(max_length=200)
+    block_type = models.CharField(
+        max_length=50,
+        choices=BlockType.choices
+    )
     config = JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

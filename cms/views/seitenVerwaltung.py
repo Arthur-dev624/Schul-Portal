@@ -12,19 +12,21 @@ from django.contrib import messages
 def to_seiten_main(request):
     username = request.user.username
     pages = Page.objects.all().order_by("-id")
-    page_versions = current_page_versions(pages)
+    page_entries = current_page_versions(pages)
     context = {
         "username": username,
-        "pages": pages,
-        "page_versions": page_versions
+        "pages": page_entries
     }
     return render(request, "seitenVerwaltung.html", context)
 
 def seiten_search(request):
     query = request.GET.get("q", "")
     pages_found = search_pages_with_title(query)
-    return render(request, "seitenVerwaltung.html",
-                  {"pages_found": pages_found, "query": query})
+    context = {
+        "query": query,
+        "pages_found": pages_found
+    }
+    return render(request, "seitenVerwaltung.html", context)
 
 @login_required
 def seite_erstellen(request):
@@ -93,7 +95,7 @@ def seite_bearbeiten(request, page_id, version):
 def seiten_vorschau(request, page_id, version):
     page = Page.objects.get(id=page_id)
     design = page.design_id
-    blocks_by_region, _ = get_block_ids_used_in_page(page.id, version)
+    blocks_by_region = get_block_ids_used_in_page(page.id, version)
 
     # TODO: Logik einbauen wo welche Blöcke gerendert werden sollen
     context = {

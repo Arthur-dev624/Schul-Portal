@@ -238,17 +238,17 @@
                         </thead>
                         <!-- Tabellen körper wird automatisch mit django generiert -->
                         <tbody>
-                        {% for page in pages %}
+                        {% for entry in page_entries %}
                             <tr>
-                                <td>{{ page.title }}</td>
+                                <td>{{ entry.page.title }}</td>
                                 <td>
-                                    {% if page.status %}
+                                    {% if entry.page.status %}
                                         Veröffentlicht
                                     {% else %}
                                         Entwurf
                                     {% endif %}
                                 </td>
-                                <td> {{ page.updated_at }} </td>
+                                <td> {{ entry.page.updated_at }} </td>
                                 <td>
                                     <!-- TODO: Views zu Vorschau etc hinzufügen -->
                                     <div class="dropdown">
@@ -258,19 +258,19 @@
 
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a class="dropdown-item" href="{% url "seite_bearbeiten" page.id page_versions.page.id %}">
+                                                <a class="dropdown-item" href="{% url "seite_bearbeiten" entry.page.id entry.version %}">
                                                     Bearbeiten
                                                 </a>
                                             </li>
 
                                             <li>
-                                                <a class="dropdown-item" href="{% url "vorschau" page.id page_versions.page.id %}">
+                                                <a class="dropdown-item" href="{% url "vorschau" entry.page.id entry.version %}">
                                                     Vorschau
                                                 </a>
                                             </li>
 
                                             <li>
-                                                <a class="dropdown-item" href="{% url "release_page" page.id page_versions.page.id %}">
+                                                <a class="dropdown-item" href="{% url "release_page" entry.page.id entry.version %}">
                                                     Veröffentlichen
                                                 </a>
                                             </li>
@@ -281,7 +281,7 @@
 
                                             <li>
                                                 <a class="dropdown-item text-danger"
-                                                    href="{% url "delete_page" page.id %}"
+                                                    href="{% url "delete_page" entry.page.id %}"
                                                     onclick="return confirm('Möchtest du diese Seite wirklich löschen?');">
                                                         Löschen
                                                 </a>

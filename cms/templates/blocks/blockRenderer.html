@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% if block.block_type == "heading" %}
+
+    <div class="cms-block cms-heading-block">
+        <h2>{{ block.config.text }}</h2>
+    </div>
+
+{% elif block.block_type == "text" %}
+
+    <div class="cms-block cms-text-block">
+        {{ block.config.text|linebreaks }}
+    </div>
+
+{% elif block.block_type == "image" %}
+
+    <div class="cms-block cms-image-block">
+        {% for block_medium in block.blockMedia.all %}
+            <figure>
+                <img src="{{ block_medium.medium_id.file.url }}"
+                     alt="{{ block_medium.medium_id.alt_text }}"
+                     class="img-fluid">
+
+                {% if block.config.caption %}
+                    <figcaption>
+                        {{ block_medium.medium_id.title }}
+                    </figcaption>
+                {% endif %}
+            </figure>
+        {% empty %}
+            <p>Kein Bild hinterlegt</p>
+        {% endfor %}
+    </div>
+
+{% elif block.block_type == "button" %}
+
+    <div class="cms-block cms-button-block">
+        <a href="{{ block.config.url }}" class="btn btn-primary">
+            {{ block.config.text }}
+        </a>
+    </div>
+
+{% elif block.block_type == "function" %}
+    <div class="cms-block cms-function-block">
+        {% for function_block in block.functionBlocks.all %}
+            {% if function_block.function_id.active %}
+                {% if function_block.function_id.function_type == "news" %}
+                    {% include "blocks/functions/news.html" with function_block=function_block %}
+                {% elif function_block.function_id.function_type == "announcement" %}
+                    {% include "blocks/functions/announcement.html" with function_block=function_block %}
+                {% else %}
+                    <p>
+                        Funktion: {{ function_block.function_id.get_function_type_display }}
+                    </p>
+                {% endif %}
+            {% endif %}
+        {% empty %}
+            <p>Keine Funktion hinterlegt</p>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="alert alert-warning">
+        Unbekannter Block-Typ: {{ block.block_type }}
+    </div>
+{% endif %}
+
+</body>
+</html>

@@ -6,7 +6,6 @@ from django.db.models import Q, Exists, OuterRef, When, IntegerField, FloatField
 from pyasn1.type.univ import Null
 
 from cms.models import *
-from models import Page
 from myapp.models import Person, User
 
 def _get_person(user) -> Person:
@@ -54,14 +53,22 @@ def search_pages_with_title(title = String):
     return pages
 
 def current_page_versions(pages):
-    """ returns dictionary of the current page version which belongs to each page """
-    page_versions = defaultdict(list)
+    """ returns every page with its latest version """
+    pages_with_versions = defaultdict(list)
     for page in pages:
-        page_versions[page.id].append(PageVersion.objects.filter(
-            page_id=page.id
-        ).order_by("-version").values_list("version", flat=True).first())
+        current_version = (
+            PageVersion.objects.filter(page_id=page.id)
+            .order_by("-version")
+            .values_list("version", flat=True)
+            .first()
+        )
 
-    return page_versions
+        pages_with_versions.append({
+            "page": page,
+            "version": current_version
+        })
+
+    return pages_with_versions
 
 def get_blocks_and_layout_region_by_page_id(page_id= int, page_version= int):
     """ gets the CMS Object Page_block and blocks by the given page id """
@@ -103,30 +110,29 @@ def get_media_used_by_page_id(page_id= int, page_version= int):
     return list(medium_titles)
 
 def get_block_ids_used_in_page(page_id= int, given_page_version=int):
-    """ returns block_ids ordered after position and grouped by layout region which are used by the page """
+    """ returns PageBlocks ordered after position and grouped by layout region which are used by the page """
 
-    # gets the page_versions which belong to current page
-    page_version = PageVersion.objects.filter(page_id=page_id)
-    # gets the page_version object with the given page version
-    current_page_version = page_version.get(version=given_page_version)
+    current_page_version = PageVersion.objects.filter(
+        page_id=page_id,
+        version=given_page_version
+    )
 
-    # filter PageBlock Objects by the current_page_version id and order them descending by LayoutRegion id and the position
-    used_page_blocks_by_current_page_version = PageBlock.objects.filter(
-        page_version_id = current_page_version.id
-    ).order_by("layout_region_id_id", "position")
+    page_blocks = PageBlock.objects.filter(
+        page_version_id=current_page_version
+    ).select_related(
+        "block_id",
+        "layout_region_id"
+    ).order_by(
+        "layout_region_id_id",
+        "position",
+        "id"
+    )
 
-    block_ids_by_region = defaultdict(list)
+    page_blocks_by_region = defaultdict(list)
 
-    # get all block_ids ordered by region id and by position
-    for page_block in used_page_blocks_by_current_page_version:
-        block_ids_by_region[page_block.layout_region_id_id].append(page_block.block_id)
+    for page_block in page_blocks:
+        region_key = page_block.layout_region_id.key
+        page_blocks_by_region[region_key].append(page_block)
 
-    blocks_by_region = defaultdict(list)
-
-    for layout_id, block_id in block_ids_by_region:
-        layout_region = LayoutRegion.objects.get(id=layout_id)
-        block = Block.objects.get(id=block_id)
-        blocks_by_region[layout_region.key].append(block)
-
-    return blocks_by_region, block_ids_by_region
+    return dict(page_blocks_by_region)
 

@@ -13,8 +13,8 @@ urlpatterns = [
     path("dashboard/admindashboard/seitenverwaltung/erstellen/", seite_erstellen, name="seite_erstellen"),
     path ("dashboard/admindashboard/seitenverwaltung/<int:page_id>/veroeffentlichen/", release_page, name="release_page"),
     path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/delete", delete_page, name="delete_page"),
-    path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/editor", seite_bearbeiten, name="seite_bearbeiten"),
-    path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/preview", seiten_vorschau, name="seiten_vorschau"),
-    path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/vorschau", vorschau_view, name="vorschau"),
+    path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/<int:version>/editor", seite_bearbeiten, name="seite_bearbeiten"),
+    path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/<int:version>/preview", seiten_vorschau, name="seiten_vorschau"),
+    path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/<int:version>/vorschau", vorschau_view, name="vorschau"),
     path("seiten_search/", seiten_search, name="seiten_search"),
 ]

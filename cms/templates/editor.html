@@ -108,7 +108,7 @@
         <main class="flex-grow-1">
             <iframe
                 id="page-preview"
-                src="{% url "seiten_vorschau" page.id %}"
+                src="{% url "seiten_vorschau" page.id page_versions.page.id %}"
                 class="w-100 border bg-white"
                 style="height: 100%;">
             </iframe>
