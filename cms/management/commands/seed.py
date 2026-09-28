@@ -7,15 +7,28 @@ class Command(BaseCommand):
     help = "Erstellt Testdaten"
 
     def handle(self, *args, **kwargs):
-        Layout.objects.create(
-            name="Startseite",
+        layout = Layout.objects.create(
+            name="Landingpage",
             description="Layout mit Hero Section und Main Section",
             template="startseite.html",
         )
 
-        Design.objects.create(
-            name="Simple Design für Startseite",
-            custom_css="startseiten_design.css",
+        LayoutRegion.objects.create(
+            layout_id=layout,
+            name="Hero",
+            key="hero"
+        )
+
+        LayoutRegion.objects.create(
+            layout_id=layout,
+            name="Main",
+            key="main"
+        )
+
+        LayoutRegion.objects.create(
+            layout_id=layout,
+            name="Footer",
+            key="footer"
         )
 
         self.stdout.write(self.style.SUCCESS("Daten erstellt"))

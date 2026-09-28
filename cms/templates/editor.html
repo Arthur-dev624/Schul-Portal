@@ -18,12 +18,12 @@
                 <a href="{% url "to_seiten_main" %}" class="text-decoration-none navbar-brand mb-0 h1">
                     Seitenverwaltung
                 </a>
-                 > Neue Seite erstellen > Editor
+                > Neue Seite erstellen > Editor
             </div>
 
             <div class="d-flex align-items-center gap-3">
                 <h5 class="mb-0">
-                    Seiteneditor mit Live Vorschau
+                    Seiteneditor mit Live-Vorschau
                 </h5>
 
                 <span class="badge text-bg-secondary">
@@ -52,40 +52,76 @@
         </div>
     </header>
 
+    {% if messages %}
+        <div class="px-3 pt-3">
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} mb-2">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <!-- Editor -->
     <div class="d-flex flex-grow-1 overflow-hidden">
 
         <!-- Linke Sidebar -->
-        <aside class=" border-end bg-light p-3 overflow-auto" style="width: 16rem">
+        <aside class="border-end bg-light p-3 overflow-auto" style="width: 18rem">
             <h6 class="text-secondary">
                 Blöcke
             </h6>
 
             <p class="text-secondary mb-2">
-                Inhalt
+                Inhalt nach Layoutregion
             </p>
 
-            <div class="d-grid gap-2 mb-4">
-                {% for block in blocks %}
-                    
-                    <button class="btn btn-light border text-start">
-                        {{ block.block_type }}
-                    </button>
+            <!-- für jede layoutregion den namen und die dazugehörigen Blöcke mit ihren Positionen rendern  -->
+            {% for item in regions_with_blocks %}
+                <p class="fw-semibold mb-2">
+                    {{ item.region.name }}
+                </p>
 
-                {% endfor %}
-            </div>
+                <div class="d-grid gap-2 mb-4">
+                    <!-- page_block ist die Liste "blocks" aus regions_with_blocks dictionary (Blöcke der zugehörigen region) -->
+                    {% for page_block in item.blocks %}
+                        <a
+                            href="{% url 'seite_bearbeiten_block' page.id version page_block.id %}"
+                            class="btn btn-light border text-start
+                            {% if selected_page_block.id == page_block.id %}active{% endif %}"
+                        >
+                            <span>{{ page_block.block_id.block_type }}</span>
+                            <span class="badge text-bg-secondary float-end">
+                                {{ page_block.position }}
+                            </span>
+                        </a>
+                    <!-- wenn page_block leer ist -->
+                    {% empty %}
+                        <p class="text-secondary small mb-0">
+                            Keine Blöcke in dieser Layoutregion vorhanden
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <a href="{% url 'block_erstellen' page.id version create_page_block = True %}"
+               class="btn btn-light border text-start"
+            >
+                + Block erstellen
+            </a>
 
             <p class="text-secondary mb-2">
                 Funktionen
             </p>
 
-            <div class="d-grid gap-2">
+            <div class="d-grid gap-2 mb-4">
                 {% for function_type in used_function_types %}
-
                     <button class="btn btn-light border text-start">
                         {{ function_type }}
                     </button>
-
+                {% empty %}
+                    <p class="text-secondary small mb-0">
+                        Keine Funktionen vorhanden
+                    </p>
                 {% endfor %}
             </div>
 
@@ -95,11 +131,13 @@
 
             <div class="d-grid gap-2">
                 {% for media_title in medium_titles %}
-
                     <button class="btn btn-light border text-start">
                         {{ media_title }}
                     </button>
-
+                {% empty %}
+                    <p class="text-secondary small mb-0">
+                        Keine Medien vorhanden
+                    </p>
                 {% endfor %}
             </div>
         </aside>
@@ -108,22 +146,253 @@
         <main class="flex-grow-1">
             <iframe
                 id="page-preview"
-                src="{% url "seiten_vorschau" page.id page_versions.page.id %}"
+                src="{% url "seiten_vorschau" page.id version %}"
                 class="w-100 border bg-white"
                 style="height: 100%;">
             </iframe>
         </main>
 
         <!-- Rechte Sidebar -->
-        <aside class="border-start bg-white p-3 overflow-auto" style="width: 16rem">
+        <aside class="border-start bg-white p-3 overflow-auto" style="width: 20rem">
             <h6>
                 Einstellungen
             </h6>
 
+            <!-- wenn ein Block erstellt werden soll -->
+            {% if create_page_block %}
+                <form
+                    method="post"
+                    action="{% url 'block_erstellen' page.id version %}"
+                    class="d-grid gap-3"
+                >
+                    {% csrf_token %}
 
+                    <!-- Blocktyp auswählen -->
+                    <div>
+                        <label for="block_type" class="form-label">Blocktypen</label>
+                        <select id="block_type_id" name="block_type" class="form-select">
+                            {% for value, label in block_types %}
+                                <option
+                                    value="{{ label }}"
+                                >
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- html template um Block zu bearbeiten -->
+            	    {% include "blockEdit.html" %}
+
+                    <!-- Speichern oder Schließen -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" name="action" value="create_block" class="btn btn-primary">
+                            Speichern
+                        </button>
+
+                        <a href="{% url 'seite_bearbeiten' page.id version %}" class="btn btn-outline-secondary">
+                            Schließen
+                        </a>
+                    </div>
+                </form>
+                {% else %}
+                    <p class="text-secondary">
+                        Erstelle einen neuen Block,
+                    </p>
+            {% endif %}
+
+            <!-- wenn ein Block ausgewählt wurde -->
+            {% if selected_page_block %}
+                <form
+                    method="post"
+                    action="{% url 'seite_bearbeiten_block' page.id version selected_page_block.id %}"
+                    class="d-grid gap-3"
+                >
+                    {% csrf_token %}
+
+                    <input type="hidden" name="page_block_id" value="{{ selected_page_block.id }}">
+
+                    <!-- Blocktyp anzeigen -->
+                    <div>
+                        <p class="text-secondary mb-1">Blocktyp</p>
+                        <p class="fw-semibold mb-0">{{ selected_page_block.block_id.block_type }}</p>
+                    </div>
+
+                    <!-- block verändern -->
+                    {% include "blockEdit.html" %}
+
+                    <!-- select type anzeigen mit layout regionen der page -->
+                    <div>
+                        <label for="layout_region_id" class="form-label">Layoutregion</label>
+                        <select id="layout_region_id" name="layout_region_id" class="form-select">
+                            {% for layout_region in layout_regions %}
+                                <option
+                                    value="{{ layout_region.id }}"
+                                    {% if layout_region.id == selected_page_block.layout_region_id.id %}selected{% endif %}
+                                >
+                                    {{ layout_region.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- select type mit den möglichen Positionen -->
+                    <div>
+                        <label for="position" class="form-label">Position</label>
+                        <select id="position" name="position" class="form-select">
+                            {% for position in position_choices %}
+                                <option
+                                    value="{{ position }}"
+                                    {% if position == selected_page_block.position %}selected{% endif %}
+                                >
+                                    {{ position }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Speichern oder Schließen -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" name="action" value="change_block" class="btn btn-primary">
+                            Speichern
+                        </button>
+
+                        <a href="{% url 'seite_bearbeiten' page.id version %}" class="btn btn-outline-secondary">
+                            Schließen
+                        </a>
+                    </div>
+                </form>
+            {% else %}
+                <p class="text-secondary">
+                    oder wähle links einen Block aus, um seine Einstellungen zu bearbeiten.
+                </p>
+            {% endif %}
         </aside>
     </div>
 
 </div>
+
+<!-- Config für jeweilige BlockTypes ist so aufgebaut:
+           für heading: text, level, alignment
+           für text: text, alignment
+           für image: caption, width, height, align-items
+           für button: text, url, style
+           für function: Keine Config!! -->
+
+<!-- JavaScript, wenn ein Block erstellt wird -->
+{% if create_page_block %}
+    <script>
+        // blockTypeSelect speichert das Dropdown für die Block_types
+        const blockTypeSelect = document.getElementById("block_type_id");
+
+        // funktion die alle areas sichtbar macht, das ist wichtig, da ansonsten bei change von einem blocktype zum anderen
+        // die areas die aktiviert wurden und nicht gebraucht werden, sichtbar sind
+        function deactivateAreas() {
+            document.getElementById("caption-area").style.display = "none"
+            document.getElementById("width-area").style.display = "none"
+            document.getElementById("height-area").style.display = "none"
+            document.getElementById("url-area").style.display = "none"
+            document.getElementById("style-area").style.display = "none"
+            document.getElementById("align-self").style.display = "none"
+            document.getElementById("align-items").style.display = "none"
+            document.getElementById("justify-content").style.display = "none"
+            document.getElementById("text-align").style.display = "none"
+            document.getElementById("alignment-area").style.display = "none"
+            document.getElementById("text-area").style.display = "none"
+            document.getElementById("level-area").style.display = "none"
+            document.getElementById("media-area").style.display = "none"
+        }
+
+
+        deactivateAreas();
+
+        // wenn ein change im Dropdown von BlockType gemacht wird, werden die entsprechenden dazugehörigen
+        // eingabe areas angezeigt
+        blockTypeSelect.addEventListener("change", function () {
+            // blockType speichert die Option, welche ausgewählt wurde im Block_type Dropdown
+            const block_type = blockTypeSelect.value;
+
+           if (block_type === "Text") {
+               deactivateAreas();
+               document.getElementById("text-area").style.display = "block"
+               document.getElementById("alignment-area").style.display = "block"
+               document.getElementById("text-align").style.display = "block"
+           }
+
+           if (block_type === "Überschrift") {
+               deactivateAreas();
+               document.getElementById("text-area").style.display = "block"
+               document.getElementById("level-area").style.display = "block"
+               document.getElementById("alignment-area").style.display = "block"
+               document.getElementById("text-align").style.display = "block"
+           }
+
+           if (block_type === "Bild") {
+               deactivateAreas();
+               document.getElementById("caption-area").style.display = "block"
+               document.getElementById("width-area").style.display = "block"
+               document.getElementById("height-area").style.display = "block"
+               document.getElementById("alignment-area").style.display = "block"
+               document.getElementById("align-self").style.display = "block"
+               document.getElementById("media-area").style.display = "block"
+           }
+
+           if (block_type === "Button") {
+               document.getElementById("text-area").style.display = "block"
+               document.getElementById("alignment-area").style.display = "block"
+               document.getElementById("align-self").style.display = "block"
+               document.getElementById("url-area").style.display = "block"
+               document.getElementById("style-area").style.display = "block"
+           }
+
+        });
+    </script>
+{% endif %}
+
+<!-- JavaScript, wenn ein Block ausgewählt ist -->
+{% if selected_page_block%}
+    <script>
+        // positionCounts speichert Anzahl an Blöcke pro Layoutregion
+        const positionCounts = {{ region_position_counts_json|safe }};
+        // originalRegionId speichert die alte Layoutregion
+        const originalRegionId = "{{ selected_page_block.layout_region_id.id }}";
+        // originalPosition speichert die alte Position
+        const originalPosition = "{{ selected_page_block.position }}";
+        // regionSelect speichert das Dropdown für die Layoutregionen
+        const regionSelect = document.getElementById("layout_region_id");
+        // positionSelect speichert das Dropdown für die Positionen
+        const positionSelect = document.getElementById("position");
+
+        // refreshPositions baut das Dropdown für die Positionen neu auf
+        function refreshPositions() {
+            // aktuell ausgewählte Layoutregion (im Dropdown Main auswählen -> diese Id)
+            const selectedRegionId = regionSelect.value;
+            // wie viele Blöcke hat diese Region aktuell
+            const baseCount = Number(positionCounts[selectedRegionId] || 0);
+            // es wird berechnet, welche Positionen möglich sind
+            const maxPosition = selectedRegionId === originalRegionId ? baseCount : baseCount + 1;
+
+            // altes Positions-Dropdown leeren
+            positionSelect.innerHTML = "";
+
+            // die neuen Optionen werden erstellt
+            for (let position = 1; position <= maxPosition; position++) {
+                // für jede Position wird eine neue option im Dropdown erstellt
+                const option = document.createElement("option");
+                option.value = String(position);
+                option.textContent = String(position);
+
+                // wenn ursprüngliche Region ausgewählt dann ursprüngliche Position vorausgewählt
+                if (selectedRegionId === originalRegionId && String(position) === originalPosition) {
+                    option.selected = true;
+                }
+
+                positionSelect.appendChild(option);
+            }
+        }
+
+        regionSelect.addEventListener("change", refreshPositions);
+    </script>
+{% endif %}
 </body>
 </html>

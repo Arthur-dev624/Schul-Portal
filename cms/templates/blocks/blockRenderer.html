@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
 {% if block.block_type == "heading" %}
 
     <div class="cms-block cms-heading-block">
-        <h2>{{ block.config.text }}</h2>
+        {% if block.config.level == 1 %}
+            <h1 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h1>
+        {% elif block.config.level == 2 %}
+            <h2 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h2>
+        {% elif block.config.level == 3 %}
+            <h3 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h3>
+        {% elif block.config.level == 4 %}
+            <h4 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h4>
+        {% elif block.config.level == 5 %}
+            <h5 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h5>
+        {% endif %}
     </div>
 
 {% elif block.block_type == "text" %}
 
-    <div class="cms-block cms-text-block">
+    <div class="cms-block cms-text-block" style="align-content: {{ block.config.alignment }}">
         {{ block.config.text|linebreaks }}
     </div>
 
@@ -25,7 +27,10 @@
             <figure>
                 <img src="{{ block_medium.medium_id.file.url }}"
                      alt="{{ block_medium.medium_id.alt_text }}"
-                     class="img-fluid">
+                     class="img-fluid"
+                     style="width: {{ block_medium.medium_id.width }};
+                             height: {{ block_medium.medium_id.height }};
+                             align-self: {{ block_medium.medium_id.alignment }}">
 
                 {% if block.config.caption %}
                     <figcaption>
@@ -41,7 +46,7 @@
 {% elif block.block_type == "button" %}
 
     <div class="cms-block cms-button-block">
-        <a href="{{ block.config.url }}" class="btn btn-primary">
+        <a href="{{ block.config.url }}" class="btn btn-{{ block.config.style }}">
             {{ block.config.text }}
         </a>
     </div>
@@ -70,6 +75,3 @@
         Unbekannter Block-Typ: {{ block.block_type }}
     </div>
 {% endif %}
-
-</body>
-</html>

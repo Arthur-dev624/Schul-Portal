@@ -2,7 +2,10 @@ from builtins import id
 from collections import defaultdict
 from tokenize import String
 
+from django.db import transaction
 from django.db.models import Q, Exists, OuterRef, When, IntegerField, FloatField, Count, ExpressionWrapper, Case, Value, F, Prefetch
+from google.genai._gaos.utils import values
+from pip._internal.commands import index
 from pyasn1.type.univ import Null
 
 from cms.models import *
@@ -100,19 +103,19 @@ def get_functions_by_page_id(page_id= int, page_version= int):
 def get_media_used_by_page_id(page_id= int, page_version= int):
     """ returns the titles of the Media Objects which are used by the page """
     medium_titles = CmsMedium.objects.filter(
-        block_id__pageBlocks__page_version_id__page_id_id=page_id,
-        block_id__pageBlocks__page_version_id__version=page_version
+        mediumBlocks__block_id__pageBlocks__page_version_id__page_id_id=page_id,
+        mediumBlocks__block_id__pageBlocks__page_version_id__version=page_version
     ).values_list(
-        "medium_id__title",
+        "title",
         flat=True
     ).distinct()
 
     return list(medium_titles)
 
-def get_block_ids_used_in_page(page_id= int, given_page_version=int):
+def get_page_block_used_in_page(page_id= int, given_page_version=int):
     """ returns PageBlocks ordered after position and grouped by layout region which are used by the page """
 
-    current_page_version = PageVersion.objects.filter(
+    current_page_version = PageVersion.objects.get(
         page_id=page_id,
         version=given_page_version
     )
@@ -136,3 +139,219 @@ def get_block_ids_used_in_page(page_id= int, given_page_version=int):
 
     return dict(page_blocks_by_region)
 
+def get_layout_regions_of_page(page_id= int):
+    """ returns the layout regions of the layout used by the page"""
+    page = Page.objects.get(id=page_id)
+    layout_regions = LayoutRegion.objects.filter(
+        layout_id=page.layout_id.id
+    )
+
+    return layout_regions
+
+def get_all_media():
+    """ returns all media """
+    media = CmsMedium.objects.all()
+    return media
+
+def create_header_block(header_text = String, level = int, header_alignment = String,
+                        block_type = String, page_version = PageVersion):
+    """ creates a header block with PageBlock """
+    if header_text is None or header_alignment is None or level is None or block_type is None:
+        raise ValueError("Alle Werte müssen ausgefüllt sein")
+    else:
+        header_block = PageBlock.objects.create(
+            block_type=block_type,
+            config={
+                "text": header_text,
+                "level": level,
+                "alignment": header_alignment,
+            }
+        )
+
+        PageBlock.objects.create(
+            page_version_id=page_version,
+            block_id=header_block,
+            layout_region_id=None,
+            position=None
+        )
+
+def create_text_block(text = String, text_alignment = String,
+                      block_type = String, page_version = PageVersion):
+    """ creates a text block with PageBlock """
+    if text is None or text_alignment is None or block_type is None:
+        raise ValueError("Alle Werte müssen ausgefüllt sein")
+    else:
+        text_block = Block.objects.create(
+            block_type=block_type,
+            config={
+                "text": text,
+                "alignment": text_alignment,
+            }
+        )
+
+        PageBlock.objects.create(
+            page_version_id=page_version,
+            block_id=text_block,
+            layout_region_id=None,
+            position=None
+        )
+
+def create_image_block(caption = String, width = String, height = String,
+                       image_alignment = String, media_object = CmsMedium, block_type = String,
+                       page_version = PageVersion):
+    """ creates an image block with PageBlock and BlockMedium """
+    if (caption is None or width is None or height is None or
+            image_alignment is None or media_object is None or block_type is None):
+        raise ValueError("Alle Werte müssen ausgefüllt sein")
+    else:
+        image_block = Block.objects.create(
+            block_type=block_type,
+            config={
+                "caption": caption,
+                "width": width,
+                "height": height,
+                "alignment": image_alignment
+            }
+        )
+
+        PageBlock.objects.create(
+            page_version_id=page_version,
+            block_id=image_block,
+            layout_region_id=None,
+            position=None
+        )
+
+        BlockMedium.objects.create(
+            block_id=image_block,
+            medium_id=media_object,
+            position=None
+        )
+
+def create_button_block(button_text = String, url = String, button_style = String, block_type = String,
+                        page_version = PageVersion):
+    """ creates a button block and PageBlock """
+    if button_text is None or url is None or button_style is None or block_type is None:
+        raise ValueError("Alle Werte müssen ausgefüllt sein")
+    else:
+        button_block = Block.objects.create(
+            block_type=block_type,
+            config={
+                "text": button_text,
+                "style": button_style,
+                "url": url
+            }
+        )
+
+        PageBlock.objects.create(
+            page_version_id=page_version,
+            block_id=button_block,
+            layout_region_id=None,
+            position=None
+        )
+
+def update_header_block(header_text = String, level = int, header_alignment = String,
+                        selected_page_block = PageBlock, page_version = PageVersion,
+                        layout_region_id = LayoutRegion, position = int):
+    """ updates header block with PageBlock and config """
+    # if all passed values of form are None return Error
+    if (header_text is None and level is None and header_alignment is None and
+        layout_region_id is None and position is None):
+    else:
+        values = [header_text, header_alignment, level, layout_region_id, position]
+
+        for index, value in enumerate(values):
+            if index == 0 and value is not None:
+                selected_page_block.block_id.config["text"] = header_text
+            elif index == 1 and value is not None:
+                selected_page_block.block_id.config["alignment"] = header_alignment
+            elif index == 2 and value is not None:
+                selected_page_block.block_id.config["level"] = level
+            elif index == 3 and value is not None:
+                selected_page_block.layout_region_id = layout_region_id
+            elif index == 4 and value is not None:
+                selected_page_block.position = position
+
+        selected_page_block.page_version_id = page_version
+        selected_page_block.block_id.save()
+        selected_page_block.save()
+
+def update_text_block(text = String, text_alignment = String, selected_page_block = PageBlock, page_version = PageVersion,
+                      layout_region_id = LayoutRegion, position = int):
+    """ updates text block with PageBlock and config """
+    # if all passed values of form are None return Error
+    if text is None and text_alignment is None and layout_region_id is None and position is None:
+        raise ValueError("Mindestens ein Wert muss ausgefüllt sein")
+    else:
+        values = [text, text_alignment, layout_region_id, position]
+
+        for index, value in enumerate(values):
+            if index == 0 and value is not None:
+                selected_page_block.block_id.config["text"] = text
+            elif index == 1 and value is not None:
+                selected_page_block.block_id.config["alignment"] = text_alignment
+            elif index == 2 and value is not None:
+                selected_page_block.layout_region_id = layout_region_id
+            elif index == 3 and value is not None:
+                selected_page_block.position = position
+
+        selected_page_block.page_version_id = page_version
+        selected_page_block.block_id.save()
+        selected_page_block.save()
+
+def update_image_block(caption = String, width = String, height = String, image_alignment = String,
+                       media_object = CmsMedium, page_version = PageVersion, selected_page_block = PageBlock,
+                       layout_region_id = LayoutRegion, position = int):
+    """ updates image block with PageBlock, BlockMedium and config """
+    # if all passed Values of Form are None return Error
+    if (caption is None and width is None and height is None and image_alignment is None
+        and media_object is None and layout_region_id is None and position is None):
+        raise ValueError("Mindestens ein Wert muss ausgefüllt sein")
+    else:
+        values = [caption, width, height, image_alignment, media_object, layout_region_id, position]
+
+        for index, value in enumerate(values):
+            if index == 0 and value is not None:
+                selected_page_block.block_id.config["caption"] = caption
+            elif index == 1 and value is not None:
+                selected_page_block.block_id.config["width"] = width
+            elif index == 2 and value is not None:
+                selected_page_block.block_id.config["height"] = height
+            elif index == 3 and value is not None:
+                selected_page_block.block_id.config["alignment"] = image_alignment
+            elif index == 4 and value is not None:
+                selected_block_medium = BlockMedium.objects.get(block_id=selected_page_block.block_id)
+                selected_block_medium.medium_id = media_object
+                selected_block_medium.save()
+            elif index == 5 and value is not None:
+                selected_page_block.layout_region_id = layout_region_id
+            elif index == 6 and value is not None:
+                selected_page_block.position = position
+
+        selected_page_block.page_version_id = page_version
+        selected_page_block.block_id.save()
+        selected_page_block.save()
+
+def update_button_block(button_text = String, url = String, button_style = String, selected_page_block = PageBlock,
+                        page_version = PageVersion, layout_region_id = LayoutRegion, position = int):
+    """ updates button block with PageBlock and config """
+    # if all passed Values of Form are None return Error
+    if button_text is None and url is None and button_style is None and layout_region_id is None and position is None:
+        raise ValueError("Mindestens ein Wert muss ausgefüllt sein")
+    else:
+        values = [button_text, url, button_style, layout_region_id, position]
+
+        for index, value in enumerate(values):
+            if index == 0 and value is not None:
+                selected_page_block.block_id.config["text"] = button_text
+            elif index == 1 and value is not None:
+                selected_page_block.block_id.config["url"] = url
+            elif index == 2 and value is not None:
+                selected_page_block.block_id.config["style"] = button_style
+            elif index == 3 and value is not None:
+                selected_page_block.layout_region_id = layout_region_id
+            elif index == 4 and value is not None:
+                selected_page_block.position = position
+
+        selected_page_block.page_version_id = page_version
+        selected_page_block.block_id.save()
+        selected_page_block.save()

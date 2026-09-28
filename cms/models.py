@@ -82,6 +82,11 @@ class NavigationItem(models.Model):
     position = models.IntegerField(blank=True, null=True)
     visible = models.BooleanField(default=True)
 
+# config für jeweilige BlockTypes ist so aufgebaut:
+#            für heading: text, level, alignment
+#            für text: text, alignment
+#            für image: caption, width, height, align-items
+#            für button: text, url, style
 class Block(models.Model):
 
     class BlockType(models.TextChoices):
@@ -92,6 +97,7 @@ class Block(models.Model):
         FUNCTION = "function", "Funktion"
 
     id = models.AutoField(primary_key=True)
+
     block_type = models.CharField(
         max_length=50,
         choices=BlockType.choices
@@ -133,14 +139,14 @@ class PageBlock(models.Model):
     id = models.AutoField(primary_key=True)
     page_version_id = models.ForeignKey(PageVersion, on_delete=models.CASCADE, related_name='pageBlocks')
     block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='pageBlocks')
-    layout_region_id = models.ForeignKey(LayoutRegion, on_delete=models.CASCADE, related_name='pageBlocks')
-    position = models.IntegerField()
+    layout_region_id = models.ForeignKey(LayoutRegion, on_delete=models.CASCADE, related_name='pageBlocks', null=True, blank=True)
+    position = models.IntegerField(null=True, blank=True)
 
 class BlockMedium(models.Model):
     id = models.AutoField(primary_key=True)
     block_id = models.ForeignKey(Block, on_delete=models.CASCADE, related_name='blockMedia')
     medium_id = models.ForeignKey(CmsMedium, on_delete=models.CASCADE, related_name='mediumBlocks')
-    position = models.IntegerField()
+    position = models.IntegerField(null=True, blank=True)
 
 class FunctionBlock(models.Model):
     id = models.AutoField(primary_key=True)

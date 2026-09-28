@@ -43,22 +43,36 @@
     </nav>
     </header>
 
-    <!-- TODO: for schleifen einbauen die über blocks_by_region iterieren und die Blöcke rendern lassen -->
-    <section>
+    <!-- Hero -->
+    <section class="hero">
         <div class="container">
-            <!-- Hero -->
+
+            {% for page_block in blocks_by_region %}
+                {% include "blocks/blockRenderer.html" with block=page_block.block_id only %}
+            {% endfor %}
+
         </div>
     </section>
 
+    <!-- Main -->
     <section>
         <div class="container">
-            <!-- Main -->
+
+            {% for page_block in blocks_by_region %}
+                {% include "blocks/blockRenderer.html" with block=page_block.block_id only %}
+            {% endfor %}
+
         </div>
     </section>
 
+    <!-- Footer -->
     <section>
         <div class="container">
-            <!-- Footer -->
+
+            {% for page_block in blocks_by_region %}
+                {% include "blocks/blockRenderer.html" with block=page_block.block_id only %}
+            {% endfor %}
+
         </div>
     </section>
 

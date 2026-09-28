@@ -1,0 +1,194 @@
+<!-- config des blocks bearbeiten -->
+<!-- Eingabe für Text -->
+<div class="mb-3" id="text-area">
+    <label for="text" class="form-label">Text</label>
+    <input type="text" class="form-control" id="text" name="text">
+</div>
+
+<!-- Eingabe für größe der Schrift -->
+<div class="mb-3" id="level-area">
+    <label for="level" class="form-label">Level</label>
+    <input type="number" class="form-control" id="level" name="level">
+</div>
+
+<!-- Eingabe für Caption -->
+<div class="mb-3" id="caption-area">
+    <label for="caption" class="form-label">Caption</label>
+    <input type="text" class="form-control" id="caption" name="caption">
+</div>
+
+<!-- Eingabe für Alignment -->
+<div class="mb-3" id="alignment-area">
+    <label for="alignment" class="form-label">Alignment</label>
+    <input type="hidden" class="form-control" id="alignment" name="alignment">
+    <select class="form-select" id="alignment" name="alignment">
+        <!-- Optionen für text -->
+        <option id="text-align">
+            left
+        </option>
+        <option id="text-align">
+            right
+        </option>
+        <option id="text-align">
+            center
+        </option>
+        <option id="text-align">
+            justify
+        </option>
+        <option id="text-align">
+            start
+        </option>
+        <option id="text-align">
+            end
+        </option>
+        <!-- Optionen für Flexbox/Grid um auf Querachse auszurichten -->
+        <option id="align-items">
+            stretch
+        </option>
+        <option id="align-items">
+            flex-start
+        </option>
+        <option id="align-items">
+            flex-end
+        </option>
+        <option id="align-items">
+            center
+        </option>
+        <option id="align-items">
+            baseline
+        </option>
+        <!-- Optionen für Flexbox/Grid um auf der Hauptachse auszurichten -->
+        <option id="justify-content">
+            flex-start
+        </option>
+        <option id="justify-content">
+            flex-end
+        </option>
+        <option id="justify-content">
+            center
+        </option>
+        <option id="justify-content">
+            space-between
+        </option>
+        <option id="justify-content">
+            space-around
+        </option>
+        <option id="justify-content">
+            space-evenly
+        </option>
+        <!-- Optionen um ein einzelnes Flex/Grid Element auszurichten -->
+        <option id="align-self">
+            auto
+        </option>
+        <option id="align-self">
+            flex-start
+        </option>
+        <option id="align-self">
+            flex-end
+        </option>
+        <option id="align-self">
+            center
+        </option>
+        <option id="align-self">
+            stretch
+        </option>
+        <option id="align-self">
+            baseline
+        </option>
+    </select>
+</div>
+
+<!-- Eingabe für die width -->
+<div class="mb-3" id="width-area">
+    <label for="width" class="form-label">Width</label>
+    <input type="hidden" class="form-control" id="width" name="width">
+    <select class="form-select" id="width" name="width">
+        <option>
+            auto
+        </option>
+        <option>
+            fit-content
+        </option>
+        <option>
+            max-content
+        </option>
+        <option>
+            min-content
+        </option>
+    </select>
+</div>
+
+<!-- Auswahl eines Bildes -->
+<div class="mb-3" id="media-area">
+    <label for="media_id" class="form-label">Medium</label>
+    <input type="hidden" class="form-control" id="media_id" name="media_id">
+    <select class="form-select" id="media_id" name="media_id">
+        {% for medium in media %}
+            <option value="{{ medium.id }}">
+                {{ medium.title }}
+            </option>
+        {% endfor %}
+    </select>
+</div>
+
+<!-- Eingabe für die Höhe -->
+<div class="mb-3" id="height-area">
+    <label for="height" class="form-label">Height</label>
+    <input type="hidden" class="form-control" id="height" name="height">
+    <select class="form-select" id="height" name="height">
+        <option>
+            auto
+        </option>
+        <option>
+            fit-content
+        </option>
+        <option>
+            max-content
+        </option>
+        <option>
+            min-content
+        </option>
+    </select>
+</div>
+
+<!-- Eingabe für URL -->
+<div class="mb-3" id="url-area">
+    <label for="url" class="form-label">URL</label>
+    <input type="text" class="form-control" id="url" name="url">
+</div>
+
+<!-- Eingabe für Button style -->
+<div class="mb-3">
+    <label for="button-style" class="form-label">Button-Style</label>
+    <input type="text" class="form-control" id="button-style" name="button-style">
+    <select class="form-select" id="button-style" name="button-style">
+        <option>
+            primary
+        </option>
+        <option>
+            secondary
+        </option>
+        <option>
+            succes
+        </option>
+        <option>
+            danger
+        </option>
+        <option>
+            warning
+        </option>
+    </select>
+</div>
+
+    {% if create_page_block %}
+        <!-- Speichern oder Schließen -->
+        <div class="d-grid gap-2">
+            <button type="submit" name="action" value="create_block" class="btn btn-primary">
+                Speichern
+            </button>
+
+            <a href="{% url 'seite_bearbeiten' page.id version %}" class="btn btn-outline-secondary">
+                Schließen
+            </a>
+    </div>
+    {% endif %}
