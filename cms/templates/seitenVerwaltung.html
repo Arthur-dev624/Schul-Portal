@@ -65,7 +65,6 @@
     <!-- Sidebar + Main -->
     <div class="cms-body">
         <!-- sidebar -->
-        <!-- TODO: Views erstellen für jeden Sidebar item -->
         <aside class="cms-sidebar border-end bg-light">
             <div class="p-4">
                 <p class="fs-2">Schul CMS</p>
@@ -78,7 +77,9 @@
                     <li class="list-group-item active">
                         <a class="text-dark" href="{% url "to_seiten_main" %}">Seiten</a>
                     </li>
-                    <li class="list-group-item">Medien</li>
+                    <li class="list-group-item">
+                        <a class="text-dark" href="{% url "to_medien_verwaltung" %}">Medien</a>
+                    </li>
                     <li class="list-group-item">Navigation</li>
                     <li class="list-group-item">Funktionen</li>
                     <li class="list-group-item">Layouts</li>

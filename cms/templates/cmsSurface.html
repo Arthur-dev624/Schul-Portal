@@ -80,7 +80,9 @@
                     <li class="list-group-item">
                         <a class="text-dark" href="{% url "to_seiten_main" %}">Seiten</a>
                     </li>
-                    <li class="list-group-item">Medien</li>
+                    <li class="list-group-item">
+                        <a class="text-dark" href="{% url "to_medien_verwaltung" %}">Medien</a>
+                    </li>
                     <li class="list-group-item">Navigation</li>
                     <li class="list-group-item">Funktionen</li>
                     <li class="list-group-item">
@@ -111,7 +113,6 @@
                     </div>
                 </div>
                 <!-- Schnellzugriff -->
-                <!-- TODO: Links zu den jeweiligen views des Schnellzugriffs erstellen -->
                 <div class="col-sm-6 mb-3">
                     <div class="card">
                         <div class="card-body">
@@ -123,7 +124,7 @@
                                 <a class="stretched-link" href="{% url "seite_erstellen" %}">+ Neue Seite</a>
                             </li>
                             <li class="list-group-item">
-                                <a class="stretched-link" href="#">Medien hochladen</a>
+                                <a class="stretched-link" href="{% url "to_medien_verwaltung" %}">Medien hochladen</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="stretched-link" href="#">Navigation</a>
@@ -135,7 +136,6 @@
                     </div>
                 </div>
                 <!-- Zuletzt bearbeitete Seiten -->
-                <!-- TODO: Benötigte Daten für zuletzt bearbeitete Seiten anzeigen lassen -->
                 <div class="col-sm-6 mb-3">
                     <div class="card">
                         <div class="card-body">

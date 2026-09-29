@@ -1,5 +1,6 @@
 from django.urls import path
 
+from views.medienVerwaltung import to_medien_verwaltung
 from .views.cmsLogin import cms_login, cms_logout, cms_dashboard, admin_dashboard
 from .views.seitenVerwaltung import to_seiten_main, seiten_search, seite_erstellen, seite_bearbeiten, seiten_vorschau, vorschau_view, delete_page
 from .views.pageRelease import release_page
@@ -19,4 +20,5 @@ urlpatterns = [
     path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/<int:version>/preview", seiten_vorschau, name="seiten_vorschau"),
     path("dashboard/admindashboard/seitenverwaltung/<int:page_id>/<int:version>/vorschau", vorschau_view, name="vorschau"),
     path("seiten_search/", seiten_search, name="seiten_search"),
+    path("dashboard/admindahsboard/medienverwaltung", to_medien_verwaltung, name="to_medien_verwaltung"),
 ]
