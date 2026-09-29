@@ -47,10 +47,10 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Seitenverwaltung</span>
+            <span class="navbar-brand mb-0 h1">Medienverwaltung</span>
         </div>
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Übersicht der Aktionen</span>
+            <span class="navbar-brand mb-0 h1">Übersicht der Medien und Medien hochladen</span>
         </div>
 
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -92,15 +92,315 @@
 
         <!-- Main Bereich der Medienverwaltung -->
         <main class="cms-main bg-white">
-            <!-- Medien Hochladen funktion -->
-            <div class="p-2">
+            {% if messages %}
 
-            </div>
+                {% for message in messages %}
+                    <div
+                            class="alert {% if message.type == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %}"
+                            role="alert"
+                    >
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-            <!-- Vorhandene Medien Titel anzeigen -->
-            <div class="p-2">
+            <!-- Medien hochladen -->
+            <section class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        Neues Medium hochladen
+                    </h5>
+                </div>
 
-            </div>
+                <div class="card-body">
+
+                    <form
+                        method="post"
+                        action="{% url 'to_medien_verwaltung' %}"
+                        enctype="multipart/form-data"
+                    >
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="action"
+                            value="upload"
+                        >
+
+                        <div class="row g-3">
+
+                            <!-- Titel -->
+                            <div class="col-md-6">
+
+                                <label
+                                    for="media-title"
+                                    class="form-label"
+                                >
+                                    Titel
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="media-title"
+                                    name="title"
+                                    class="form-control"
+                                    maxlength="200"
+                                    value="{{ upload_values.title|default:'' }}"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- Alternativtext -->
+                            <div class="col-md-6">
+
+                                <label
+                                    for="media-alt"
+                                    class="form-label"
+                                >
+                                    Alternativtext
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="media-alt"
+                                    name="alt_text"
+                                    class="form-control"
+                                    maxlength="200"
+                                    value="{{ upload_values.alt_text|default:'' }}"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- Datei -->
+                            <div class="col-12">
+
+                                <label
+                                    for="media-file"
+                                    class="form-label"
+                                >
+                                    Bilddatei auswählen
+                                </label>
+
+                                <input
+                                    type="file"
+                                    id="media-file"
+                                    name="file"
+                                    class="form-control"
+                                    accept=".jpg,.jpeg,.png,.gif,.webp"
+                                    required
+                                >
+
+                                <div class="form-text">
+                                    JPG, PNG, GIF oder WebP.
+                                    Maximale Dateigröße: 10 MB.
+                                </div>
+
+                            </div>
+
+                            <!-- Speichern -->
+                            <div class="col-12">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary"
+                                >
+                                    Medium hochladen
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- vorhandene medien -->
+            <section>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0">
+                        Vorhandene Medien
+                    </h5>
+                    <span class="badge bg-secondary">
+                        {{ media_count }} Medien
+                    </span>
+                </div>
+
+                <div class="row g-3">
+                    {% for medium in media %}
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card media-card">
+
+                                <!-- Medienvorschau -->
+                                {% if medium.file %}
+                                    {% if medium.is_image %}
+                                        <img
+                                            src="{{ medium.file.url }}"
+                                            alt="{{ medium.alt_text }}"
+                                            class="card-img-top media-preview"
+                                            loading="lazy"
+                                        >
+                                    {% else %}
+
+                                        <div class="media-preview d-flex align-items-center justify-content-center">
+                                            Datei
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+
+                                <!-- Medieninformationen -->
+                                <div class="card-body">
+
+                                    <h6 class="card-title">
+                                        {{ medium.title }}
+                                    </h6>
+
+                                    <p class="card-text small text-secondary mb-2">
+                                        ID: {{ medium.id }}
+                                        <br>
+                                        Typ: {{ medium.media_type }}
+                                        <br>
+                                        Hochgeladen:
+                                        {{ medium.uploaded_at|date:"d.m.Y H:i" }}
+                                        <br>
+                                        Von:
+                                        {{ medium.uploaded_by.username }}
+                                    </p>
+
+                                    <p class="small">
+                                        <strong>Alternativtext:</strong>
+                                        {{ medium.alt_text }}
+                                    </p>
+
+                                    <p>
+                                        <span class="badge bg-info text-dark">
+                                            In {{ medium.block_count }}
+                                            Blöcken verwendet
+                                        </span>
+                                    </p>
+
+                                    {% if medium.file %}
+                                        <a
+                                            href="{{ medium.file.url }}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn btn-outline-secondary btn-sm"
+                                        >
+                                            Datei öffnen
+                                        </a>
+
+                                    {% endif %}
+
+                                    <hr>
+
+                                    <!-- medium ersetzen -->
+                                    {% if medium.is_image %}
+
+                                        <form
+                                            method="post"
+                                            action="{% url 'to_medien_verwaltung' %}"
+                                            enctype="multipart/form-data"
+                                        >
+                                            {% csrf_token %}
+
+                                            <input
+                                                type="hidden"
+                                                name="action"
+                                                value="replace"
+                                            >
+
+                                            <input
+                                                type="hidden"
+                                                name="medium_id"
+                                                value="{{ medium.id }}"
+                                            >
+
+                                            <div class="mb-2">
+                                                <label
+                                                    for="title-{{ medium.id }}"
+                                                    class="form-label"
+                                                >
+                                                    Titel
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    id="title-{{ medium.id }}"
+                                                    name="title"
+                                                    class="form-control form-control-sm"
+                                                    maxlength="200"
+                                                    value="{{ medium.title }}"
+                                                    required
+                                                >
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <label
+                                                    for="alt-{{ medium.id }}"
+                                                    class="form-label"
+                                                >
+                                                    Alternativtext
+                                                </label>
+
+                                                <input
+                                                    type="text"
+                                                    id="alt-{{ medium.id }}"
+                                                    name="alt_text"
+                                                    class="form-control form-control-sm"
+                                                    maxlength="200"
+                                                    value="{{ medium.alt_text }}"
+                                                    required
+                                                >
+                                            </div>
+
+
+                                            <div class="mb-3">
+                                                <label
+                                                    for="file-{{ medium.id }}"
+                                                    class="form-label"
+                                                >
+                                                    Neue Bilddatei
+                                                </label>
+
+                                                <input
+                                                    type="file"
+                                                    id="file-{{ medium.id }}"
+                                                    name="file"
+                                                    class="form-control form-control-sm"
+                                                    accept=".jpg,.jpeg,.png,.gif,.webp"
+                                                    required
+                                                >
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-warning btn-sm w-100"
+                                                onclick="return confirm('Dieses Medium wird in allen verbundenen Blöcken ersetzt. Fortfahren?');"
+                                            >
+                                                Medium ersetzen
+                                            </button>
+                                        </form>
+
+                                    {% else %}
+                                        <p class="small text-secondary">
+                                            Für diesen Medientyp ist der Bildaustausch nicht verfügbar.
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% empty %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Es wurden noch keine Medien hochgeladen.
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </section>
         </main>
     </div>
 </div>
