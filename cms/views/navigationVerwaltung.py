@@ -146,31 +146,48 @@ def to_navigation_verwaltung(request):
 # Eine veröffentlichte CMS-Seite öffentlich darstellen
 def cms_page(request, slug):
 
+    # Nur grundsätzlich veröffentlichte Seiten.
     page = get_object_or_404(
         Page,
         slug=slug,
         status=True,
     )
 
-    # Vorhandene Version mit der höchsten Versionsnummer
+    # Ausschließlich die aktive
+    # veröffentlichte Version verwenden.
     page_version = (
         PageVersion.objects
-        .filter(page_id=page)
-        .order_by("-version", "-id")
+        .filter(
+            page_id=page,
+            status=True,
+        )
+        .order_by(
+            "-published_at",
+            "-version",
+            "-id",
+        )
         .first()
     )
 
     if page_version is None:
-        raise Http404("Keine Seitenversion vorhanden")
+        raise Http404(
+            "Keine veröffentlichte Seitenversion vorhanden."
+        )
 
     context = {
         "page": page,
         "design": page.design_id,
+
         "blocks_by_region": get_page_block_used_in_page(
             page.id,
             page_version.version,
         ),
+
         "navigation_entries": get_visible_navigation(),
     }
 
-    return render(request, page.layout_id.template, context)
+    return render(
+        request,
+        page.layout_id.template,
+        context,
+    )

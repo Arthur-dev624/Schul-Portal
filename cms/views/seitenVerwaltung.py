@@ -341,6 +341,23 @@ def seite_bearbeiten(
         version=version,
     )
 
+    # Bereits veröffentlichte Versionen dürfen nicht erneut verändert werden
+    if request.method == "POST":
+
+        was_published = (
+                page_version.status
+                or page_version.published.exists()
+        )
+
+        if was_published:
+            messages.error(
+                request,
+                "Diese Version wurde bereits veröffentlicht. "
+                "Bitte bearbeite die neueste Entwurfsversion."
+            )
+
+            return redirect("to_seiten_main")
+
     layout_regions = get_layout_regions_of_page(page.id)
 
     selected_page_block = None

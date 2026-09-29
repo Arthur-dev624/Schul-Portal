@@ -83,6 +83,9 @@
                     <li class="list-group-item">
                         <a class="text-dark" href="{% url 'to_navigation_verwaltung' %}">Navigation</a>
                     </li>
+                    <li>
+                        <a href="{% url 'to_veroeffentlichungs_verwaltung' %}" class="list-group-item list-group-item-action active">Veröffentlichung</a>
+                    </li>
                 </ul>
             </div>
         </aside>
@@ -94,27 +97,23 @@
                 <!-- message für erfolgreiche Seiten veröffentlichung -->
                 {% if messages %}
                     <div class="container-fluid p-3">
+
                         {% for message in messages %}
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <div class="alert
+                                {% if message.tags == 'error' %}
+                                    alert-danger
+                                {% else %}
+                                    alert-success
+                                {% endif %}"
+                            >
                                 {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
+
                         {% endfor %}
                     </div>
                 {% endif %}
-            <!-- message für erfolgreiche seiten löschung -->
-            {% if messages %}
-                <div class="container-fluid p-3">
-                    {% for message in messages %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
 
-                <!-- TODO: für Seite erstellen eine message anzeigen lassen, dass seite erstellt worden ist -->
+
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col text-center">
@@ -197,9 +196,19 @@
                                             </li>
 
                                             <li>
-                                                <a class="dropdown-item" href="{% url "release_page" entry.page.id %}">
-                                                    Veröffentlichen
-                                                </a>
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'release_page' entry.page.id %}"
+                                                >
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="dropdown-item"
+                                                    >
+                                                        Veröffentlichen
+                                                    </button>
+                                                </form>
                                             </li>
 
                                             <li>

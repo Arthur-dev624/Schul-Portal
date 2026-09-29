@@ -1,103 +1,318 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
     <title>Veröffentlichungsverwaltung</title>
-
-    <style>
-        html,
-        body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .cms-layout {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cms-body {
-            flex: 1;
-            display: flex;
-            min-height: 100%;
-        }
-
-        .cms-sidebar {
-            width: 16rem;
-            flex-shrink: 0;
-        }
-
-        .cms-main {
-            flex: 1;
-            min-width: 0;
-        }
-    </style>
 </head>
-<body class="min-vh-100 bg-body-tertiary">
-<div class="cms-layout">
+
+<body class="bg-body-tertiary">
+
+<div class="d-flex flex-column vh-100">
+
     <!-- Header -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Veröffentlichungsverwaltung</span>
-        </div>
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Seite veröffentlichen/archivieren</span>
-        </div>
+    <header class="navbar border-bottom px-4">
+        <span class="navbar-brand">
+            Veröffentlichungsverwaltung
+        </span>
 
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Profil: {{ username }}</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url "cms_logout" %}">Abmelden</a>
-            </li>
-        </ul>
-    </nav>
+        <div>
+            <span class="me-3">{{ username }}</span>
 
-    <!-- Sidebar + Main -->
-    <div class="cms-body">
-        <!-- sidebar -->
-        <!-- TODO: Views erstellen für jeden Sidebar item -->
-        <aside class="cms-sidebar border-end bg-light">
-            <div class="p-4">
-                <p class="fs-2">Schul CMS</p>
-            </div>
-            <div class="p-4">
-                <ul class="list-group">
-                    <li class="list-group-item" aria-current="true">
-                        <a class="text-dark" href="{% url "admin_dashboard" %}">Übersicht</a>
-                    </li>
-                    <li class="list-group-item active">
-                        <a class="text-dark" href="{% url "to_seiten_main" %}">Seiten</a>
-                    </li>
-                    <li class="list-group-item">Medien</li>
-                    <li class="list-group-item">
-                        <a class="text-dark" href="{% url 'to_navigation_verwaltung' %}">Navigation</a>
-                    </li>
-                    <li class="list-group-item">Funktionen</li>
-                    <li class="list-group-item">
-                        <a class="text-dark" href="#">Veröffentlichung</a>
-                    </li>
-                    <li class="list-group-item">Layouts</li>
-                    <li class="list-group-item">Designs</li>
-                    <li class="list-group-item">Benutzer & Rechte</li>
-                </ul>
+            <a href="{% url 'cms_logout' %}">
+                Abmelden
+            </a>
+        </div>
+    </header>
+
+    <div class="d-flex flex-grow-1 overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside
+            class="border-end bg-light p-3 overflow-auto"
+            style="width: 16rem; flex-shrink: 0;"
+        >
+
+            <h4 class="mb-4">Schul CMS</h4>
+
+            <div class="list-group">
+
+                <a
+                    href="{% url 'admin_dashboard' %}"
+                    class="list-group-item list-group-item-action"
+                >
+                    Übersicht
+                </a>
+
+                <a
+                    href="{% url 'to_seiten_main' %}"
+                    class="list-group-item list-group-item-action"
+                >
+                    Seiten
+                </a>
+
+                <a
+                    href="{% url 'to_medien_verwaltung' %}"
+                    class="list-group-item list-group-item-action"
+                >
+                    Medien
+                </a>
+
+                <a
+                    href="{% url 'to_navigation_verwaltung' %}"
+                    class="list-group-item list-group-item-action"
+                >
+                    Navigation
+                </a>
+
+                <a
+                    href="{% url 'to_veroeffentlichungs_verwaltung' %}"
+                    class="list-group-item list-group-item-action active"
+                >
+                    Veröffentlichung
+                </a>
+
             </div>
         </aside>
 
-        <!-- Main -->
-        <main class="cms-main">
+        <!-- Hauptbereich -->
+        <main class="flex-grow-1 overflow-auto bg-white p-4">
+
+            <h3>Seiten veröffentlichen</h3>
+
+            <p class="text-secondary">
+                Verwalte veröffentlichte Seiten,
+                Entwurfsversionen und Archivierungen.
+            </p>
+
+            <!-- Rückmeldungen -->
+            {% for message in messages %}
+
+                <div class="alert
+                    {% if message.tags == 'error' %}
+                        alert-danger
+                    {% else %}
+                        alert-success
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+            <!-- Seitenübersicht -->
+            <section class="card mb-4">
+
+                <div class="card-header">
+                    Seitenübersicht
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Seite</th>
+                                    <th>Status</th>
+                                    <th>Online-Version</th>
+                                    <th>Entwurf</th>
+                                    <th>Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for row in rows %}
+
+                                <tr>
+                                    <!-- Seitentitel -->
+                                    <td>
+                                        {{ row.page.title }}
+                                    </td>
+                                    <!-- Veröffentlichungsstatus -->
+                                    <td>
+                                        {% if row.page.status and row.live_version %}
+
+                                            <span class="badge bg-success">
+                                                Veröffentlicht
+                                            </span>
+
+                                        {% elif row.page.status %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Keine aktive Version
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-secondary">
+                                                Offline
+                                            </span>
+                                        {% endif %}
+                                    </td>
+
+                                    <!-- Öffentlich sichtbare Version -->
+                                    <td>
+
+                                        {% if row.live_version %}
+
+                                            Version {{ row.live_version.version }}
+
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <!-- Neueste Entwurfsversion -->
+                                    <td>
+
+                                        {% if row.draft_version %}
+
+                                            Version {{ row.draft_version.version }}
+
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+
+                                    <!-- Aktionen -->
+                                    <td>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <!-- Entwurf veröffentlichen -->
+                                            {% if row.draft_version %}
+
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'release_page' row.page.id %}"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-success btn-sm"
+                                                    >
+                                                        Veröffentlichen
+                                                    </button>
+
+                                                </form>
+
+                                                <a
+                                                    href="{% url 'vorschau' row.page.id row.draft_version.version %}"
+                                                    class="btn btn-outline-primary btn-sm"
+                                                >
+                                                    Vorschau
+                                                </a>
+
+                                            {% endif %}
+
+                                            <!-- Öffentliche Seite öffnen -->
+                                            {% if row.live_version %}
+                                                <a
+                                                    href="{% url 'cms_page' row.page.slug %}"
+                                                    class="btn btn-outline-secondary btn-sm"
+                                                    target="_blank"
+                                                    rel="noopener"
+                                                >
+                                                    Website
+                                                </a>
+                                            {% endif %}
+
+                                            <!-- Seite archivieren -->
+                                            {% if row.page.status %}
+                                                <form
+                                                    method="post"
+                                                    action="{% url 'archive_page' row.page.id %}"
+                                                >
+
+                                                    {% csrf_token %}
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-outline-danger btn-sm"
+                                                        onclick="return confirm('Seite wirklich archivieren?')"
+                                                    >
+                                                        Archivieren
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% empty %}
+
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        Keine Seiten vorhanden.
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Veröffentlichungshistorie -->
+            <section class="card">
+
+                <div class="card-header">
+                    Letzte Veröffentlichungen
+                </div>
+
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Seite</th>
+                                    <th>Version</th>
+                                    <th>Veröffentlicht am</th>
+                                    <th>Veröffentlicht von</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for publication in history %}
+                                    <tr>
+                                        <td>
+                                            {{ publication.page_version_id.page_id.title }}
+                                        </td>
+                                        <td>
+                                            {{ publication.page_version_id.version }}
+                                        </td>
+                                        <td>
+                                            {{ publication.published_at|date:"d.m.Y H:i" }}
+                                        </td>
+                                        <td>
+                                            {{ publication.published_by.username }}
+                                        </td>
+                                    </tr>
+                                {% empty %}
+
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            Noch keine Veröffentlichungen vorhanden.
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
         </main>
     </div>
 </div>
+
 </body>
 </html>
