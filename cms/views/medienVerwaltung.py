@@ -66,7 +66,7 @@ class CmsImageForm(forms.Form):
 
         # Dateiendung muss tum tatsächlichen Bildformat passen
         extension = Path(uploaded_file.name).suffix.lower().lstrip(".")
-        allowed_extensions = IMAGE_FORMATS[image_format]
+        allowed_extensions, _ = IMAGE_FORMATS[image_format]
 
         if extension not in allowed_extensions:
             raise forms.ValidationError(
@@ -232,9 +232,9 @@ def to_medien_verwaltung(request):
     # für die Vorschau unterscheiden, ob es ein Bild ist
     # auch ältere Einträge mit media_type="image" unterstützen
     for medium in media:
-        medium.is_image (
-            medium.media_type == "image"
-            or medium.media_type.startswith("image/")
+        medium.is_image = (
+                medium.media_type == "image"
+                or medium.media_type.startswith("image/")
         )
 
     context = {
@@ -249,4 +249,4 @@ def to_medien_verwaltung(request):
         ),
     }
 
-    return render(request, "medienverwaltung.html", context)
+    return render(request, "medienVerwaltung.html", context)

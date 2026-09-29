@@ -140,7 +140,7 @@ def to_navigation_verwaltung(request):
         "rows": rows,
     }
 
-    return render(request, "navigationVerwaltung.html", context)
+    return render(request, "navigationsverwaltung.html", context)
 
 
 # Eine veröffentlichte CMS-Seite öffentlich darstellen
