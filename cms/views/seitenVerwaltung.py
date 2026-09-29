@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from cms.api import search_pages_with_title, get_page_block_used_in_page, get_functions_by_page_id, get_media_used_by_page_id, get_blocks_and_layout_region_by_page_id, current_page_versions, get_layout_regions_of_page, get_all_media, create_header_block, create_text_block, create_image_block, create_button_block, update_header_block, update_text_block, update_image_block, update_button_block
 from cms.models import Design, Layout, Page, PageVersion, PageBlock, Block, BlockMedium, CmsMedium
+from cms.views.navigationVerwaltung import get_visible_navigation
 from django.utils.text import slugify
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.contrib import messages
@@ -629,21 +630,29 @@ def seite_bearbeiten(
 
 # rendert die zu bearbeitende Page mit ihrem Layout, Design, Blöcke und die anordnung der Blöcke in der Page
 # in einem iframe in editor.html
+
 @login_required
 @xframe_options_sameorigin
 def seiten_vorschau(request, page_id, version):
-    page = Page.objects.get(id=page_id)
-    design = page.design_id
-    blocks_by_region = get_page_block_used_in_page(page.id, version)
 
-    # TODO: Logik einbauen wo welche Blöcke gerendert werden sollen
+    page = get_object_or_404(Page, id=page_id)
+
+    design = page.design_id
+
+    blocks_by_region = get_page_block_used_in_page(
+        page.id,
+        version,
+    )
+
     context = {
         "page": page,
         "design": design,
         "blocks_by_region": blocks_by_region,
+        "navigation_entries": get_visible_navigation(),
     }
 
     return render(request, page.layout_id.template, context)
+
 
 @login_required
 def vorschau_view(request, page_id, version):
