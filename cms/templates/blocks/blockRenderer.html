@@ -2,39 +2,40 @@
 
     <div class="cms-block cms-heading-block">
         {% if block.config.level == 1 %}
-            <h1 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h1>
+            <h1 style="text-align: {{ block.config.alignment }};">{{ block.config.text }}</h1>
         {% elif block.config.level == 2 %}
-            <h2 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h2>
+            <h2 style="text-align: {{ block.config.alignment }};">{{ block.config.text }}</h2>
         {% elif block.config.level == 3 %}
-            <h3 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h3>
+            <h3 style="text-align: {{ block.config.alignment }};">{{ block.config.text }}</h3>
         {% elif block.config.level == 4 %}
-            <h4 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h4>
+            <h4 style="text-align: {{ block.config.alignment }};">{{ block.config.text }}</h4>
         {% elif block.config.level == 5 %}
-            <h5 style="align-self: {{ block.config.alignment }};">{{ block.config.text }}</h5>
+            <h5 style="text-align: {{ block.config.alignment }};">{{ block.config.text }}</h5>
+        {% elif block.config.level == 6 %}
+            <h6 style="text-align: {{ block.config.alignment }};">{{ block.config.text }}</h6>
         {% endif %}
     </div>
 
 {% elif block.block_type == "text" %}
 
-    <div class="cms-block cms-text-block" style="align-content: {{ block.config.alignment }}">
+    <div class="cms-block cms-text-block" style="text-align: {{ block.config.alignment }}">
         {{ block.config.text|linebreaks }}
     </div>
 
 {% elif block.block_type == "image" %}
 
-    <div class="cms-block cms-image-block">
+    <div class="cms-block cms-image-block" style="align-self: {{ block.config.alignment }}">
         {% for block_medium in block.blockMedia.all %}
             <figure>
                 <img src="{{ block_medium.medium_id.file.url }}"
                      alt="{{ block_medium.medium_id.alt_text }}"
                      class="img-fluid"
-                     style="width: {{ block_medium.medium_id.width }};
-                             height: {{ block_medium.medium_id.height }};
-                             align-self: {{ block_medium.medium_id.alignment }}">
+                     style="width: {{ block.config.width }};
+                             height: {{ block.config.height }};">
 
                 {% if block.config.caption %}
                     <figcaption>
-                        {{ block_medium.medium_id.title }}
+                        {{ block.config.caption }}
                     </figcaption>
                 {% endif %}
             </figure>

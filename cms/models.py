@@ -108,7 +108,7 @@ class Block(models.Model):
 
 class CmsMedium(models.Model):
     id = models.AutoField(primary_key=True)
-    file = models.FileField(upload_to='media/cms')
+    file = models.FileField(upload_to='cms/')
     title = models.CharField(max_length=200)
     media_type = models.CharField(max_length=200)
     alt_text = models.CharField(max_length=200)

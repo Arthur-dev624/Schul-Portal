@@ -103,7 +103,7 @@
                 </div>
             {% endfor %}
 
-            <a href="{% url 'block_erstellen' page.id version create_page_block = True %}"
+            <a href="{% url 'block_erstellen' page.id version %}"
                class="btn btn-light border text-start"
             >
                 + Block erstellen
@@ -169,11 +169,11 @@
 
                     <!-- Blocktyp auswählen -->
                     <div>
-                        <label for="block_type" class="form-label">Blocktypen</label>
-                        <select id="block_type_id" name="block_type" class="form-select">
+                        <label for="block_type_id" class="form-label">Blocktyp</label>
+                        <select id="block_type_id" name="block_type" class="form-select" required>
                             {% for value, label in block_types %}
                                 <option
-                                    value="{{ label }}"
+                                    value="{{ value }}"
                                 >
                                     {{ label }}
                                 </option>
@@ -183,6 +183,21 @@
 
                     <!-- html template um Block zu bearbeiten -->
             	    {% include "blockEdit.html" %}
+
+                    <!-- select type anzeigen mit layout regionen der page -->
+                    <div>
+                        <label for="layout_region_id" class="form-label">Layoutregion</label>
+                        <select id="layout_region_id" name="layout_region_id" class="form-select">
+                            {% for layout_region in layout_regions %}
+                                <option
+                                    value="{{ layout_region.id }}"
+                                    {% if layout_region.id == selected_page_block.layout_region_id.id %}selected{% endif %}
+                                >
+                                    {{ layout_region.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
                     <!-- Speichern oder Schließen -->
                     <div class="d-grid gap-2">
@@ -279,75 +294,78 @@
            für button: text, url, style
            für function: Keine Config!! -->
 
-<!-- JavaScript, wenn ein Block erstellt wird -->
-{% if create_page_block %}
-    <script>
-        // blockTypeSelect speichert das Dropdown für die Block_types
-        const blockTypeSelect = document.getElementById("block_type_id");
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // eingabefelder speicher
+        const blockFields = document.getElementById("block_fields");
 
-        // funktion die alle areas sichtbar macht, das ist wichtig, da ansonsten bei change von einem blocktype zum anderen
-        // die areas die aktiviert wurden und nicht gebraucht werden, sichtbar sind
-        function deactivateAreas() {
-            document.getElementById("caption-area").style.display = "none"
-            document.getElementById("width-area").style.display = "none"
-            document.getElementById("height-area").style.display = "none"
-            document.getElementById("url-area").style.display = "none"
-            document.getElementById("style-area").style.display = "none"
-            document.getElementById("align-self").style.display = "none"
-            document.getElementById("align-items").style.display = "none"
-            document.getElementById("justify-content").style.display = "none"
-            document.getElementById("text-align").style.display = "none"
-            document.getElementById("alignment-area").style.display = "none"
-            document.getElementById("text-area").style.display = "none"
-            document.getElementById("level-area").style.display = "none"
-            document.getElementById("media-area").style.display = "none"
+        if (!blockFields) {
+            return;
         }
 
+        // Nur im Block erstellen Formular vorhanden
+        const blockTypeSelect = document.getElementById("block_type_id");
 
-        deactivateAreas();
+        // Beim Bearbeiten kommt der Typ aus dem bestehenden Block
+        function getCurrentBlockType() {
+            if(blockTypeSelect) {
+                return blockTypeSelect.value;
+            }
 
-        // wenn ein change im Dropdown von BlockType gemacht wird, werden die entsprechenden dazugehörigen
-        // eingabe areas angezeigt
-        blockTypeSelect.addEventListener("change", function () {
-            // blockType speichert die Option, welche ausgewählt wurde im Block_type Dropdown
-            const block_type = blockTypeSelect.value;
+            return blockFields.dataset.blockType;
+        }
 
-           if (block_type === "Text") {
-               deactivateAreas();
-               document.getElementById("text-area").style.display = "block"
-               document.getElementById("alignment-area").style.display = "block"
-               document.getElementById("text-align").style.display = "block"
-           }
+        function updateBlockFields() {
+            const blockType = getCurrentBlockType();
 
-           if (block_type === "Überschrift") {
-               deactivateAreas();
-               document.getElementById("text-area").style.display = "block"
-               document.getElementById("level-area").style.display = "block"
-               document.getElementById("alignment-area").style.display = "block"
-               document.getElementById("text-align").style.display = "block"
-           }
+            // Alle Bereiche prüfen
+            blockFields.querySelectorAll(".block-field").forEach(function (area) {
+                const allowedTypes = area.dataset.blockTypes.split(" ");
+                const visible = allowedTypes.includes(blockType);
 
-           if (block_type === "Bild") {
-               deactivateAreas();
-               document.getElementById("caption-area").style.display = "block"
-               document.getElementById("width-area").style.display = "block"
-               document.getElementById("height-area").style.display = "block"
-               document.getElementById("alignment-area").style.display = "block"
-               document.getElementById("align-self").style.display = "block"
-               document.getElementById("media-area").style.display = "block"
-           }
+                // ein oder ausblenden
+                area.hidden = !visible;
 
-           if (block_type === "Button") {
-               document.getElementById("text-area").style.display = "block"
-               document.getElementById("alignment-area").style.display = "block"
-               document.getElementById("align-self").style.display = "block"
-               document.getElementById("url-area").style.display = "block"
-               document.getElementById("style-area").style.display = "block"
-           }
+                // Eingaben in ausgeblendeten Bereichen nicht übertragen
+                area.querySelectorAll("input, select, textarea").forEach(function (input) {
+                    input.disabled = !visible;
 
-        });
-    </script>
-{% endif %}
+                    // Nur sichtbare Pflichtfelder müssen ausgefüllt werden
+                    input.required =
+                        visible && input.dataset.required === "true";
+                });
+            });
+
+            // Nur zum Blocktyp passende Alignment Optionen anbieten
+            const alignmentSelect = document.getElementById("block-alignment");
+
+            alignmentSelect.querySelectorAll("option").forEach(function (option) {
+                const allowedTypes = option.dataset.blockTypes.split(" ");
+                const allowed = allowedTypes.includes(blockType);
+
+                option.hidden = !allowed;
+                option.disabled = !allowed;
+            });
+
+            // falls die bisherige ausrichtung für den neuen Typ
+            // nicht zulässig ist, einen gültigen Standard setzen
+            const currentOption = alignmentSelect.selectedOptions[0];
+
+            if (!currentOption || currentOption.disabled) {
+                alignmentSelect.value =
+                    blockType === "image" ? "center" : "left";
+            }
+        }
+
+        // beim wechsel des BlockTyps aktualisieren
+        if (blockTypeSelect) {
+            blockTypeSelect.addEventListener("change", updateBlockFields);
+        }
+
+        // auch direkt nach dem Laden ausführen
+        updateBlockFields();
+    });
+</script>
 
 <!-- JavaScript, wenn ein Block ausgewählt ist -->
 {% if selected_page_block%}

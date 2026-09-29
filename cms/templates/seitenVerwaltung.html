@@ -173,7 +173,6 @@
                             <td> {{ page_found.updated_at }} </td>
                             <td>
                                 <!-- Aktionen je Seite dropdown menu -->
-                                <!-- TODO: Views zu Vorschau etc hinzufügen -->
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Aktion
@@ -270,7 +269,7 @@
                                             </li>
 
                                             <li>
-                                                <a class="dropdown-item" href="{% url "release_page" entry.page.id entry.version %}">
+                                                <a class="dropdown-item" href="{% url "release_page" entry.page.id %}">
                                                     Veröffentlichen
                                                 </a>
                                             </li>

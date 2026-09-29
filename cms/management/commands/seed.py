@@ -10,7 +10,7 @@ class Command(BaseCommand):
         layout = Layout.objects.create(
             name="Landingpage",
             description="Layout mit Hero Section und Main Section",
-            template="startseite.html",
+            template="layouts/startseite.html",
         )
 
         LayoutRegion.objects.create(

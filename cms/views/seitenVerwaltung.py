@@ -1,14 +1,17 @@
 import json
 from json import JSONDecodeError
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from cms.api import search_pages_with_title, get_page_block_used_in_page, get_functions_by_page_id, get_media_used_by_page_id, get_blocks_and_layout_region_by_page_id, current_page_versions, get_layout_regions_of_page, get_all_media, create_header_block, create_text_block, create_image_block, create_button_block, update_header_block, update_text_block, update_image_block, update_button_block
-from cms.models import Design, Layout, Page, PageVersion, PageBlock, Block
+from cms.models import Design, Layout, Page, PageVersion, PageBlock, Block, BlockMedium
 from django.utils.text import slugify
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.contrib import messages
 from django.db import transaction
+
+from models import CmsMedium
+
 
 @login_required
 def to_seiten_main(request):
@@ -17,7 +20,7 @@ def to_seiten_main(request):
     page_entries = current_page_versions(pages)
     context = {
         "username": username,
-        "pages": page_entries
+        "page_entries": page_entries
     }
     return render(request, "seitenVerwaltung.html", context)
 
@@ -200,6 +203,8 @@ def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_
     config_form_value = None
     # blockTypes speichern
     block_types = Block.BlockType.choices
+    #blockmedium vom ausgewähltem Block mit Medium
+    selected_block_medium = None
 
     # wenn Einstellungen zu einem PageBlock gespeichert werden, oder ein Block erstellt wird, also POST-Request
     if request.method == "POST":
@@ -217,8 +222,6 @@ def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_
         width = request.POST.get("width")
         height = request.POST.get("height")
         image_alignment = request.POST.get("alignment")
-        media_id = request.POST.get("media_id")
-        media_object = media.get(id=media_id)
         # werte für button
         button_text = request.POST.get("text")
         url = request.POST.get("url")
@@ -261,45 +264,62 @@ def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_
                 if new_position < 1 or new_position > max_position:
                     messages.error(request, "Die ausgewählte Position ist außerhalb des erlaubten Bereichs.")
                 else:
-                    # alle änderungen werden zusammen gespeichert
-                    with (transaction.atomic()):
-
-                        # werte aus dem Formular speichern, abhängig vom blockType
-                        if selected_page_block.block_id.block_type == "Überschrift":
-                            try:
+                    # werte aus dem Formular speichern, abhängig vom blockType
+                    if selected_page_block.block_id.block_type == Block.BlockType.HEADING:
+                        try:
+                            with transaction.atomic():
+                                level = int(level)
                                 update_header_block(header_text, level, header_alignment, selected_page_block,
-                                                page_version, new_layout_region, new_position)
-                            except ValueError as error:
-                                messages.error(request, error)
+                                    page_version)
+                        except ValueError as error:
+                            messages.error(request, str(error))
+                        except (ValueError, TypeError):
+                            messages.error(request, "Die ausgewählte größe ""level"" ist ungültig")
+                        else:
                             messages.success(request, "Block wurde erfolgreich gespeichert.")
 
-                        elif selected_page_block.block_id.block_type == "Text":
-                            try:
-                                update_text_block(text, text_alignment, selected_page_block, page_version,
-                                            new_layout_region, new_position)
-                            except ValueError as error:
-                                messages.error(request, error)
+                    elif selected_page_block.block_id.block_type == Block.BlockType.TEXT:
+                        try:
+                            with transaction.atomic():
+                                update_text_block(text, text_alignment, selected_page_block, page_version)
+                        except ValueError as error:
+                            messages.error(request, str(error))
+                        else:
                             messages.success(request, "Block wurde erfolgreich gespeichert.")
 
-                        elif selected_page_block.block_id.block_type == "Bild":
-                            try:
+                    elif selected_page_block.block_id.block_type == Block.BlockType.IMAGE:
+                        media_id = request.POST.get("media_id")
+
+                        if not media_id:
+                            messages.error(request, "Bitte ein Bild auswählen")
+                            return redirect("block_erstellen", page_id=page.id, version=version)
+
+                        media_object = get_object_or_404(
+                            CmsMedium,
+                            id=media_id
+                        )
+
+                        try:
+                            with transaction.atomic():
                                 update_image_block(caption, width, height, image_alignment, media_object, page_version,
-                                            selected_page_block, new_layout_region, new_position)
-                            except ValueError as error:
-                                messages.error(request, error)
+                                    selected_page_block)
+                        except ValueError as error:
+                            messages.error(request, str(error))
+                        else:
                             messages.success(request, "Block wurde erfolgreich gespeichert.")
 
-                        elif selected_page_block.block_id.block_type == "Button":
-                            try:
-                                update_button_block(button_text, url, button_style, selected_page_block, page_version,
-                                            new_layout_region, new_position)
-                            except ValueError as error:
+                    elif selected_page_block.block_id.block_type == Block.BlockType.BUTTON:
+                        try:
+                            with transaction.atomic():
+                                update_button_block(button_text, url, button_style, selected_page_block, page_version)
+                        except ValueError as error:
                                 messages.error(request, error)
+                        else:
                             messages.success(request, "Block wurde erfolgreich gespeichert.")
 
-                        _reorder_page_blocks(page_version, selected_page_block, new_layout_region, new_position)
+                    _reorder_page_blocks(page_version, selected_page_block, new_layout_region, new_position)
 
-                    return redirect("seite_bearbeiten", page_id=page.id, version=version)
+                return redirect("seite_bearbeiten", page_id=page.id, version=version)
 
         # wenn POST ein request ist, um einen Block zu erstellen
         elif action == "create_block":
@@ -307,20 +327,59 @@ def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_
 
             # Blocktyp aus Formular speichern
             block_type = request.POST.get("block_type")
+            # layoutregion aus Formular laden
+            layout_region_id = request.POST.get("layout_region_id")
+            layout_region = layout_regions.get(id=layout_region_id)
 
             # werte aus Formular speichern, abhängig vom Blocktyp, danach Datenbankeinträge machen
-            if block_type is not None and block_type == "Überschrift":
+            if block_type is not None and block_type == Block.BlockType.HEADING:
                 # Block und PageBlock in Datenbank speichern mit config
-                create_header_block(header_text, int(level), header_alignment, block_type, page_version)
+                try:
+                    level = int(level)
+                    create_header_block(header_text, level, header_alignment, block_type,
+                                    layout_region, page_version)
+                except ValueError as error:
+                    messages.error(request, str(error))
+                except (ValueError, TypeError):
+                    messages.error(request, "Die ausgewählte größe ""level"" ist ungültig")
+                else:
+                    messages.success(request, "Block wurde erfolgreich erstellt.")
 
-            elif block_type is not None and block_type == "Text":
-                create_text_block(text, text_alignment, block_type, page_version)
+            elif block_type is not None and block_type == Block.BlockType.TEXT:
+                try:
+                    create_text_block(text, text_alignment, block_type, layout_region, page_version)
+                except ValueError as error:
+                    messages.error(request, str(error))
+                else:
+                    messages.success(request, "Block wurde erfolgreich erstellt.")
 
-            elif block_type is not None and block_type == "Bild":
-                create_image_block(caption, width, height, image_alignment, media_object, block_type, page_version)
+            elif block_type is not None and block_type == Block.BlockType.IMAGE:
+                media_id = request.POST.get("media_id")
 
-            elif block_type is not None and block_type == "Button":
-                create_button_block(button_text, url, button_style, block_type, page_version)
+                if not media_id:
+                    messages.error(request, "Bitte ein Bild auswählen")
+                    return redirect("block_erstellen", page_id=page.id, version=version)
+
+                media_object = get_object_or_404(
+                    CmsMedium,
+                    id=media_id
+                )
+
+                try:
+                    create_image_block(caption, width, height, image_alignment,
+                                   media_object, block_type, layout_region, page_version)
+                except ValueError as error:
+                    messages.error(request, str(error))
+                else:
+                    messages.success(request, "Block wurde erfolgreich erstellt.")
+
+            elif block_type is not None and block_type == Block.BlockType.BUTTON:
+                try:
+                    create_button_block(button_text, url, button_style, block_type, layout_region, page_version)
+                except ValueError as error:
+                    messages.error(request, str(error))
+                else:
+                    messages.success(request, "Block wurde erfolgreich erstellt.")
 
     # ein PageBlock wurde ausgewählt aber nicht gespeichert
     elif page_block_id is not None:
@@ -332,6 +391,10 @@ def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_
         ).get(
             id=page_block_id,
             page_version_id=page_version,
+        )
+
+        selected_block_medium = BlockMedium.objects.get(
+            block_id=selected_page_block.block_id
         )
 
     # config und auswählbare positionen
@@ -354,6 +417,7 @@ def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_
         "layout_regions": layout_regions,
         "regions_with_blocks": regions_with_blocks,
         "selected_page_block": selected_page_block,
+        "selected_block_medium": selected_block_medium,
         "create_page_block": create_page_block,
         "selected_config": selected_config,
         "position_choices": position_choices,
