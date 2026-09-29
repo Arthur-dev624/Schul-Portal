@@ -1,17 +1,15 @@
 import json
-from json import JSONDecodeError
-
+import re
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from cms.api import search_pages_with_title, get_page_block_used_in_page, get_functions_by_page_id, get_media_used_by_page_id, get_blocks_and_layout_region_by_page_id, current_page_versions, get_layout_regions_of_page, get_all_media, create_header_block, create_text_block, create_image_block, create_button_block, update_header_block, update_text_block, update_image_block, update_button_block
-from cms.models import Design, Layout, Page, PageVersion, PageBlock, Block, BlockMedium
+from cms.models import Design, Layout, Page, PageVersion, PageBlock, Block, BlockMedium, CmsMedium
 from django.utils.text import slugify
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.contrib import messages
 from django.db import transaction
-
-from models import CmsMedium
-
 
 @login_required
 def to_seiten_main(request):
@@ -24,14 +22,21 @@ def to_seiten_main(request):
     }
     return render(request, "seitenVerwaltung.html", context)
 
+@login_required
 def seiten_search(request):
-    query = request.GET.get("q", "")
-    pages_found = search_pages_with_title(query)
-    context = {
-        "query": query,
-        "pages_found": pages_found
-    }
-    return render(request, "seitenVerwaltung.html", context)
+    query = request.GET.get("q", "").strip()
+
+    pages = search_pages_with_title(query).order_by("-id")
+
+    return render(
+        request,
+        "seitenVerwaltung.html",
+        {
+            "username": request.user.username,
+            "query": query,
+            "page_entries": current_page_versions(pages),
+        },
+    )
 
 @login_required
 def seite_erstellen(request):
@@ -182,248 +187,441 @@ def _reorder_page_blocks(page_version, page_block, new_layout_region, new_positi
         sibling.layout_region_id = new_layout_region
         sibling.save(update_fields=["position", "layout_region_id"])
 
-# rendert das editor.html template als POST View
-@login_required
-def seite_bearbeiten(request, page_id, version, page_block_id=None, create_page_block=None):
+def _get_selected_layout_region(request, layout_regions):
+    raw_id = request.POST.get("layout_region_id")
+
+    try:
+        region_id = int(raw_id)
+    except (TypeError, ValueError):
+        raise ValueError("Bitte eine gültige Layoutregion auswählen.")
+
+    region = layout_regions.filter(id=region_id).first()
+
+    if region is None:
+        raise ValueError(
+            "Die ausgewählte Layoutregion gehört nicht zum Layout dieser Seite."
+        )
+
+    return region
+
+
+def _read_block_form(request, block_type):
     """
-        rendert den Editor und rendert die Einstellungen zu einem ausgewähltem PageBlock und speichert diese
-
-        page_id: Seite die bearbeitet wird
-        version: Version der zu bearbeitenden Seite
-        page_block_id: optional, wenn vorhanden dann wurde links im Editor ein PageBlock ausgewählt
+    Liest und validiert die zum Blocktyp gehörenden Eingaben.
+    Gibt nur die Daten dieses Blocktyps zurück.
     """
-    page = Page.objects.get(id=page_id)
-    page_version = PageVersion.objects.get(page_id=page, version=version)
-    layout_regions, regions_with_blocks = _build_regions_with_blocks(page.id, version)
-    media = get_all_media()
-    used_function_types = get_functions_by_page_id(page_id, version)
-    medium_titles = get_media_used_by_page_id(page_id, version)
-    # kein Block ist am Anfang ausgewählt
-    selected_page_block = None
-    config_form_value = None
-    # blockTypes speichern
-    block_types = Block.BlockType.choices
-    #blockmedium vom ausgewähltem Block mit Medium
-    selected_block_medium = None
 
-    # wenn Einstellungen zu einem PageBlock gespeichert werden, oder ein Block erstellt wird, also POST-Request
-    if request.method == "POST":
-        action = request.POST.get("action")
-        # werte aus dem Formular laden
-        # werte für Überschrift
-        header_text = request.POST.get("text")
-        level = request.POST.get("level")
-        header_alignment = request.POST.get("alignment")
-        # werte für Text
-        text = request.POST.get("text")
-        text_alignment = request.POST.get("alignment")
-        # werte für Bild
-        caption = request.POST.get("caption")
-        width = request.POST.get("width")
-        height = request.POST.get("height")
-        image_alignment = request.POST.get("alignment")
-        # werte für button
-        button_text = request.POST.get("text")
-        url = request.POST.get("url")
-        button_style = request.POST.get("button-style")
+    if block_type in (
+        Block.BlockType.HEADING,
+        Block.BlockType.TEXT,
+        Block.BlockType.BUTTON,
+    ):
+        text = request.POST.get("text", "").strip()
 
-        # wenn POST ein request ist, um einen Block zu ändern
-        if action == "change_block":
-            # speichert PageBlock, der geändert worden ist
-            page_block_id = request.POST.get("page_block_id")
-            selected_page_block = PageBlock.objects.select_related(
-                "block_id",
-                "layout_region_id",
-                "page_version_id",
-            ).get(
-                id=page_block_id,
-                page_version_id=page_version,   # PageBlock muss zur aktuellen version gehören
-            )
+        if not text:
+            raise ValueError("Bitte einen Text eingeben.")
 
-            # nimm eingegebene werte für layout_region und position
-            layout_region_id = request.POST.get("layout_region_id")
-            position = request.POST.get("position")
+    if block_type in (
+        Block.BlockType.HEADING,
+        Block.BlockType.TEXT,
+    ):
+        alignment = request.POST.get("alignment")
 
-            # prüfen ob config_data gültiges JSON ist, new_layout_region eine vorhandene Layoutregion ist und
-            # new_position eine für die layoutregion gültige Zahl ist
+        if alignment not in {"left", "right", "center", "justify"}:
+            raise ValueError("Ungültige Textausrichtung.")
+
+    if block_type == Block.BlockType.HEADING:
+        try:
+            level = int(request.POST.get("level"))
+        except (TypeError, ValueError):
+            raise ValueError("Bitte eine gültige Überschriftenebene eingeben.")
+
+        if not 1 <= level <= 6:
+            raise ValueError("Die Überschriftenebene muss zwischen 1 und 6 liegen.")
+
+        return {
+            "text": text,
+            "level": level,
+            "alignment": alignment,
+        }
+
+    if block_type == Block.BlockType.TEXT:
+        return {
+            "text": text,
+            "alignment": alignment,
+        }
+
+    if block_type == Block.BlockType.IMAGE:
+        alignment = request.POST.get("alignment")
+
+        if alignment not in {"flex-start", "center", "flex-end"}:
+            raise ValueError("Ungültige Bildausrichtung.")
+
+        caption = request.POST.get("caption", "").strip()
+        width = request.POST.get("width", "auto").strip()
+        height = request.POST.get("height", "auto").strip()
+
+        # Nur einfache CSS-Längen erlauben.
+        allowed_size = (
+            r"(?:auto|fit-content|max-content|min-content|0|"
+            r"\d+(?:\.\d+)?(?:px|%|rem|em|vw|vh))"
+        )
+
+        if not re.fullmatch(allowed_size, width):
+            raise ValueError("Ungültige Bildbreite.")
+
+        if not re.fullmatch(allowed_size, height):
+            raise ValueError("Ungültige Bildhöhe.")
+
+        try:
+            media_id = int(request.POST.get("media_id"))
+        except (TypeError, ValueError):
+            raise ValueError("Bitte ein Bild auswählen.")
+
+        media_object = CmsMedium.objects.filter(id=media_id).first()
+
+        if media_object is None:
+            raise ValueError("Das ausgewählte Medium existiert nicht.")
+
+        return {
+            "caption": caption,
+            "width": width,
+            "height": height,
+            "alignment": alignment,
+            "media_object": media_object,
+        }
+
+    if block_type == Block.BlockType.BUTTON:
+        url = request.POST.get("url", "").strip()
+        style = request.POST.get("button-style")
+
+        if style not in {
+            "primary",
+            "secondary",
+            "success",
+            "danger",
+            "warning",
+        }:
+            raise ValueError("Ungültiger Button-Style.")
+
+        # Interne Pfade oder absolute HTTP(S)-URLs.
+        if not (url.startswith("/") and not url.startswith("//")):
             try:
-                new_layout_region = layout_regions.get(id=layout_region_id)
-                new_position = int(position)
-            except (ValueError, TypeError):
-                messages.error(request, "Die ausgewählte Position ist ungültig.")
-            except layout_regions.model.DoesNotExist:
-                messages.error(request, "Die ausgewählte Layoutregion gehört nicht zu diesem Layout.")
-            else:
-                # berechne, welche Position ist maximal erlaubt
-                max_position = PageBlock.objects.filter(
-                    page_version_id=page_version,
-                    layout_region_id=new_layout_region,
-                ).exclude(id=selected_page_block.id).count() + 1
-
-                # prüfe, dass neue position erlaubt ist
-                if new_position < 1 or new_position > max_position:
-                    messages.error(request, "Die ausgewählte Position ist außerhalb des erlaubten Bereichs.")
-                else:
-                    # werte aus dem Formular speichern, abhängig vom blockType
-                    if selected_page_block.block_id.block_type == Block.BlockType.HEADING:
-                        try:
-                            with transaction.atomic():
-                                level = int(level)
-                                update_header_block(header_text, level, header_alignment, selected_page_block,
-                                    page_version)
-                        except ValueError as error:
-                            messages.error(request, str(error))
-                        except (ValueError, TypeError):
-                            messages.error(request, "Die ausgewählte größe ""level"" ist ungültig")
-                        else:
-                            messages.success(request, "Block wurde erfolgreich gespeichert.")
-
-                    elif selected_page_block.block_id.block_type == Block.BlockType.TEXT:
-                        try:
-                            with transaction.atomic():
-                                update_text_block(text, text_alignment, selected_page_block, page_version)
-                        except ValueError as error:
-                            messages.error(request, str(error))
-                        else:
-                            messages.success(request, "Block wurde erfolgreich gespeichert.")
-
-                    elif selected_page_block.block_id.block_type == Block.BlockType.IMAGE:
-                        media_id = request.POST.get("media_id")
-
-                        if not media_id:
-                            messages.error(request, "Bitte ein Bild auswählen")
-                            return redirect("block_erstellen", page_id=page.id, version=version)
-
-                        media_object = get_object_or_404(
-                            CmsMedium,
-                            id=media_id
-                        )
-
-                        try:
-                            with transaction.atomic():
-                                update_image_block(caption, width, height, image_alignment, media_object, page_version,
-                                    selected_page_block)
-                        except ValueError as error:
-                            messages.error(request, str(error))
-                        else:
-                            messages.success(request, "Block wurde erfolgreich gespeichert.")
-
-                    elif selected_page_block.block_id.block_type == Block.BlockType.BUTTON:
-                        try:
-                            with transaction.atomic():
-                                update_button_block(button_text, url, button_style, selected_page_block, page_version)
-                        except ValueError as error:
-                                messages.error(request, error)
-                        else:
-                            messages.success(request, "Block wurde erfolgreich gespeichert.")
-
-                    _reorder_page_blocks(page_version, selected_page_block, new_layout_region, new_position)
-
-                return redirect("seite_bearbeiten", page_id=page.id, version=version)
-
-        # wenn POST ein request ist, um einen Block zu erstellen
-        elif action == "create_block":
-            create_page_block = None
-
-            # Blocktyp aus Formular speichern
-            block_type = request.POST.get("block_type")
-            # layoutregion aus Formular laden
-            layout_region_id = request.POST.get("layout_region_id")
-            layout_region = layout_regions.get(id=layout_region_id)
-
-            # werte aus Formular speichern, abhängig vom Blocktyp, danach Datenbankeinträge machen
-            if block_type is not None and block_type == Block.BlockType.HEADING:
-                # Block und PageBlock in Datenbank speichern mit config
-                try:
-                    level = int(level)
-                    create_header_block(header_text, level, header_alignment, block_type,
-                                    layout_region, page_version)
-                except ValueError as error:
-                    messages.error(request, str(error))
-                except (ValueError, TypeError):
-                    messages.error(request, "Die ausgewählte größe ""level"" ist ungültig")
-                else:
-                    messages.success(request, "Block wurde erfolgreich erstellt.")
-
-            elif block_type is not None and block_type == Block.BlockType.TEXT:
-                try:
-                    create_text_block(text, text_alignment, block_type, layout_region, page_version)
-                except ValueError as error:
-                    messages.error(request, str(error))
-                else:
-                    messages.success(request, "Block wurde erfolgreich erstellt.")
-
-            elif block_type is not None and block_type == Block.BlockType.IMAGE:
-                media_id = request.POST.get("media_id")
-
-                if not media_id:
-                    messages.error(request, "Bitte ein Bild auswählen")
-                    return redirect("block_erstellen", page_id=page.id, version=version)
-
-                media_object = get_object_or_404(
-                    CmsMedium,
-                    id=media_id
+                URLValidator(schemes=["http", "https"])(url)
+            except ValidationError:
+                raise ValueError(
+                    "Bitte einen internen Pfad oder eine gültige HTTP(S)-URL eingeben."
                 )
 
-                try:
-                    create_image_block(caption, width, height, image_alignment,
-                                   media_object, block_type, layout_region, page_version)
-                except ValueError as error:
-                    messages.error(request, str(error))
-                else:
-                    messages.success(request, "Block wurde erfolgreich erstellt.")
+        return {
+            "text": text,
+            "url": url,
+            "style": style,
+        }
 
-            elif block_type is not None and block_type == Block.BlockType.BUTTON:
-                try:
-                    create_button_block(button_text, url, button_style, block_type, layout_region, page_version)
-                except ValueError as error:
-                    messages.error(request, str(error))
-                else:
-                    messages.success(request, "Block wurde erfolgreich erstellt.")
+    raise ValueError("Dieser Blocktyp wird noch nicht unterstützt.")
 
-    # ein PageBlock wurde ausgewählt aber nicht gespeichert
-    elif page_block_id is not None:
-        # speichert den ausgewählten Block
-        selected_page_block = PageBlock.objects.select_related(
-            "block_id",
-            "layout_region_id",
-            "page_version_id",
-        ).get(
+@login_required
+def seite_bearbeiten(
+    request,
+    page_id,
+    version,
+    page_block_id=None,
+    create_page_block=False,
+):
+    """
+    öffnet den editor mit einer seiten-vorschau und lädt alle blöcke in ihren layoutregionen und positionen
+    """
+    page = get_object_or_404(Page, id=page_id)
+
+    page_version = get_object_or_404(
+        PageVersion,
+        page_id=page,
+        version=version,
+    )
+
+    layout_regions = get_layout_regions_of_page(page.id)
+
+    selected_page_block = None
+    selected_medium_id = None
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        # Festlegen, wohin bei einem Formularfehler zurückgeleitet wird
+        if action == "create_block":
+            error_redirect = "block_erstellen"
+
+        elif action == "change_block" and page_block_id is not None:
+            error_redirect = "seite_bearbeiten_block"
+
+        else:
+            messages.error(request, "Ungültige Editor-Aktion.")
+
+            return redirect(
+                "seite_bearbeiten",
+                page_id=page.id,
+                version=version,
+            )
+
+        try:
+            with transaction.atomic():
+                # neuen Block erstellen
+                if action == "create_block":
+                    block_type = request.POST.get("block_type")
+
+                    allowed_types = {
+                        Block.BlockType.HEADING,
+                        Block.BlockType.TEXT,
+                        Block.BlockType.IMAGE,
+                        Block.BlockType.BUTTON,
+                    }
+
+                    if block_type not in allowed_types:
+                        raise ValueError("Ungültiger Blocktyp.")
+
+                    layout_region = _get_selected_layout_region(
+                        request,
+                        layout_regions,
+                    )
+
+                    data = _read_block_form(request, block_type)
+
+                    if block_type == Block.BlockType.HEADING:
+                        create_header_block(
+                            data["text"],
+                            data["level"],
+                            data["alignment"],
+                            block_type,
+                            layout_region,
+                            page_version,
+                        )
+
+                    elif block_type == Block.BlockType.TEXT:
+                        create_text_block(
+                            data["text"],
+                            data["alignment"],
+                            block_type,
+                            layout_region,
+                            page_version,
+                        )
+
+                    elif block_type == Block.BlockType.IMAGE:
+                        create_image_block(
+                            data["caption"],
+                            data["width"],
+                            data["height"],
+                            data["alignment"],
+                            data["media_object"],
+                            block_type,
+                            layout_region,
+                            page_version,
+                        )
+
+                    elif block_type == Block.BlockType.BUTTON:
+                        create_button_block(
+                            data["text"],
+                            data["url"],
+                            data["style"],
+                            block_type,
+                            layout_region,
+                            page_version,
+                        )
+
+                # vorhandenen block bearbeiten
+                else:
+                    # ausgewählten block speichern
+                    selected_page_block = get_object_or_404(
+                        PageBlock.objects.select_related(
+                            "block_id",
+                            "layout_region_id",
+                        ),
+                        id=page_block_id,
+                        page_version_id=page_version,
+                    )
+
+                    # blocktyp speichern
+                    block_type = selected_page_block.block_id.block_type
+
+                    new_layout_region = _get_selected_layout_region(
+                        request,
+                        layout_regions,
+                    )
+
+                    try:
+                        new_position = int(request.POST.get("position"))
+                    except (TypeError, ValueError):
+                        raise ValueError("Bitte eine gültige Position auswählen.")
+
+                    max_position = (
+                        PageBlock.objects.filter(
+                            page_version_id=page_version,
+                            layout_region_id=new_layout_region,
+                        )
+                        .exclude(id=selected_page_block.id)
+                        .count() + 1
+                    )
+
+                    if not 1 <= new_position <= max_position:
+                        raise ValueError(
+                            "Die Position liegt außerhalb des erlaubten Bereichs."
+                        )
+
+                    data = _read_block_form(request, block_type)
+
+                    if block_type == Block.BlockType.HEADING:
+                        update_header_block(
+                            data["text"],
+                            data["level"],
+                            data["alignment"],
+                            selected_page_block,
+                            page_version,
+                        )
+
+                    elif block_type == Block.BlockType.TEXT:
+                        update_text_block(
+                            data["text"],
+                            data["alignment"],
+                            selected_page_block,
+                            page_version,
+                        )
+
+                    elif block_type == Block.BlockType.IMAGE:
+                        update_image_block(
+                            data["caption"],
+                            data["width"],
+                            data["height"],
+                            data["alignment"],
+                            data["media_object"],
+                            page_version,
+                            selected_page_block,
+                        )
+
+                    elif block_type == Block.BlockType.BUTTON:
+                        update_button_block(
+                            data["text"],
+                            data["url"],
+                            data["style"],
+                            selected_page_block,
+                            page_version,
+                        )
+
+                    else:
+                        raise ValueError("Dieser Blocktyp ist nicht bearbeitbar.")
+
+                    # erst nach erfolgreicher Inhaltsänderung verschieben.
+                    _reorder_page_blocks(
+                        page_version,
+                        selected_page_block,
+                        new_layout_region,
+                        new_position,
+                    )
+
+        except (ValueError, TypeError) as error:
+            messages.error(request, str(error))
+
+            if error_redirect == "seite_bearbeiten_block":
+                return redirect(
+                    "seite_bearbeiten_block",
+                    page_id=page.id,
+                    version=version,
+                    page_block_id=page_block_id,
+                )
+
+            return redirect(
+                "block_erstellen",
+                page_id=page.id,
+                version=version,
+            )
+
+        if action == "create_block":
+            messages.success(request, "Block wurde erfolgreich erstellt.")
+
+            return redirect(
+                "seite_bearbeiten",
+                page_id=page.id,
+                version=version,
+            )
+
+        messages.success(request, "Block wurde erfolgreich gespeichert.")
+
+        return redirect(
+            "seite_bearbeiten_block",
+            page_id=page.id,
+            version=version,
+            page_block_id=page_block_id,
+        )
+
+    # bestehenden Block öffnen
+    if page_block_id is not None:
+        selected_page_block = get_object_or_404(
+            PageBlock.objects.select_related(
+                "block_id",
+                "layout_region_id",
+            ),
             id=page_block_id,
             page_version_id=page_version,
         )
 
-        selected_block_medium = BlockMedium.objects.get(
-            block_id=selected_page_block.block_id
-        )
+        # Medien nur bei Bildblöcken abfragen!
+        if (
+            selected_page_block.block_id.block_type
+            == Block.BlockType.IMAGE
+        ):
+            selected_medium_id = (
+                BlockMedium.objects.filter(
+                    block_id=selected_page_block.block_id,
+                )
+                .order_by("position", "id")
+                .values_list("medium_id_id", flat=True)
+                .first()
+            )
 
-    # config und auswählbare positionen
-    selected_config = ""
+    # Daten für den Editor
+    layout_regions, regions_with_blocks = _build_regions_with_blocks(
+        page.id,
+        version,
+    )
+
     position_choices = []
 
-    if selected_page_block:
-        selected_config = config_form_value
-        if selected_config is None:
-            selected_config = json.dumps(selected_page_block.block_id.config or {}, indent=2)
-        position_choices = _build_position_choices(page_version, selected_page_block)
+    if selected_page_block is not None:
+        position_choices = _build_position_choices(
+            page_version,
+            selected_page_block,
+        )
 
-    # mit dem Kontext kann das editor.html links alle Regionen und Blöcke anzeigen, leere Regionen,
-    # rechts das Formular, wenn ein Block ausgewählt ist und die Vorschau in der iframe laden
+    block_types = [
+        (value, label)
+        for value, label in Block.BlockType.choices
+        if value != Block.BlockType.FUNCTION
+    ]
+
     context = {
         "page": page,
         "page_version": page_version,
-        "media": media,
         "version": version,
+        "media": get_all_media(),
         "layout_regions": layout_regions,
         "regions_with_blocks": regions_with_blocks,
         "selected_page_block": selected_page_block,
-        "selected_block_medium": selected_block_medium,
+        "selected_medium_id": selected_medium_id,
         "create_page_block": create_page_block,
-        "selected_config": selected_config,
         "position_choices": position_choices,
-        "region_position_counts_json": json.dumps(_build_region_position_counts(page_version, layout_regions)),
-        "used_function_types": used_function_types,
-        "medium_titles": medium_titles,
+        "region_position_counts_json": json.dumps(
+            _build_region_position_counts(
+                page_version,
+                layout_regions,
+            )
+        ),
+        "used_function_types": get_functions_by_page_id(
+            page_id,
+            version,
+        ),
+        "medium_titles": get_media_used_by_page_id(
+            page_id,
+            version,
+        ),
         "block_types": block_types,
     }
 
@@ -449,15 +647,23 @@ def seiten_vorschau(request, page_id, version):
 
 @login_required
 def vorschau_view(request, page_id, version):
-    page = Page.objects.get(id=page_id)
-    username = request.user.username
-    block_ids_by_region = get_page_block_used_in_page(page.id, version)
-    # TODO: Block objekte aus den block_ids dem context übergeben
-    context = {
-        "page": page,
-        "username": username,
-    }
-    return render(request, "vorschau.html", context)
+    page = get_object_or_404(Page, id=page_id)
+
+    get_object_or_404(
+        PageVersion,
+        page_id=page,
+        version=version,
+    )
+
+    return render(
+        request,
+        "vorschau.html",
+        {
+            "page": page,
+            "version": version,
+            "username": request.user.username,
+        },
+    )
 
 @login_required
 def delete_page(request, page_id):

@@ -24,14 +24,30 @@
 
 {% elif block.block_type == "image" %}
 
-    <div class="cms-block cms-image-block" style="align-self: {{ block.config.alignment }}">
+    <div
+        class="cms-block cms-image-block"
+        style="
+            text-align:
+            {% if block.config.alignment == 'flex-start' %}
+                left
+            {% elif block.config.alignment == 'flex-end' %}
+                right
+            {% else %}
+                center
+            {% endif %};
+        "
+    >
         {% for block_medium in block.blockMedia.all %}
             <figure>
-                <img src="{{ block_medium.medium_id.file.url }}"
-                     alt="{{ block_medium.medium_id.alt_text }}"
-                     class="img-fluid"
-                     style="width: {{ block.config.width }};
-                             height: {{ block.config.height }};">
+                <img
+                    src="{{ block_medium.medium_id.file.url }}"
+                    alt="{{ block_medium.medium_id.alt_text }}"
+                    class="img-fluid"
+                    style="
+                        width: {{ block.config.width }};
+                        height: {{ block.config.height }};
+                    "
+                >
 
                 {% if block.config.caption %}
                     <figcaption>
@@ -40,7 +56,7 @@
                 {% endif %}
             </figure>
         {% empty %}
-            <p>Kein Bild hinterlegt</p>
+            <p>Kein Bild hinterlegt.</p>
         {% endfor %}
     </div>
 
@@ -53,22 +69,20 @@
     </div>
 
 {% elif block.block_type == "function" %}
+
     <div class="cms-block cms-function-block">
+
         {% for function_block in block.functionBlocks.all %}
             {% if function_block.function_id.active %}
-                {% if function_block.function_id.function_type == "news" %}
-                    {% include "blocks/functions/news.html" with function_block=function_block %}
-                {% elif function_block.function_id.function_type == "announcement" %}
-                    {% include "blocks/functions/announcement.html" with function_block=function_block %}
-                {% else %}
-                    <p>
-                        Funktion: {{ function_block.function_id.get_function_type_display }}
-                    </p>
-                {% endif %}
+                <p>
+                    Funktion:
+                    {{ function_block.function_id.get_function_type_display }}
+                </p>
             {% endif %}
         {% empty %}
-            <p>Keine Funktion hinterlegt</p>
+            <p>Keine Funktion hinterlegt.</p>
         {% endfor %}
+
     </div>
 
 {% else %}

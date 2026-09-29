@@ -146,84 +146,13 @@
                         </div>
                     </div>
                 </div>
-                <!-- Django generiert Infos zu gefundenen Seiten -->
-                {% if pages_found %}
-                <div class="container-fluid p-4">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Titel</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Aktualisiert</th>
-                                <th scope="col">Aktionen</th>
-                            </tr>
-                        </thead>
 
-                    <tbody>
-                    {% for page_found in pages_found %}
-                        <tr>
-                            <td>{{ page_found.title }}</td>
-                            <td>
-                                {% if page_found.status %}
-                                    Veröffentlicht
-                                {% else %}
-                                    Entwurf
-                                {% endif %}
-                            </td>
-                            <td> {{ page_found.updated_at }} </td>
-                            <td>
-                                <!-- Aktionen je Seite dropdown menu -->
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Aktion
-                                    </button>
-
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item" href="{% url "seite_bearbeiten" page_found.id %}">
-                                                Bearbeiten
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item" href="{% url "seiten_vorschau" page_found.id %}">
-                                                Vorschau
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="dropdown-item" href="{% url "release_page" page.id %}">
-                                                Veröffentlichen
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-danger"
-                                                href="{% url "delete_page" page.id %}"
-                                                onclick="return confirm('Möchtest du diese Seite wirklich löschen?');">
-                                                Löschen
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                    </table>
-                </div>
-
-            <!-- wenn keine seite gefunden wurde -->
-            {% elif query %}
-                <div class="container-fluid p-4">
-                    <div class="alert alert-warning">
-                        Keine Seite gefunden
+                {% if query and not page_entries %}
+                    <div class="alert alert-warning m-3">
+                        Keine Seite gefunden.
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
+
                 <!-- Tabelle mit Seitendaten -->
                 <div class="container-fluid">
                     <table class="table">

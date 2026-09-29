@@ -1,14 +1,18 @@
-from builtins import id
 from collections import defaultdict
 from tokenize import String
 
 from django.db import transaction
-from django.db.models import Q, Exists, OuterRef, When, IntegerField, FloatField, Count, ExpressionWrapper, Case, Value, F, Prefetch
-from google.genai._gaos.utils import values
-from pip._internal.commands import index
-from pyasn1.type.univ import Null
 
-from cms.models import *
+from cms.models import (
+    Page,
+    PageVersion,
+    LayoutRegion,
+    Block,
+    PageBlock,
+    BlockMedium,
+    CmsMedium,
+    FunctionBlock,
+)
 from myapp.models import Person, User
 
 def _get_person(user) -> Person:
@@ -121,7 +125,8 @@ def get_page_block_used_in_page(page_id= int, given_page_version=int):
     )
 
     page_blocks = PageBlock.objects.filter(
-        page_version_id=current_page_version
+        page_version_id=current_page_version,
+        layout_region_id__isnull=False
     ).select_related(
         "block_id",
         "layout_region_id"

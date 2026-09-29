@@ -37,17 +37,12 @@
 
             <!-- Buttons -->
             <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary">
+                <a
+                    href="{% url 'vorschau' page.id version %}"
+                    class="btn btn-outline-secondary"
+                >
                     Vorschau
-                </button>
-
-                <button class="btn btn-outline-primary">
-                    Speichern
-                </button>
-
-                <button class="btn btn-primary">
-                    Veröffentlichen
-                </button>
+                </a>
             </div>
         </div>
     </header>
@@ -297,7 +292,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // eingabefelder speicher
-        const blockFields = document.getElementById("block_fields");
+        const blockFields = document.getElementById("block-fields");
 
         if (!blockFields) {
             return;

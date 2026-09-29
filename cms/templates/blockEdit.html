@@ -1,12 +1,12 @@
 <!-- Eingabefelder zum Erstellen und bearbeiten von Blöcken -->
 <div
     id="block-fields"
-    data-block-type="{% if selected_page_block %}{{ selected_page_block.block_id.block_type }}{% endif %}"
+    data-block-types="{% if selected_page_block %}{{ selected_page_block.block_id.block_type }}{% endif %}"
 >
 
     <!-- Eingabe für Text, Button und Überschrift -->
     <div class="block-field mb-3" id="text-area"
-        data-block-type="heading text button" hidden
+        data-block-types="heading text button" hidden
     >
         <label for="block-text" class="form-label">Text</label>
         <textarea
@@ -14,13 +14,12 @@
             name="text"
             class="form-control"
             rows="3"
-            data-required="true">
-            {{ selected_page_block.block_id.config.text|default_if_none:"" }}
-        </textarea>
+            data-required="true"
+        >{{ selected_page_block.block_id.config.text|default_if_none:"" }}</textarea>
     </div>
 
     <!-- Eingabe für größe der Schrift (Überschrift) -->
-    <div class="block-field mb-3" id="level-area">
+    <div class="block-field mb-3" id="level-area" data-block-types="heading" hidden>
         <label for="block-level" class="form-label">Überschriftenebene</label>
         <input
                 type="number"
@@ -35,7 +34,7 @@
     </div>
 
     <!-- Eingabe für Alignment für Überschrift, Text und Bild -->
-    <div class="block-field mb-3" id="alignment-area">
+    <div class="block-field mb-3" id="alignment-area" data-block-types="heading text image" hidden>
         <label for="block-alignment" class="form-label">Ausrichtung</label>
         <select
             class="form-select"
@@ -109,7 +108,7 @@
     </div>
 
     <!-- Eingabe für die width (Bild) -->
-    <div class="block-field mb-3" id="width-area" data-block-type="image" hidden>
+    <div class="block-field mb-3" id="width-area" data-block-types="image" hidden>
         <label for="block-width" class="form-label">Breite</label>
         <input
             id="block-width"
@@ -123,7 +122,7 @@
     </div>
 
     <!-- Eingabe für die Höhe -->
-    <div class="block-field mb-3" id="height-area" data-block-type="image" hidden>
+    <div class="block-field mb-3" id="height-area" data-block-types="image" hidden>
         <label for="block-height" class="form-label">Höhe</label>
 
         <input
@@ -138,14 +137,14 @@
     </div>
 
     <!-- Auswahl eines Bildes -->
-    <div class="block-field mb-3" id="media-area" data-block-type="image" hidden>
+    <div class="block-field mb-3" id="media-area" data-block-types="image" hidden>
         <label for="block-media" class="form-label">Bild auswählen</label>
         <select class="form-select" id="block-media" name="media_id" data-required="true">
             <option value="">Bitte ein Medium auswählen</option>
 
             {% for medium in media %}
                 <option value="{{ medium.id }}"
-                {% if medium.id == selected_block_medium.id %}selected{% endif %}>
+                {% if medium.id == selected_medium_id %}selected{% endif %}>
                     {{ medium.title }}
                 </option>
             {% endfor %}
@@ -153,7 +152,7 @@
     </div>
 
     <!-- Eingabe für URL -->
-    <div class="block-field mb-3" id="url-area" data-block-type="button" hidden>
+    <div class="block-field mb-3" id="url-area" data-block-types="button" hidden>
         <label for="block-url" class="form-label">Ziel-URL</label>
         <input
                 id="block-url"
@@ -166,7 +165,7 @@
     </div>
 
     <!-- Eingabe für Button style -->
-    <div class="block-field mb-3" id="style-area" data-block-type="button" hidden>
+    <div class="block-field mb-3" id="style-area" data-block-types="button" hidden>
         <label for="block-button-style" class="form-label">Button-Style</label>
         <select
                 class="form-select"
