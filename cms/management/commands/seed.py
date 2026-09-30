@@ -1,34 +1,44 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
-from cms.models import Layout, LayoutRegion, Design
-from datetime import date
+from cms.models import Layout, LayoutRegion
+
 
 class Command(BaseCommand):
-    help = "Erstellt Testdaten"
+    help = "Erstellt bzw. aktualisiert die CMS-Layouts und Layoutregionen"
 
     def handle(self, *args, **kwargs):
-        layout = Layout.objects.create(
-            name="Landingpage",
-            description="Layout mit Hero Section und Main Section",
-            template="layouts/startseite.html",
-        )
+        layouts = [
+            {
+                "name": "Landingpage",
+                "description": "Startseite mit Hero-, Main- und Footerbereich",
+                "template": "layouts/startseite.html",
+                "regions": [
+                    ("Hero", "hero"),
+                    ("Main", "main"),
+                    ("Footer", "footer"),
+                ],
+            },
+        ]
 
-        LayoutRegion.objects.create(
-            layout_id=layout,
-            name="Hero",
-            key="hero"
-        )
+        for layout_data in layouts:
+            layout, _ = Layout.objects.update_or_create(
+                name=layout_data["name"],
+                defaults={
+                    "description": layout_data["description"],
+                    "template": layout_data["template"],
+                },
+            )
 
-        LayoutRegion.objects.create(
-            layout_id=layout,
-            name="Main",
-            key="main"
-        )
+            for region_name, region_key in layout_data["regions"]:
+                LayoutRegion.objects.update_or_create(
+                    layout_id=layout,
+                    key=region_key,
+                    defaults={
+                        "name": region_name,
+                    },
+                )
 
-        LayoutRegion.objects.create(
-            layout_id=layout,
-            name="Footer",
-            key="footer"
+        self.stdout.write(
+            self.style.SUCCESS(
+                "CMS-Layouts und Layoutregionen wurden erfolgreich erstellt oder aktualisiert."
+            )
         )
-
-        self.stdout.write(self.style.SUCCESS("Daten erstellt"))

@@ -24,22 +24,7 @@
 
             <div class="collapse navbar-collapse" id="navbar">
                 <!-- Globale Navigation -->
-                <ul class="navbar-nav me-auto">
-                    {% for entry in navigation_entries %}
-
-                        <li class="nav-item">
-
-                            <a class="nav-link"
-                                href="{% url 'cms_page' entry.page_id.slug %}">
-
-                                {{ entry.title }}
-                            </a>
-                        </li>
-
-                    {% endfor %}
-
-                </ul>
-
+                {% include "components/navigation.html" %}
 
                 <!-- Portal-Zugang -->
                 <a href="{% url "login" %}" class="btn btn-outline-primary">

@@ -14,9 +14,20 @@ class Layout(models.Model):
 
 class LayoutRegion(models.Model):
     id = models.AutoField(primary_key=True)
-    layout_id = models.ForeignKey(Layout, on_delete=models.CASCADE)
+    layout_id = models.ForeignKey(Layout, on_delete=models.CASCADE, related_name="regions")
     name = models.CharField(max_length=200)
     key = models.CharField(max_length=200)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["layout_id", "key"],
+                name="unique_region_key_per_layout"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.layout_id.name} - {self.name}"
 
 # Design modell for page to choose
 class Design(models.Model):

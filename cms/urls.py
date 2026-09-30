@@ -5,7 +5,6 @@ from .views.navigationVerwaltung import to_navigation_verwaltung, cms_page
 from .views.pageRelease import to_veroeffentlichungs_verwaltung, release_page, archive_page
 from .views.cmsLogin import cms_login, cms_logout, cms_dashboard, admin_dashboard
 from .views.seitenVerwaltung import to_seiten_main, seiten_search, seite_erstellen, seite_bearbeiten, seiten_vorschau, vorschau_view, delete_page
-from .views.pageRelease import release_page
 
 urlpatterns = [
     path("", cms_login, name="cms_login"),
