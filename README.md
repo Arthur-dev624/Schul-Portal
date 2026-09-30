@@ -104,13 +104,16 @@ views: Views um die Oberflächen des Schul-CMS zu rendern und beinhaltet deren H
         9. _read_block_form nimmt die Formularwerte von einem ausgewählten Blocktyp, Unterstützt werden Überschrift,
             Text, Bild, Form und Button dabei werden Textausrichtung, Überschriftenebene, Bildgröße, Medium, Button-Style
             geprüft
-        10. seite_bearbeiten stellt den eigentlichen Editor bereit, dazu lädt die View Seite, Seitenversion, Layoutregionen,
+        10. _block_content_changed vergleicht die aktuell abgeschickten Formularwerte mit der gespeicherten config
+             des Blocks. Die Funktion gibt true zurück, wenn sich blockspezifische Inhalte wie Text, Bilddaten oder Button
+            URL geändert haben und False wenn nur Layoutregion oder Position geändert wurden
+        11. seite_bearbeiten stellt den eigentlichen Editor bereit, dazu lädt die View Seite, Seitenversion, Layoutregionen,
             vorhandene Blöcke und Medien. Dort kann man Überschrift, Text, Bild, Button Blöcke erstellen und bearbeiten, 
             sowie das ändern ihrer Layoutregion und Position. Veröffentlichte Versionen können nicht verändert werden
-        11. seiten_vorschau rendert die aktuell bearbeitete Seitenversion mit ihrem Layout, Design, ihren Blöcken und ihrer
+        12. seiten_vorschau rendert die aktuell bearbeitete Seitenversion mit ihrem Layout, Design, ihren Blöcken und ihrer
             Navigation. Diese View wird für die Live-Vorschau innerhalb des Editors verwendet
-        12. vorschau_view rendert die vorschau.html als eigene Vorschauansicht für eine bestimmte Seite und Version
-        13. delete_page löscht die ausgewählte Page aus der Datenbank und leitet anschließend zurück zur Seitenverwaltung
+        13. vorschau_view rendert die vorschau.html als eigene Vorschauansicht für eine bestimmte Seite und Version
+        14. delete_page löscht die ausgewählte Page aus der Datenbank und leitet anschließend zurück zur Seitenverwaltung
     medienVerwaltung.py:
         1. CmsImageForm.clean_file validiert hochgeladene Bilddateien, geprüft wird eine maximale Bildgröße von 10 MB,
             tatsächliches Bildformat und die Dateiendung und Bildformat

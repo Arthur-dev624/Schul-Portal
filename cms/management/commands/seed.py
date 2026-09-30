@@ -20,13 +20,24 @@ class Command(BaseCommand):
         ]
 
         for layout_data in layouts:
-            layout, _ = Layout.objects.update_or_create(
-                name=layout_data["name"],
-                defaults={
-                    "description": layout_data["description"],
-                    "template": layout_data["template"],
-                },
+            layout = (
+                Layout.objects
+                .filter(template=layout_data["template"])
+                .order_by("id")
+                .first()
             )
+
+            if layout is None:
+                layout = Layout.objects.create(
+                    name=layout_data["name"],
+                    description=layout_data["description"],
+                    template=layout_data["template"],
+                )
+            else:
+                layout.name = layout_data["name"]
+                layout.description = layout_data["description"]
+                layout.template = layout_data["template"]
+                layout.save(update_fields=["name", "description", "template"])
 
             for region_name, region_key in layout_data["regions"]:
                 LayoutRegion.objects.update_or_create(

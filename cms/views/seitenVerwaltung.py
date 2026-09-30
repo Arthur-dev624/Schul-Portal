@@ -42,7 +42,7 @@ def seiten_search(request):
 @login_required
 def seite_erstellen(request):
     error = None
-    layouts = Layout.objects.all()
+    layouts = Layout.objects.filter(regions__isnull=False).distinct()
     designs = Design.objects.all()
 
     if request.method == "POST":
@@ -322,6 +322,48 @@ def _read_block_form(request, block_type):
 
     raise ValueError("Dieser Blocktyp wird noch nicht unterstützt.")
 
+def _block_content_changed(request, page_block):
+    config = page_block.block_id.config or {}
+    block_type = page_block.block_id.block_type
+
+    if block_type == Block.BlockType.HEADING:
+        return (
+            request.POST.get("text", "").strip() != str(config.get("text", "")).strip()
+            or request.POST.get("alignment") != config.get("alignment")
+            or request.POST.get("level") != str(config.get("level", ""))
+        )
+
+    if block_type == Block.BlockType.TEXT:
+        return (
+            request.POST.get("text", "").strip() != str(config.get("text", "")).strip()
+            or request.POST.get("alignment") != config.get("alignment")
+        )
+
+    if block_type == Block.BlockType.IMAGE:
+        current_media_id = (
+            BlockMedium.objects.filter(block_id=page_block.block_id)
+            .order_by("position", "id")
+            .values_list("medium_id_id", flat=True)
+            .first()
+        )
+
+        return (
+            request.POST.get("caption", "").strip() != str(config.get("caption", "")).strip()
+            or request.POST.get("width", "auto").strip() != str(config.get("width", "auto")).strip()
+            or request.POST.get("height", "auto").strip() != str(config.get("height", "auto")).strip()
+            or request.POST.get("alignment") != config.get("alignment")
+            or request.POST.get("media_id") != str(current_media_id or "")
+        )
+
+    if block_type == Block.BlockType.BUTTON:
+        return (
+            request.POST.get("text", "").strip() != str(config.get("text", "")).strip()
+            or request.POST.get("url", "").strip() != str(config.get("url", "")).strip()
+            or request.POST.get("button-style") != config.get("style")
+        )
+
+    return False
+
 @login_required
 def seite_bearbeiten(
     request,
@@ -485,49 +527,51 @@ def seite_bearbeiten(
                             "Die Position liegt außerhalb des erlaubten Bereichs."
                         )
 
-                    data = _read_block_form(request, block_type)
+                    content_changed = _block_content_changed(request, selected_page_block)
 
-                    if block_type == Block.BlockType.HEADING:
-                        update_header_block(
-                            data["text"],
-                            data["level"],
-                            data["alignment"],
-                            selected_page_block,
-                            page_version,
-                        )
+                    if content_changed:
+                        data = _read_block_form(request, block_type)
 
-                    elif block_type == Block.BlockType.TEXT:
-                        update_text_block(
-                            data["text"],
-                            data["alignment"],
-                            selected_page_block,
-                            page_version,
-                        )
+                        if block_type == Block.BlockType.HEADING:
+                            update_header_block(
+                                data["text"],
+                                data["level"],
+                                data["alignment"],
+                                selected_page_block,
+                                page_version,
+                            )
 
-                    elif block_type == Block.BlockType.IMAGE:
-                        update_image_block(
-                            data["caption"],
-                            data["width"],
-                            data["height"],
-                            data["alignment"],
-                            data["media_object"],
-                            page_version,
-                            selected_page_block,
-                        )
+                        elif block_type == Block.BlockType.TEXT:
+                            update_text_block(
+                                data["text"],
+                                data["alignment"],
+                                selected_page_block,
+                                page_version,
+                            )
 
-                    elif block_type == Block.BlockType.BUTTON:
-                        update_button_block(
-                            data["text"],
-                            data["url"],
-                            data["style"],
-                            selected_page_block,
-                            page_version,
-                        )
+                        elif block_type == Block.BlockType.IMAGE:
+                            update_image_block(
+                                data["caption"],
+                                data["width"],
+                                data["height"],
+                                data["alignment"],
+                                data["media_object"],
+                                page_version,
+                                selected_page_block,
+                            )
 
-                    else:
-                        raise ValueError("Dieser Blocktyp ist nicht bearbeitbar.")
+                        elif block_type == Block.BlockType.BUTTON:
+                            update_button_block(
+                                data["text"],
+                                data["url"],
+                                data["style"],
+                                selected_page_block,
+                                page_version,
+                            )
 
-                    # erst nach erfolgreicher Inhaltsänderung verschieben.
+                        else:
+                            raise ValueError("Dieser Blocktyp ist nicht bearbeitbar.")
+
                     _reorder_page_blocks(
                         page_version,
                         selected_page_block,

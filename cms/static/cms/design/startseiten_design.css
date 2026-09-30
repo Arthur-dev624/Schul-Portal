@@ -152,7 +152,7 @@ body > section:nth-of-type(2) {
     min-height: 500px;
     padding-top: 5rem;
     padding-bottom: 5rem;
-    background-color: #ffffff;
+    background-color: var(--section-light);
 }
 
 body > section:nth-of-type(2) > .container {
@@ -168,7 +168,7 @@ body > section:nth-of-type(3) {
     padding-top: 3rem;
     padding-bottom: 3rem;
 
-    background-color: var(--primary-dark);
+    background-color: var(--section-light);
 
     color: #ffffff;
 }
