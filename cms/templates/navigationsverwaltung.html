@@ -16,14 +16,24 @@
 <div class="d-flex flex-column vh-100">
 
     <!-- CMS Header -->
-    <header class="navbar bg-body-tertiary border-bottom px-4">
-        <span class="navbar-brand">Navigationsverwaltung</span>
-
-        <div>
-            <span class="me-3">{{ username }}</span>
-            <a href="{% url 'cms_logout' %}">Abmelden</a>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Navigationsverwaltung</span>
         </div>
-    </header>
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Navigationselemente bearbeiten</span>
+        </div>
+
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Profil: {{ username }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url "cms_logout" %}">Abmelden</a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="d-flex flex-grow-1 overflow-hidden">
 
@@ -53,7 +63,7 @@
                    class="list-group-item list-group-item-action active">
                     Navigation
                 </a>
-                <a href="{% url 'to_veroeffentlichungs_verwaltung' %}" class="list-group-item list-group-item-action active">Veröffentlichung</a>
+                <a href="{% url 'to_veroeffentlichungs_verwaltung' %}" class="list-group-item list-group-item-action">Veröffentlichung</a>
             </div>
         </aside>
 

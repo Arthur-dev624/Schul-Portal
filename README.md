@@ -8,12 +8,11 @@ Projekt-Aufbau:
 |-Schulprojekt-main
     |-myapp (bestehendes Django-Projekt auf welchem aufgebaut wird)
     |-cms
-        |-forms
-        |-layouts
         |-management
-        |-migrations
         |-static
         |-templates
+            |- blocks
+            |- layouts
         |-views
 
 Das System umfasst:

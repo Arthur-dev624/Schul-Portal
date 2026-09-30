@@ -2,10 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from cms.api import count_pages, count_releases, count_drafts, count_media
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import user_passes_test
+from django.db.models import DateTimeField, Max
+from django.db.models.functions import Coalesce
+from cms.models import Page, PageVersion
 
-# TODO: Redakteur check hinzufügen und weiterleitung an redakteur_dashboard
 # dashboard view checks if logged in person got admin role
 @login_required
 def cms_dashboard(request):
@@ -29,18 +29,46 @@ def admin_dashboard(request):
     draft_count = count_drafts()
     media_count = count_media()
 
+    latest_pages = (
+        Page.objects
+        .annotate(
+            last_edited=Coalesce(
+                Max("owns__pageBlocks__block_id__updated_at"),
+                "updated_at",
+                output_field=DateTimeField(),
+            )
+        )
+        .order_by("-last_edited")[:3]
+    )
+
+    latest_edited_pages = []
+
+    for page in latest_pages:
+        page_version = (
+            PageVersion.objects
+            .filter(page_id=page)
+            .order_by("-version", "-id")
+            .first()
+        )
+
+        if page_version:
+            latest_edited_pages.append({
+                "page": page,
+                "version": page_version.version,
+                "status": page_version.status,
+            })
+
     context = {
         "username": username,
         "siteCount": site_count,
         "releasedCount": released_count,
         "draftCount": draft_count,
-        "mediaCount": media_count
+        "mediaCount": media_count,
+        "latest_edited_pages": latest_edited_pages,
     }
 
     # render cmsSurface template
     return render(request, "cmsSurface.html", context)
-
-# TODO: redakteur_dashboard view implementieren und redakteurDashboard.html template erstellen
 
 def cms_login(request):
     error = None

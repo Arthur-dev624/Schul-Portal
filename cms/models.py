@@ -58,6 +58,9 @@ class Page(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.title
+
 class PageVersion(models.Model):
     id = models.AutoField(primary_key=True)
     page_id = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='owns')

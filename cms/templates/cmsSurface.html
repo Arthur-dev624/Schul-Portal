@@ -83,13 +83,12 @@
                     <li class="list-group-item">
                         <a class="text-dark" href="{% url "to_medien_verwaltung" %}">Medien</a>
                     </li>
-                    <li class="list-group-item">Navigation</li>
-                    <li class="list-group-item">Funktionen</li>
                     <li class="list-group-item">
-                        <a class="text-dark" href="#">Layouts</a>
+                        <a href="{% url 'to_navigation_verwaltung' %}">Navigation</a>
                     </li>
-                    <li class="list-group-item">Designs</li>
-                    <li class="list-group-item">Benutzer & Rechte</li>
+                    <li class="list-group-item">
+                        <a href="{% url 'to_veroeffentlichungs_verwaltung' %}">Veröffentlichung</a>
+                    </li>
                 </ul>
             </div>
         </aside>
@@ -129,8 +128,8 @@
                             <li class="list-group-item">
                                 <a class="text-dark" href="{% url 'to_navigation_verwaltung' %}">Navigation</a>
                             </li>
-                            <li>
-                                <a href="{% url 'to_veroeffentlichungs_verwaltung' %}" class="list-group-item list-group-item-action active">Veröffentlichung</a>
+                            <li class="list-group-item">
+                                <a href="{% url 'to_veroeffentlichungs_verwaltung' %}">Veröffentlichung</a>
                             </li>
                         </ul>
                     </div>
@@ -142,31 +141,31 @@
                             <h5 class="card-title">Zuletzt bearbeitete Seiten</h5>
                             <p class="card-text">Die letzten drei bearbeitete Seiten</p>
                         </div>
-                        <ul class="list-group list-group-horizontal">
-                            <li class="list-group-item flex-fill">Seite 1</li>
-                            <li class="list-group-item flex-fill">Status</li>
-                            <li class="list-group-item flex-fill">
-                                <a class="stretched-link" href="#">Edit</a>
-                            </li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal-sm">
-                            <li class="list-group-item flex-fill">Seite 2</li>
-                            <li class="list-group-item flex-fill">Status</li>
-                            <li class="list-group-item flex-fill">
-                                <a class="stretched-link" href="#">Edit</a>
-                            </li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal-md">
-                            <li class="list-group-item flex-fill">Seite 3</li>
-                            <li class="list-group-item flex-fill">Status</li>
-                            <li class="list-group-item flex-fill">
-                                <a class="stretched-link" href="#">Edit</a>
-                            </li>
-                        </ul>
+                        {% for latest_edited_page in latest_edited_pages %}
+                            <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item flex-fill">{{ latest_edited_page.page.title }}</li>
+                                <li class="list-group-item flex-fill">
+                                    {% if latest_edited_page.status %}
+                                        Veröffentlicht
+                                    {% else %}
+                                        Entwurf
+                                    {% endif %}
+                                </li>
+                                <li class="list-group-item flex-fill">
+                                    <a class="stretched-link"
+                                       href="{% url 'seite_bearbeiten' latest_edited_page.page.id latest_edited_page.version %}">
+                                        Edit
+                                    </a>
+                                </li>
+                            </ul>
+                        {% empty %}
+                            <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item flex-fill">Keine Seiten vorhanden</li>
+                            </ul>
+                        {% endfor %}
                     </div>
                 </div>
                 <!-- System / Funktionen -->
-                <!-- TODO: Daten der Funktionen anzeigen lassen -->
                 <div class="col-sm-6 mb-3">
                     <div class="card">
                         <div class="card-body">
