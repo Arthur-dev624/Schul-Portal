@@ -76,76 +76,76 @@ templates|-layouts: html-Layouts um eine neue Seite zu erstellen in "Seiten"
 templates|-blocks: html-block renderer und wird in den Layouts mit Django include hinzugefügt
 templates|-components: html-Navigations einträge Liste und wird in den Layouts im Header mit Django include hinzugefügt
 views: Views um die Oberflächen des Schul-CMS zu rendern und beinhaltet deren Hilfsfunktionen
-    cmsLogin.py: 
-        1. cms_dashboard prüft nach dem Login die Rolle des Benutzers, mit der Rolle admin wird dieser dann zum Admin-
+cmsLogin.py: 
+1. cms_dashboard prüft nach dem Login die Rolle des Benutzers, mit der Rolle admin wird dieser dann zum Admin-
             Dashboard weitergeleitet
-        2. admin_dashboard rendert die CMS-Übersicht cmsSurface.html, diese View lädt die Anzahl der Seiten, veröffentlichte
+2. admin_dashboard rendert die CMS-Übersicht cmsSurface.html, diese View lädt die Anzahl der Seiten, veröffentlichte
             Seiten, Entwürfe und Medien sowie die drei zuletzt bearbeiteten Seiten mit ihrer aktuellen Version und ihrem Status
-        3. cms_login rendert die Login-Seite cmsLogin.html und bei einem POST-Request werden Benutzername und Passwort
+3. cms_login rendert die Login-Seite cmsLogin.html und bei einem POST-Request werden Benutzername und Passwort
             mit Djangos authenticate überprüft und der Benutzer anschließend angemeldet
-        4. cms_logout meldet den Benutzer ab und leitet diesen zurück zur CMS-Login Seite
-    seitenVerwaltung.py: 
-        1. to_seiten_main rendert die Seitenverwaltung seitenVerwaltung.html und gibt alle vorhandenen Seiten zusammen
+4. cms_logout meldet den Benutzer ab und leitet diesen zurück zur CMS-Login Seite
+seitenVerwaltung.py: 
+1. to_seiten_main rendert die Seitenverwaltung seitenVerwaltung.html und gibt alle vorhandenen Seiten zusammen
             mit ihrer jeweils neuesten Version aus
-        2. seiten_search nimmt den Suchbegriff aus der Suchleiste, sucht nach Seiten mit einem passenden Titel und zeigt
+2. seiten_search nimmt den Suchbegriff aus der Suchleiste, sucht nach Seiten mit einem passenden Titel und zeigt
             die gefundenen Seiten zusammen mit ihrer aktuellen Versionen an
-        3. seite_erstellen rendert seiteErstellen.html, lädt alle verfügbaren Layouts und Designs und erstellt bei einem gültigen
+3. seite_erstellen rendert seiteErstellen.html, lädt alle verfügbaren Layouts und Designs und erstellt bei einem gültigen
             POST-Request eine neue Page sowie die erste PageVersion
-        4. _build_region_with_blocks lädt alle Layoutregionen einer Seite und ordnet jeder Region die darin enthaltenen
+4. _build_region_with_blocks lädt alle Layoutregionen einer Seite und ordnet jeder Region die darin enthaltenen
             PageBlocks zu
-        5. _build_region_position_counts sucht für jede Layoutregion, wie viele PageBlocks in der aktuellen Version der Seite
+5. _build_region_position_counts sucht für jede Layoutregion, wie viele PageBlocks in der aktuellen Version der Seite
             zugeordnet sind
-        6. _build_position_choices berechnet die möglichen Positionen, an die ein bestehender PageBlock innerhalb seiner
+6. _build_position_choices berechnet die möglichen Positionen, an die ein bestehender PageBlock innerhalb seiner
             Layoutregion verschoben werden kann
-        7. _reorder_page_blocks verschiebt einen PageBlock innerhalb einer Layoutregion oder in eine andere Layoutregion
+7. _reorder_page_blocks verschiebt einen PageBlock innerhalb einer Layoutregion oder in eine andere Layoutregion
             und nummeriert anschließend die Positionen der betroffenen Blöcke neu
-        8. _get_selected_layout_region nimmt die Layoutregion aus einem POST-Request und prüft, ob diese zu einem Layout
+8. _get_selected_layout_region nimmt die Layoutregion aus einem POST-Request und prüft, ob diese zu einem Layout
             der bearbeiteten Seite gehört
-        9. _read_block_form nimmt die Formularwerte von einem ausgewählten Blocktyp, Unterstützt werden Überschrift,
+9. _read_block_form nimmt die Formularwerte von einem ausgewählten Blocktyp, Unterstützt werden Überschrift,
             Text, Bild, Form und Button dabei werden Textausrichtung, Überschriftenebene, Bildgröße, Medium, Button-Style
             geprüft
-        10. _block_content_changed vergleicht die aktuell abgeschickten Formularwerte mit der gespeicherten config
+10. _block_content_changed vergleicht die aktuell abgeschickten Formularwerte mit der gespeicherten config
              des Blocks. Die Funktion gibt true zurück, wenn sich blockspezifische Inhalte wie Text, Bilddaten oder Button
             URL geändert haben und False wenn nur Layoutregion oder Position geändert wurden
-        11. seite_bearbeiten stellt den eigentlichen Editor bereit, dazu lädt die View Seite, Seitenversion, Layoutregionen,
-            vorhandene Blöcke und Medien. Dort kann man Überschrift, Text, Bild, Button Blöcke erstellen und bearbeiten, 
-            sowie das ändern ihrer Layoutregion und Position. Veröffentlichte Versionen können nicht verändert werden
-        12. seiten_vorschau rendert die aktuell bearbeitete Seitenversion mit ihrem Layout, Design, ihren Blöcken und ihrer
-            Navigation. Diese View wird für die Live-Vorschau innerhalb des Editors verwendet
-        13. vorschau_view rendert die vorschau.html als eigene Vorschauansicht für eine bestimmte Seite und Version
-        14. delete_page löscht die ausgewählte Page aus der Datenbank und leitet anschließend zurück zur Seitenverwaltung
-    medienVerwaltung.py:
-        1. CmsImageForm.clean_file validiert hochgeladene Bilddateien, geprüft wird eine maximale Bildgröße von 10 MB,
-            tatsächliches Bildformat und die Dateiendung und Bildformat
-        2. _get_media_type ermittelt anhand des validierten Bildformats den passenden MIME-Type des Medium
-        3. _delete_old_file löscht eine ersetzte Mediendatei aus dem Dateispeicher, sofern kein anderer CmsMedium-
-            Datensatz auf diese Datei verweist
-        4. to_medien_verwaltung rendert die Medienverwaltung medienVerwaltung.html und nur admins dürfen darauf zugreifen,
-            die View ermöglicht das Hochladen von Bildern und das ersetzen von Bildern. Die Dateien werden geprüft und als
-            CmsMedium gespeichert. Es werden alle vorhandenen Medien, ihre Verwendung in Blöcken und die Anzahl der Medien geladen
-    navigationVerwaltung.py:
-        1. NavigationForm.__init__ erstellt das Formular zur Navigationsverwaltung und stellt nur veröffentlichte Seiten
-            als auswählbare Ziele eines Navigationseintrags zur Verfügung
-        2. get_visible_navigation gibt alle sichtbaren Navigationseinträge zurück, deren verlinkte Seite veröffentlicht ist
-            Die Einträge werden nach ihrer Position sortiert
-        3. to_navigation_verwaltung rendert die Navigationsverwaltung navigationsverwaltung.html nur admins können
-            Einträge erstellen, bearbeiten und löschen. Im aktuellen Prototyp werden nur Einträge ohne Untermenüs unterstützt
-        4. cms_page stellt eine veröffentlichte CMS-Seite öffentlich über ihren Slug dar. Dafür wird die aktuell veröffentlichte
-            PageVersion geladen und zusammen mit Layout, Design, Blöcken und Navigation gerendert
-    pageRelease.py:
-        1. is_cms_admin prüft ob der Benutzer eine Person besitzt und Rolle amdin hat
-        2. get_latest_draft gibt die neueste noch nie veröffentlichte Version einer bestimmten Seite zurück 
-        3. create_next_draft erzeugt aus einer bestehenden Seitenversion eine neue Entwurfsversion, dabei werden
-            PageBlock, Block-Konfiguration, Medienzuordnung und Funktionsblock Zuordnungen kopiert. Die eigentlichen
-            Mediendateien werden nicht dupliziert
-        4. to_veroeffentlichung_verwaltung rendert die Veröffentlichungsverwaltung veroeffentlichungsVerwaltung.html und
-            für jede Seite werden die aktuell veröffentlichte Version und der neuste Entwurf geladen. Zusätzlich werden die 
-            letzten zehn veröffentlichungen angezeigt
-        5. release_page veröffentlicht den neuesten Entwurf einer Seite. Eine eventuell zuvor veröffentlichte Version wird 
-            deaktiviert, die Veröffentlichung wird in Publication protokolliert und anschließend wird automatisch eine neue
-            bearbeitbare Entwurfsversion auf Basis der veröffentlichten Version erstellt. 
-        6. archive_page nimmt eine veröffentlichte Seite offline, diese Page und ihre veröffentlichte PageVersion werden
-            deaktiviert, ohne Versionen oder Blöcke zu löschen
+11. seite_bearbeiten stellt den eigentlichen Editor bereit, dazu lädt die View Seite, Seitenversion, Layoutregionen, 
+    vorhandene Blöcke und Medien. Dort kann man Überschrift, Text, Bild, Button Blöcke erstellen und bearbeiten, 
+                sowie das ändern ihrer Layoutregion und Position. Veröffentlichte Versionen können nicht verändert werden
+12. seiten_vorschau rendert die aktuell bearbeitete Seitenversion mit ihrem Layout, Design, ihren Blöcken und ihrer
+                Navigation. Diese View wird für die Live-Vorschau innerhalb des Editors verwendet
+13. vorschau_view rendert die vorschau.html als eigene Vorschauansicht für eine bestimmte Seite und Version
+14. delete_page löscht die ausgewählte Page aus der Datenbank und leitet anschließend zurück zur Seitenverwaltung
+medienVerwaltung.py:
+1. CmsImageForm.clean_file validiert hochgeladene Bilddateien, geprüft wird eine maximale Bildgröße von 10 MB,
+                tatsächliches Bildformat und die Dateiendung und Bildformat
+2. _get_media_type ermittelt anhand des validierten Bildformats den passenden MIME-Type des Medium
+3. _delete_old_file löscht eine ersetzte Mediendatei aus dem Dateispeicher, sofern kein anderer CmsMedium-
+                Datensatz auf diese Datei verweist
+4. to_medien_verwaltung rendert die Medienverwaltung medienVerwaltung.html und nur admins dürfen darauf zugreifen,
+                die View ermöglicht das Hochladen von Bildern und das ersetzen von Bildern. Die Dateien werden geprüft und als
+                CmsMedium gespeichert. Es werden alle vorhandenen Medien, ihre Verwendung in Blöcken und die Anzahl der Medien geladen
+navigationVerwaltung.py:
+1. NavigationForm.__init__ erstellt das Formular zur Navigationsverwaltung und stellt nur veröffentlichte Seiten
+                als auswählbare Ziele eines Navigationseintrags zur Verfügung
+2. get_visible_navigation gibt alle sichtbaren Navigationseinträge zurück, deren verlinkte Seite veröffentlicht ist
+                Die Einträge werden nach ihrer Position sortiert
+3. to_navigation_verwaltung rendert die Navigationsverwaltung navigationsverwaltung.html nur admins können
+                Einträge erstellen, bearbeiten und löschen. Im aktuellen Prototyp werden nur Einträge ohne Untermenüs unterstützt
+4. cms_page stellt eine veröffentlichte CMS-Seite öffentlich über ihren Slug dar. Dafür wird die aktuell veröffentlichte
+                PageVersion geladen und zusammen mit Layout, Design, Blöcken und Navigation gerendert
+pageRelease.py:
+1. is_cms_admin prüft ob der Benutzer eine Person besitzt und Rolle amdin hat
+2. get_latest_draft gibt die neueste noch nie veröffentlichte Version einer bestimmten Seite zurück 
+3. create_next_draft erzeugt aus einer bestehenden Seitenversion eine neue Entwurfsversion, dabei werden
+                PageBlock, Block-Konfiguration, Medienzuordnung und Funktionsblock Zuordnungen kopiert. Die eigentlichen
+                Mediendateien werden nicht dupliziert
+4. to_veroeffentlichung_verwaltung rendert die Veröffentlichungsverwaltung veroeffentlichungsVerwaltung.html und
+                für jede Seite werden die aktuell veröffentlichte Version und der neuste Entwurf geladen. Zusätzlich werden die 
+                letzten zehn veröffentlichungen angezeigt
+5. release_page veröffentlicht den neuesten Entwurf einer Seite. Eine eventuell zuvor veröffentlichte Version wird 
+                deaktiviert, die Veröffentlichung wird in Publication protokolliert und anschließend wird automatisch eine neue
+                bearbeitbare Entwurfsversion auf Basis der veröffentlichten Version erstellt. 
+6. archive_page nimmt eine veröffentlichte Seite offline, diese Page und ihre veröffentlichte PageVersion werden
+                deaktiviert, ohne Versionen oder Blöcke zu löschen
 
 api: Funktionen um Daten aus datenbank abzufragen, sowie zum Erstellen und Bearbeiten von Inhaltsblöcken
 1. _get_person gibt zu einem übergebenem User die zugehörige Person zurück und wirft einen Fehler, wenn der User nicht
