@@ -1,10 +1,48 @@
-Schul-CMS: Django Projekt für Schulen, um generisch Webseiten zu erstellen ohne Programmiererfahrung
+# 1 Projektübersicht:
 
-Schul-CMS ist ein Content-Management-System, mit dem Schulen ihre Web-präsenz selbst gestalten können.
-Entwickelt mit dem Django Framework, ist das Projekt im Rahmen einer Universitätsaufgabe erstellt worden und
-demonstriert, wie man eine datenbankgestützte Webanwendung erstellt.
+    Django Projekt für Schulen, um generisch Webseiten zu erstellen ohne Programmiererfahrung
 
-Projekt-Aufbau:
+    Schul-CMS ist ein Content-Management-System, mit dem Schulen ihre Web-präsenz selbst gestalten können.
+    Entwickelt mit dem Django Framework, ist das Projekt im Rahmen einer Universitätsaufgabe erstellt worden und
+    demonstriert, wie man eine datenbankgestützte Webanwendung erstellt.
+
+    ### 1.1 Systemumfang:
+        Übersicht - Zeigt aktuelle Daten zu Seiten, veröffentlichten Seiten, Entwürfen und Medien sowie die zuletzt bearbeiteten 
+        Seiten und Navigation zu den anderen CMS-Modulen.
+
+        Seiten - Seiten erstellen, suchen, bearbeiten und löschen sowie verschiedene Seitenversionen verwalten.
+
+        Editor - Über die Seitenverwaltung zugänglich. Ermöglicht das Erstellen und Bearbeiten von Überschriften-, Text-, Bild- 
+        und Buttonblöcken, deren Zuordnung zu Layoutregionen und Positionen sowie eine Live-Vorschau der Seite.
+
+        Medien - Übersicht aller Medien sowie Hochladen und Ersetzen von Bildern. Hochgeladene Dateien werden nach Dateigröße, 
+        Dateiendung und tatsächlichem Bildformat validiert.
+
+        Navigation - Navigationseinträge erstellen, bearbeiten und löschen sowie Position und Sichtbarkeit festlegen. 
+        Im aktuellen Prototyp werden Navigationseinträge ohne Untermenüs unterstützt.
+
+        Veröffentlichung - Entwürfe veröffentlichen, Seiten archivieren und Veröffentlichungshistorie anzeigen. 
+        Beim Veröffentlichen wird automatisch eine neue bearbeitbare Entwurfsversion erzeugt.
+
+        Funktionen - Funktionsblöcke können einer Seite zugeordnet und bei der Seitennutzung abgefragt werden. Eine vollständige 
+        Verwaltungsoberfläche ist noch nicht implementiert.
+
+        Layouts - Layouts werden vom Entwickler bereitgestellt und bestimmen die verfügbaren Layoutregionen einer Seite. 
+        Eine eigene Layout-Verwaltungsoberfläche ist noch nicht implementiert.
+
+        Design - Designs werden vom Entwickler bereitgestellt und können Seiten zugeordnet werden. Eine eigene 
+        Design-Verwaltungsoberfläche ist noch nicht implementiert.
+
+        Benutzer & Rechte - Der Zugriff auf die CMS-Verwaltungsbereiche wird aktuell über die Rolle admin kontrolliert. 
+        Eine vollständige Benutzer- und Rechteverwaltung innerhalb des CMS ist noch nicht implementiert.
+
+# 2 Technologien:
+    Backend: Python 3, Django
+    Frontend: HTML5, CSS, Bootstrap, JavaScript
+    Datenbank: Es wird SQLite verwendet, PostgreSQL in der Produktion (mögliche Option, nicht umgesetzt)
+    Bibliotheken: Django 6.0.7; google-genai 2.15.0; Pillow 12.3.0; pyasn1 0.6.4
+
+# 3 Projekt-Aufbau:
 |-Schulprojekt-main
     |-myapp (bestehendes Django-Projekt auf welchem aufgebaut wird)
     |-cms
@@ -16,40 +54,6 @@ Projekt-Aufbau:
             |- layouts
         |-views
 
-Das System umfasst:
-Übersicht - Zeigt aktuelle Daten zu Seiten, veröffentlichten Seiten, Entwürfen und Medien sowie die zuletzt bearbeiteten 
-Seiten und Navigation zu den anderen CMS-Modulen.
-
-Seiten - Seiten erstellen, suchen, bearbeiten und löschen sowie verschiedene Seitenversionen verwalten.
-
-Editor - Über die Seitenverwaltung zugänglich. Ermöglicht das Erstellen und Bearbeiten von Überschriften-, Text-, Bild- 
-und Buttonblöcken, deren Zuordnung zu Layoutregionen und Positionen sowie eine Live-Vorschau der Seite.
-
-Medien - Übersicht aller Medien sowie Hochladen und Ersetzen von Bildern. Hochgeladene Dateien werden nach Dateigröße, 
-Dateiendung und tatsächlichem Bildformat validiert.
-
-Navigation - Navigationseinträge erstellen, bearbeiten und löschen sowie Position und Sichtbarkeit festlegen. 
-Im aktuellen Prototyp werden Navigationseinträge ohne Untermenüs unterstützt.
-
-Veröffentlichung - Entwürfe veröffentlichen, Seiten archivieren und Veröffentlichungshistorie anzeigen. 
-Beim Veröffentlichen wird automatisch eine neue bearbeitbare Entwurfsversion erzeugt.
-
-Funktionen - Funktionsblöcke können einer Seite zugeordnet und bei der Seitennutzung abgefragt werden. Eine vollständige 
-Verwaltungsoberfläche ist noch nicht implementiert.
-
-Layouts - Layouts werden vom Entwickler bereitgestellt und bestimmen die verfügbaren Layoutregionen einer Seite. 
-Eine eigene Layout-Verwaltungsoberfläche ist noch nicht implementiert.
-
-Design - Designs werden vom Entwickler bereitgestellt und können Seiten zugeordnet werden. Eine eigene 
-Design-Verwaltungsoberfläche ist noch nicht implementiert.
-
-Benutzer & Rechte - Der Zugriff auf die CMS-Verwaltungsbereiche wird aktuell über die Rolle admin kontrolliert. 
-Eine vollständige Benutzer- und Rechteverwaltung innerhalb des CMS ist noch nicht implementiert.
-
-Technologien:
-Backend: Python 3, Django
-Frontend: HTML5, CSS, Bootstrap, Javascript
-Datenbank: SQLite für Entwicklung, PostgreSQL in der Produktion (mögliche Option) 
 
 Installation:
 1. Voraussetzung zur installation: Python 3, pip
