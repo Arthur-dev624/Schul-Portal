@@ -1,39 +1,39 @@
-# 1 Projektübersicht:
+# **1 Projektübersicht:**
 
-    Django Projekt für Schulen, um generisch Webseiten zu erstellen ohne Programmiererfahrung
+    Django Projekt für Schulen, um generisch Webseiten zu erstellen ohne ProgrammiererfahrungProjekt-Aufbau:
 
     Schul-CMS ist ein Content-Management-System, mit dem Schulen ihre Web-präsenz selbst gestalten können.
     Entwickelt mit dem Django Framework, ist das Projekt im Rahmen einer Universitätsaufgabe erstellt worden und
     demonstriert, wie man eine datenbankgestützte Webanwendung erstellt.
 
 ## 1.1 Systemumfang:
-    Übersicht - Zeigt aktuelle Daten zu Seiten, veröffentlichten Seiten, Entwürfen und Medien sowie die
+    - Übersicht - Zeigt aktuelle Daten zu Seiten, veröffentlichten Seiten, Entwürfen und Medien sowie die
     zuletzt bearbeiteten Seiten und Navigation zu den anderen CMS-Modulen.
 
-    Seiten - Seiten erstellen, suchen, bearbeiten und löschen sowie verschiedene Seitenversionen verwalten.
+    - Seiten - Seiten erstellen, suchen, bearbeiten und löschen sowie verschiedene Seitenversionen verwalten.
 
-    Editor - Über die Seitenverwaltung zugänglich. Ermöglicht das Erstellen und Bearbeiten von Überschriften-, Text-, Bild- 
+    - Editor - Über die Seitenverwaltung zugänglich. Ermöglicht das Erstellen und Bearbeiten von Überschriften-, Text-, Bild- 
     und Buttonblöcken, deren Zuordnung zu Layoutregionen und Positionen sowie eine Live-Vorschau der Seite.
 
-    Medien - Übersicht aller Medien sowie Hochladen und Ersetzen von Bildern. Hochgeladene Dateien werden nach Dateigröße, 
+    - Medien - Übersicht aller Medien sowie Hochladen und Ersetzen von Bildern. Hochgeladene Dateien werden nach Dateigröße, 
     Dateiendung und tatsächlichem Bildformat validiert.
 
-    Navigation - Navigationseinträge erstellen, bearbeiten und löschen sowie Position und Sichtbarkeit festlegen. 
+    - Navigation - Navigationseinträge erstellen, bearbeiten und löschen sowie Position und Sichtbarkeit festlegen. 
     Im aktuellen Prototyp werden Navigationseinträge ohne Untermenüs unterstützt.
 
-    Veröffentlichung - Entwürfe veröffentlichen, Seiten archivieren und Veröffentlichungshistorie anzeigen. 
+    - Veröffentlichung - Entwürfe veröffentlichen, Seiten archivieren und Veröffentlichungshistorie anzeigen. 
     Beim Veröffentlichen wird automatisch eine neue bearbeitbare Entwurfsversion erzeugt.
 
-    Funktionen - Funktionsblöcke können einer Seite zugeordnet und bei der Seitennutzung abgefragt werden. Eine vollständige 
+    - Funktionen - Funktionsblöcke können einer Seite zugeordnet und bei der Seitennutzung abgefragt werden. Eine vollständige 
     Verwaltungsoberfläche ist noch nicht implementiert.
 
-    Layouts - Layouts werden vom Entwickler bereitgestellt und bestimmen die verfügbaren Layoutregionen einer Seite. 
+    - Layouts - Layouts werden vom Entwickler bereitgestellt und bestimmen die verfügbaren Layoutregionen einer Seite. 
     Eine eigene Layout-Verwaltungsoberfläche ist noch nicht implementiert.
 
-    Design - Designs werden vom Entwickler bereitgestellt und können Seiten zugeordnet werden. Eine eigene 
+    - Design - Designs werden vom Entwickler bereitgestellt und können Seiten zugeordnet werden. Eine eigene 
     Design-Verwaltungsoberfläche ist noch nicht implementiert.
 
-    Benutzer & Rechte - Der Zugriff auf die CMS-Verwaltungsbereiche wird aktuell über die Rolle admin kontrolliert. 
+    - Benutzer & Rechte - Der Zugriff auf die CMS-Verwaltungsbereiche wird aktuell über die Rolle admin kontrolliert. 
     Eine vollständige Benutzer- und Rechteverwaltung innerhalb des CMS ist noch nicht implementiert.
 
 # 2 Technologien:
