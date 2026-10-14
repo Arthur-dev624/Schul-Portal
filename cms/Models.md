@@ -204,6 +204,3 @@ Felder:
 
 Beziehungen:
 - Eine `Publication` dokumentiert, welche `PageVersion` durch welchen Benutzer veröffentlicht wurde.
-
-Hinweis:
-- Die aktuelle View `release_page` setzt bisher nur `Page.status = True`. Sie erstellt aktuell keinen `Publication`-Eintrag.
