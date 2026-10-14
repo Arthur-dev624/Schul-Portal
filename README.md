@@ -59,7 +59,7 @@ Schul-Portal/<br>
 |  |- Models.md<br>
 |- myapp/<br>
 |- schoolwebsite/<br>
-|- manage.py
+|- manage.py<br>
 |- requirements.txt<br>
 |- README.md<br>
 
@@ -87,13 +87,16 @@ Die zentralen Bestandteile des Systems sind:
 1. Datenhaltung (cms/models.py)<br>
     Die Datenhaltung erfolgt über Django-Models, deren Objekte mithilfe des Django ORM in der Datenbank gespeichert und abgefragt werden.
     Die Models bilden unter anderem Webseiten, Seitenversionen, Layouts, Layoutregionen, Designs, Inhaltsblöcke, Medien, Navigationspunkte und Veröffentlichungen ab.
+
 2. Anwendungslogik (cms/views/)<br>
     Die Verarbeitung von HTTP-Anfragen erfolgt in den Django-Views. Diese übernehmen die Validierung von Eingaben, die Abfrage und Veränderung von Datenbankobjekten
     sowie die Bereitstellung der benötigten Daten für die Templates. Die Zuordnung von URLs zu den jeweiligen View-Funktionen erfolgt über cms/urls.py
+
 3. Datenzugriff und Hilfsfunktionen (cms/api.py)<br>
     Die Datei cms/api.py enthält wiederverwendbare Funktionen für den Zugriff auf CMS-Daten und deren Aufbereitung.
     Sie unterstützt insbesondere die Abfrage von Inhaltsblöcken und deren Zuordnung zu Webseiten und deren Layoutregionen.
     Dadurch können verschiedene Views dieselben Funktionen verwenden, ohne die zugehörige Abfragelogik mehrfach implementieren zu müssen.
+
 4. Darstellung (cms/templates/)<br>
     Die Darstellung der CMS-Oberflächen und der erstellten Webseiten erfolgt mithilfe des Django-Template-Systems. Hierbei
     wird zwischen den Verwaltungsoberflächen des CMS und den Templates für die dynamisch erzeugten Webseiten unterschieden.
@@ -101,6 +104,7 @@ Die zentralen Bestandteile des Systems sind:
     definiert sind. Innerhalb dieser Regionen werden die zugehörigen Inhaltsblöcke dargestellt.<br>
     Für die Darstellung einzelner Inhaltsblöcke wird das Template cms/templates/blocks/blockRenderer.html verwendet. Es 
     unterscheidet anhand des Blocktyps, welches HTML erzeugt werden soll, und verwendet dabei die im Block gespeicherte Konfiguration.
+
 5. Integration in das bestehende Schul-Portal<br>
     Die CMS-App ist in das vorhandene Django-Projekt integriert und verwendet dessen bestehende Infrastruktur. Die App
     myapp stellt weiterhin die bereits vorhandenen Funktionen des Schul-Portals sowie die bestehenden Benutzer und Rollendaten bereit.
